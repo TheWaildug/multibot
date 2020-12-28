@@ -41,9 +41,28 @@ client.on("message", async message => {
       message.channel.send("https://discord.com/oauth2/authorize?client_id=791760755195904020&scope=bot&permissions=8")
     }
 })
-var currentnum = 1
-var prevuser 
-client.on("message", message =>{
+async function updatenumber(currentnum,guild){
+  await db.set(`Guild-${guild}-CountingNum`,currentnum)
+}
+async function getnumber(guild){
+    var currentnum = await db.get(`Guild-${guild}-CountingNum`)
+    if(currentnum == null){
+        currentnum = 1
+    }
+    return currentnum
+  }
+async function updateuser(user,guild){
+    await db.set(`Guild-${guild}-CountingUser`,user)
+}
+async function finduser(guild){
+    var currentuser = await db.get(`Guild-${guild}-CountingUser`)
+    if(currentuser == null){
+        currentuser = 0
+    }
+    return currentuser
+}
+client.on("message",async message =>{
+  
     if(message.channel.type == "dm"){
         return;
     }
@@ -53,6 +72,8 @@ client.on("message", message =>{
     if(!message.channel.id == "791760708164911124"){
         return
     }
+    var currentnum = await getnumber(message.guild.id)
+    var prevuser = await finduser(message.guild.id  )
     if(prevuser == message.member.id){
         console.log(`${message.member.id} counted twice in a row.`)
         message.delete()
@@ -64,7 +85,7 @@ client.on("message", message =>{
         return
     }
     if(message.content == String(currentnum)){
-        currentnum = currentnum + 1
+        updatenumber(currentnum,message.guild.id)
         prevuser = message.member.id
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum)}.`)
         return;
