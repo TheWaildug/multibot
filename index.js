@@ -45,7 +45,7 @@ client.on("message", async message => {
       message.channel.send("https://discord.com/oauth2/authorize?client_id=791760755195904020&scope=bot&permissions=8")
     }
 })
-var currentnum = 0
+var currentnum = 1
 var prevuser = ""
 client.on("message", message =>{
     if(!message.channel.id == "791760708164911124"){
@@ -57,6 +57,7 @@ client.on("message", message =>{
     }
     if(message.content != String(currentnum)){
         console.log(`${message.member.id} didn't put correct number.`)
+        message.delete()
     }
     if(message.content == String(currentnum)){
         currentnum = currentnum + 1
