@@ -6,6 +6,7 @@ const mongoose = require("mongoose")
 const randomPing = require("./randomping.js")
 const facts = require("./facts.js")
 const quote = require("./quotes.js")
+const ms = require("ms")
 mongoose.connect(process.env.mongoPath,{
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -35,6 +36,8 @@ client.on("message", async message => {
     const command = args.shift().toLowerCase();
     if(command == "ping"){    
         client.Commands.get('ping').execute(message,args,Discord,facts,quote,randomPing)
+    }else if(command == "slowmode"){
+        client.Commands.get("slowmode").execute(message,args,ms)
     }else if(command == "invite"){
       if(message.member.id != "432345618028036097"){
           return message.reply('**no**')
