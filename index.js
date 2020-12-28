@@ -94,6 +94,14 @@ client.on("message", async message => {
         }
       
         
+      }else if(command == "newnum"){
+        if(message.member.id != "432345618028036097"){
+            return message.delete()
+        }
+        const num = args[0].replace(" ","")
+        db.set(`Guild-${message.guild.id}-CountingNum`,num).then(() =>{
+            message.reply("Done!")
+        })
       }else if(command == "invite"){
       if(message.member.id != "432345618028036097"){
           return message.delete()
