@@ -28,23 +28,12 @@ client.on("ready", async () => {
 client.on("message", async message => {   
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
-    const data = await prefixModel.findOne({
-        guildID: message.guild.id.toString()
-    })
    
-    var prefix
-    if(data){
-        prefix = data.prefix
-    }else if(!data){
-        prefix = "c!"
-    }
-	
+    const prefix = "c!"
     if(!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).split(" ");
     const command = args.shift().toLowerCase();
-    if(command == "prefix"){
-     client.Commands.get("prefix").execute(message,args,prefixModel)
-    }else if(command == "ping"){    
+    if(command == "ping"){    
         client.Commands.get('ping').execute(message,args,Discord,facts,quote,randomPing)
     }else if(command == "invite"){
       if(message.member.id != "432345618028036097"){
