@@ -54,6 +54,20 @@ client.on("message", async message => {
     }
 })
 client.login(process.env.token)
-const PORT = process.env.PORT || 5001;
+var express=        require("express");
 
-app.listen(PORT, () => console.log(`Server is listening on port ${PORT}...`));
+var app=    express();
+app.get('/',function(req,res){
+    console.log(req);
+    res.send("Hello world");
+});
+
+app.get('*', function(req, res){
+  res.send("Nothing to see here.", 404);
+});
+
+var port=   process.env.PORT || 3000;
+app.listen(port,function(){
+    var host=   server.address().address;
+    var port=   server.address().port;
+});
