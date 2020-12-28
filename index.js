@@ -54,5 +54,5 @@ client.on("message", async message => {
     }
 })
 client.login(process.env.token)
-const wakeup = require("./server.js")
-wakeup()
+const wakeup = require("./server.js")  
+wakeup() 
