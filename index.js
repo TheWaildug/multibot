@@ -46,8 +46,14 @@ client.on("message", async message => {
     }
 })
 var currentnum = 1
-var prevuser = ""
+var prevuser 
 client.on("message", message =>{
+    if(message.channel.type == "dm"){
+        return;
+    }
+    if(message.author.bot){
+        return;
+    }
     if(!message.channel.id == "791760708164911124"){
         return
     }
@@ -61,6 +67,7 @@ client.on("message", message =>{
     }
     if(message.content == String(currentnum)){
         currentnum = currentnum + 1
+        prevuser = message.member.id
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum)}.`)
     }
 })
