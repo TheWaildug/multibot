@@ -89,7 +89,9 @@ client.on("message",async message =>{
         updateuser(message.member.id,message.guild.id)
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum)}.`)
         return;
+    } 
     }
+   
 })
 client.login(process.env.token)
 const wakeup = require("./server.js")  
