@@ -50,10 +50,8 @@ client.on("message", message =>{
     if(message.author.bot){
         return;
     }
-    if(!message.channel.id == "791760708164911124"){
-        return
-    }
-    if(prevuser == message.member.id){
+    if(message.channel.id == "791760708164911124"){
+        if(prevuser == message.member.id){
         console.log(`${message.member.id} counted twice in a row.`)
         message.delete()
         return
@@ -68,7 +66,9 @@ client.on("message", message =>{
         prevuser = message.member.id
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum)}.`)
         return;
+    } 
     }
+   
 })
 client.login(process.env.token)
 const wakeup = require("./server.js")  
