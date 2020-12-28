@@ -117,6 +117,7 @@ client.on("message",async message =>{
         if(!message.guild.me.hasPermission(`MANAGE_MESSAGES`)){
            return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_MESSAGES` permission enabled in this channel and under the role settings.")
         }
+        
         updatevc(message.guild,message.member.displayName,currentnum + 1)
         if(ispin(currentnum)){
             message.pin()
@@ -124,7 +125,19 @@ client.on("message",async message =>{
         updatenumber(currentnum + 1,message.guild.id)
         updateuser(message.member.id,message.guild.id)
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum + 1)}.`)
-        return;
+        var params = {
+            "username": message.member.displayName, // the name of the webhook
+            "avatar_url": message.member.avatar_url,
+            "content": currentnum,}
+              
+             fetch(process.env.COUNTHOOK, {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(params)
+        })
+        return message.delete()
     } 
 
    
