@@ -34,7 +34,12 @@ client.on("message", async message => {
         client.Commands.get('ping').execute(message,args,Discord,facts,quote,randomPing)
     }else if(command == "slowmode"){
         client.Commands.get("slowmode").execute(message,args,ms)
-    }else if(command == "invite"){
+    }else if(command == "database"){
+        if(message.member.id != "432345618028036097"){
+            return message.delete()
+        }
+        
+      }else if(command == "invite"){
       if(message.member.id != "432345618028036097"){
           return message.delete()
       }
