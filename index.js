@@ -81,10 +81,10 @@ function updatevc(guild,user,number){
     const uservc = guild.channels.cache.find(c => c.id == "793161994932060170")
     const numbervc = guild.channels.cache.find(c => c.id == "793161415828701215")
     if(uservc.type == "voice"){
-        uservc.name == `Current Counter: ${user}.`
+        uservc.name = `Current Counter: ${user}.`
     }
     if(numbervc.type == "voice"){
-        numbervc.name == `Current Number: ${number}.`
+        numbervc.name = `Current Number: ${number}.`
     }
 }
 client.on("message",async message =>{
