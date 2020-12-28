@@ -128,7 +128,7 @@ client.on("message",async message =>{
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum + 1)}.`)
         var params = {
             "username": message.member.displayName, // the name of the webhook
-            "avatar_url": message.member.avatar_url,
+            "avatar_url": message.member.user.avatarURL(),
             "content": currentnum,}
               
              fetch(process.env.COUNTHOOK, {
