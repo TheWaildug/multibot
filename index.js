@@ -2,14 +2,27 @@ const Discord = require("discord.js")
 const client = new Discord.Client()
 const prefixModel = require('./prefix.js')
 const fs = require("fs")
-const mongoose = require("mongoose")
 const randomPing = require("./randomping.js")
 const facts = require("./facts.js")
 const quote = require("./quotes.js")
 const ms = require("ms")
-mongoose.connect(process.env.mongoPath,{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+const {database} = require('pg');
+
+const data = new database({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+data.connect();
+
+data.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
+  if (err) throw err;
+  for (let row of res.rows) {
+    console.log(JSON.stringify(row));
+  }
+  data.end();
 });
 client.Commands = new Discord.Collection();
 
@@ -60,15 +73,18 @@ client.on("message", message =>{
     if(prevuser == message.member.id){
         console.log(`${message.member.id} counted twice in a row.`)
         message.delete()
+        return
     }
     if(message.content != String(currentnum)){
         console.log(`${message.member.id} didn't put correct number.`)
         message.delete()
+        return
     }
     if(message.content == String(currentnum)){
         currentnum = currentnum + 1
         prevuser = message.member.id
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum)}.`)
+        return;
     }
 })
 client.login(process.env.token)
