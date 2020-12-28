@@ -21,10 +21,11 @@ for (const file of commandFiles) {
 client.on("ready", async () => {
     console.log("The MultiBot is ready!")
     client.user.setStatus("dnd")
-    client.user.setPresence({ activity: { name: 'the frog.', type: "WATCHING "}, status: "dnd"})
+
 })
 
 client.on("message", async message => {   
+    console.log(message.content)
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
     const data = await prefixModel.findOne({
