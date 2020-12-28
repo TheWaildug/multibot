@@ -25,19 +25,9 @@ client.on("ready", async () => {
 })
 
 client.on("message", async message => {   
-    console.log(message.content)
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
-    const data = await prefixModel.findOne({
-        guildID: message.guild.id
-    })
-   
-    var prefix
-    if(data){
-        prefix = data.prefix
-    }else if(!data){
-        prefix = "c!"
-    }
+    const prefix = "c!"
     if(!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).split(" ");
     const command = args.shift().toLowerCase();
