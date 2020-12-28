@@ -76,7 +76,17 @@ function ispin(number){
     }
     return false
 }
-const numbervc = "793161415828701215"
+
+function updatevc(guild,user,number){
+    const uservc = guild.channels.cache.find(c => c.id == "793161994932060170")
+    const numbervc = guild.channels.cache.find(c => c.id == "793161415828701215")
+    if(uservc.type == "voice"){
+        uservc.name == `Current Counter: ${user}.`
+    }
+    if(numbervc.type == "voice"){
+        numbervc.name == `Current Number: ${number}.`
+    }
+}
 client.on("message",async message =>{
   
     if(message.channel.type == "dm"){
@@ -101,6 +111,10 @@ client.on("message",async message =>{
         return
     }
     if(message.content == String(currentnum)){
+        if(!message.guild.me.hasPermission(`MANAGE_MESSAGES`)){
+           return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_MESSAGES` permission enabled in this channel and under the role settings.")
+        }
+        updatevc(message.guild,message.member.displayName,currentnum + 1)
         if(ispin(currentnum)){
             message.pin()
         }
