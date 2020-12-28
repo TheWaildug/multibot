@@ -152,8 +152,8 @@ client.on("message",async message =>{
     if(message.author.bot){
         return;
     }
-    if(!message.channel.id == "791760708164911124"){
-        return
+    if(message.channel.id != "791760708164911124"){
+        return;
     }
     var currentnum = await getnumber(message.guild.id)
     var prevuser = await finduser(message.guild.id)
