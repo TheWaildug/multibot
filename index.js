@@ -24,6 +24,7 @@ client.on("ready", async () => {
 
 })
 
+
 client.on("message", async message => {   
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
@@ -37,8 +38,7 @@ client.on("message", async message => {
     }else if(!data){
         prefix = "c!"
     }
-    console.log("test")
-    console.log(prefix)
+	
     if(!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).split(" ");
     const command = args.shift().toLowerCase();
