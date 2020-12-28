@@ -19,7 +19,7 @@ module.exports = {
             guildID: message.guild.id
         })
         if(args[0].toLowerCase() == "reset"){
-          message.channel.send(`The prefix has been reset to c!`)
+          message.channel.send(`The prefix has been reset to **c!**`)
 
           
           let newData = new prefixModel({
