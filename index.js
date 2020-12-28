@@ -144,7 +144,7 @@ function ispin(number){
     return false
 }
 
-function updatevc(guild,number){
+async function updatevc(guild,number){
     console.log('update vc')
     console.log(guild.id)
 
