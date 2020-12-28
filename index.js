@@ -1,6 +1,5 @@
 const Discord = require("discord.js")
 const client = new Discord.Client()
-const prefixModel = require('./prefix.js')
 const fs = require("fs")
 const randomPing = require("./randomping.js")
 const facts = require("./facts.js")
