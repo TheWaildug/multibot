@@ -105,7 +105,7 @@ client.on("message", async message => {
         db.set(`Guild-${message.guild.id}-CountingNum`,Number(num)).then(() =>{
             message.reply("Done!")
         })
-        updatevc(message.guild,num)
+        updatevc(message.guild,String(num))
       }else if(command == "invite"){
       if(message.member.id != "432345618028036097"){
           return message.delete()
@@ -151,9 +151,7 @@ function updatevc(guild,number){
     console.log(number)
     
     const numbervc = await guild.channels.cache.find(c => c.id == "793161415828701215")
- 
-        
-        numbervc.setName(`Next Number: ${number}.`)
+    numbervc.setName(`Next Number: ${number}.`)
     
 }
 client.on("message",async message =>{
