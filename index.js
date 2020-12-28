@@ -188,7 +188,7 @@ client.on("message",async message =>{
         updatenumber(currentnum + 1,message.guild.id)
         updateuser(message.member.id,message.guild.id)
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum + 1)}.`)
-        const webhooks = message.channel.fetchWebhooks()
+        const webhooks = await message.channel.fetchWebhooks()
        const webhook = webhooks.first()
         if(webhook){
             webhook.send(currentnum, {
