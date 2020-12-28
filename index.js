@@ -85,7 +85,7 @@ client.on("message",async message =>{
         return
     }
     if(message.content == String(currentnum)){
-        updatenumber(currentnum,message.guild.id)
+        updatenumber(currentnum + 1,message.guild.id)
         updateuser(message.member.id,message.guild.id)
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum + 1)}.`)
         return;
