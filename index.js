@@ -193,7 +193,7 @@ client.on("message",async message =>{
         if(webhook){
             webhook.send(currentnum, {
                 username: message.member.displayName,
-                avatarURL: message.member.author.avatarURL()
+                avatarURL: message.member.user.avatarURL()
             }).then(msg => {
                 if(ispin(currentnum)){
                     msg.pin()
