@@ -87,10 +87,10 @@ client.on("message",async message =>{
     if(message.content == String(currentnum)){
         updatenumber(currentnum,message.guild.id)
         updateuser(message.member.id,message.guild.id)
-        console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum)}.`)
+        console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum + 1)}.`)
         return;
     } 
-    }
+
    
 })
 client.login(process.env.token)
