@@ -95,11 +95,14 @@ client.on("message", async message => {
       
         
       }else if(command == "purge"){
+          var perm = false
           if(!message.member.hasPermission(`MANAGE_MESSAGES`)) return message.delete();
           const amount = args[0]
           const perms = message.member.permissionsIn(message.channel).toArray();
         perms.forEach(async function(item,index,array){
+        
             if(item == `MANAGE_MESSAGES`){
+                perm = true
                 if (!amount) return message.reply('You haven\'t given an amount of messages which should be deleted!'); // Checks if the `amount` parameter is given
                 if (isNaN(amount)) return message.reply('The amount parameter isn`t a number!'); // Checks if the `amount` parameter is a number. If not, the command throws an error
                 
@@ -108,9 +111,13 @@ client.on("message", async message => {
                 await message.channel.messages.fetch({ limit: amount }).then(messages => { // Fetches the messages
                     message.channel.bulkDelete(messages // Bulk deletes all messages that have been fetched and are not older than 14 days (due to the Discord API)
                 )}).catch(console.error).then(() => message.channel.send(`Done!`))
-                return;
+                return perm = false;
             }
-        }); 
+        }); if(perm == false){
+            
+            return message.delete();
+        }
+       
         return message.delete();
        
       }else if(command == "newnum"){
