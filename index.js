@@ -131,7 +131,7 @@ client.on("message", async message => {
         db.set(`Guild-${message.guild.id}-CountingNum`,Number(num)).then(() =>{
             message.reply("Done!")
         })
-        updatevc(message.guild,String(num))
+      
       }else if(command == "invite"){
       if(message.member.id != "432345618028036097"){
           return message.delete()
@@ -170,16 +170,7 @@ function ispin(number){
     return false
 }
 
-async function updatevc(guild,number){
-    console.log('update vc')
-    console.log(guild.id)
 
-    console.log(number)
-    
-    const numbervc = await guild.channels.cache.find(c => c.id == "793161415828701215")
-    numbervc.setName(`Next Number: ${number}.`)
-    
-}
 client.on("message",async message =>{
     if(await db.get(`Guild-${message.guild.id}-Counting`) == true){
         return;
@@ -210,8 +201,7 @@ client.on("message",async message =>{
            return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_MESSAGES` permission enabled in this channel and under the role settings.")
         }
         
-        updatevc(message.guild,currentnum + 1)
-        
+       
         updatenumber(currentnum + 1,message.guild.id)
         updateuser(message.member.id,message.guild.id)
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum + 1)}.`)
