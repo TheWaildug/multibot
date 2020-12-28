@@ -88,8 +88,7 @@ function updatevc(guild,user,number){
     console.log(uservc.name)
     console.log(numbervc.name)
     
-        uservc.setName(`Current Counter: ${user}.`)
-
+        uservc.setName(`Counter: ${user}.`)
         numbervc.setName(`Next Number: ${number}.`)
     
 }
