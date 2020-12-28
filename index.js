@@ -5,6 +5,7 @@ const randomPing = require("./randomping.js")
 const facts = require("./facts.js")
 const quote = require("./quotes.js")
 const ms = require("ms")
+const fetch = require("node-fetch")
 const Database = require("@replit/database")
 const db = new Database()
 client.Commands = new Discord.Collection();
@@ -137,7 +138,7 @@ client.on("message",async message =>{
             },
             body: JSON.stringify(params)
         })
-        
+
         return message.delete()
     } 
 
