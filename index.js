@@ -61,6 +61,17 @@ async function finduser(guild){
     }
     return currentuser
 }
+const numpins = require("./numbers")
+
+function ispin(number){
+    for (var i = 0; i < numpins.length; i++) {
+        if(numpins[i] == number){
+            return true
+        }
+    }
+    return false
+}
+const numbervc = "793161415828701215"
 client.on("message",async message =>{
   
     if(message.channel.type == "dm"){
@@ -85,6 +96,9 @@ client.on("message",async message =>{
         return
     }
     if(message.content == String(currentnum)){
+        if(ispin(currentnum)){
+            message.pin()
+        }
         updatenumber(currentnum + 1,message.guild.id)
         updateuser(message.member.id,message.guild.id)
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum + 1)}.`)
