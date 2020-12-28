@@ -90,7 +90,7 @@ function updatevc(guild,user,number){
     
         uservc.name = `Current Counter: ${user}.`
 
-        numbervc.name = `Current Number: ${number}.`
+        numbervc.name = `Next Number: ${number}.`
     
 }
 client.on("message",async message =>{
