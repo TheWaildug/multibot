@@ -37,6 +37,7 @@ client.on("message", async message => {
     }else if(!data){
         prefix = "c!"
     }
+    console.log("test")
     if(!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).split(" ");
     const command = args.shift().toLowerCase();
