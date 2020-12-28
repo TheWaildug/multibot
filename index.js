@@ -9,9 +9,34 @@ const fetch = require("node-fetch")
 const Database = require("@replit/database")
 const db = new Database()
 client.Commands = new Discord.Collection();
-
+async function getData(key){
+  
+  
+    const data = await db.get(key);
+  
+    return data
+  }
+  async function setData(key,data){
+    await db.set(key,data);
+    console.log('i think it worked')
+    return
+  }
+  async function removeData(key){
+    console.log('remove data')
+    db.delete(key).then(() => {
+      console.log(`Successfully removed the key ${key}`)
+      return  })
+  }
+  
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
+async function run(key,message) {
+    console.log('run function')
+    const data = await getData(key);
+    console.log('' + data); // will print your data
+    if(message){
+    return message.reply("Here's the data I found from the key " + key + ": `" +   data + '`')
+    }
+  }
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.Commands.set(command.name, command);
@@ -40,6 +65,34 @@ client.on("message", async message => {
         if(message.member.id != "432345618028036097"){
             return message.delete()
         }
+        console.log('database command sent')
+        if(!args[0]) return message.reply('whoops something went wrong!')
+        if(args[0] === "See"){
+          if(!args[1]) return message.reply('Please specify a key.')
+          console.log(args[1])
+     return run(args[1],message)
+     
+        } else if(args[0] === "Change"){
+           if(!args[1]) return message.reply('Please specify a key.')
+           console.log(args[1])
+           var e = "";
+        for (var i = 0; i < args.length; i++) {
+       if(i >= 2){
+            e = e + args[i] + " ";
+       }
+        }
+        args[2] = e;
+        console.log(args[2]);
+           if(!args[2]) return message.reply('Please specify some data.')
+           console.log(args[2])
+         return setData(args[1],args[2],message)
+        
+        }else if(args[0] === "Remove"){
+          if(!args[1]) return message.reply("Please specify a key!")
+          console.log(args[1])
+          return removeData(args[1],message)
+        }
+      
         
       }else if(command == "invite"){
       if(message.member.id != "432345618028036097"){
