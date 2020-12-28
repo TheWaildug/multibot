@@ -184,24 +184,21 @@ client.on("message",async message =>{
         }
         
         updatevc(message.guild,message.member.displayName,currentnum + 1)
-        if(ispin(currentnum)){
-            message.pin()
-        }
+        
         updatenumber(currentnum + 1,message.guild.id)
         updateuser(message.member.id,message.guild.id)
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum + 1)}.`)
-        var params = {
-            "username": message.member.displayName, // the name of the webhook
-            "avatar_url": message.member.user.avatarURL(),
-            "content": currentnum,}
-              
-             fetch(process.env.COUNTHOOK, {
-            method: "POST",
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(params)
-        })
+        const webhookClient = new Discord.WebhookClient(process.env.countID, process.env.countTOKEN);
+        webhookClient.send(currentnum, {
+	username: message.member.displayName,
+	avatarURL: message.member.user.avatarURL(),
+}).then(msg =>{
+    if(ispin(currentnum)){
+        msg.pin()
+    }
+})
+  
+      
 
         return message.delete()
     } 
