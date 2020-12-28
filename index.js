@@ -90,7 +90,7 @@ client.on("message",async message =>{
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum)}.`)
         return;
     } 
-    }
+
    
 })
 client.login(process.env.token)
