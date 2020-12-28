@@ -17,8 +17,9 @@ for (const file of commandFiles) {
 }
 client.on("ready", async () => {
     console.log("The MultiBot is ready!")
-    client.user.setStatus("dnd")
+   
     client.user.setActivity("the frog.", {type: "WATCHING"}).catch(console.error);
+    client.user.setStatus("dnd")
 })
 
 
@@ -78,8 +79,14 @@ function ispin(number){
 }
 
 function updatevc(guild,user,number){
+    console.log('update vc')
+    console.log(guild.id)
+    console.log(user)
+    console.log(number)
     const uservc = guild.channels.cache.find(c => c.id == "793161994932060170")
     const numbervc = guild.channels.cache.find(c => c.id == "793161415828701215")
+    console.log(uservc.name)
+    console.log(numbervc.name)
     if(uservc.type == "voice"){
         uservc.name = `Current Counter: ${user}.`
     }
