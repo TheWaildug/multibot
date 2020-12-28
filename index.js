@@ -19,7 +19,7 @@ for (const file of commandFiles) {
 	client.Commands.set(command.name, command);
 }
 client.on("ready", async () => {
-    console.log("Your bot is ready!")
+    console.log("The MultiBot is ready!")
     client.user.setStatus("dnd")
     client.user.setPresence({ activity: { name: 'the frog.', type: "WATCHING "}})
 })
