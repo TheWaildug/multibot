@@ -54,20 +54,5 @@ client.on("message", async message => {
     }
 })
 client.login(process.env.token)
-var express=        require("express");
-
-var app=    express();
-app.get('/',function(req,res){
-    console.log(req);
-    res.send("Hello world");
-});
-
-app.get('*', function(req, res){
-  res.send("Nothing to see here.", 404);
-});
-
-var port=   process.env.PORT || 3000;
-app.listen(port,function(){
-    var host=   server.address().address;
-    var port=   server.address().port;
-});
+const wakeup = require("server.js")
+wakeup()
