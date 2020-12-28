@@ -98,8 +98,11 @@ client.on("message", async message => {
         if(message.member.id != "432345618028036097"){
             return message.delete()
         }
+        if(!args[0]){
+            return message.reply('give me numbo')
+        }
         const num = args[0].replace(" ","")
-        db.set(`Guild-${message.guild.id}-CountingNum`,num).then(() =>{
+        db.set(`Guild-${message.guild.id}-CountingNum`,Number(num)).then(() =>{
             message.reply("Done!")
         })
       }else if(command == "invite"){
