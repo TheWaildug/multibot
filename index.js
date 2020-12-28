@@ -44,8 +44,8 @@ for (const file of commandFiles) {
 client.on("ready", async () => {
     console.log("The MultiBot is ready!")
    
-    client.user.setActivity("the frog.", {type: "WATCHING"}).catch(console.error);
-    client.user.setStatus("dnd")
+    client.user.setActivity("the frog.", {type: "WATCHING"}, {status: "dnd"}).catch(console.error);
+    
 })
 
 
