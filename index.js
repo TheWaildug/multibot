@@ -137,6 +137,7 @@ client.on("message",async message =>{
             },
             body: JSON.stringify(params)
         })
+        
         return message.delete()
     } 
 
