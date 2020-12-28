@@ -5,24 +5,8 @@ const randomPing = require("./randomping.js")
 const facts = require("./facts.js")
 const quote = require("./quotes.js")
 const ms = require("ms")
-const {database} = require('pg');
-
-const data = new database({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
-
-data.connect();
-
-data.query('SELECT table_schema,table_name FROM information_schema.tables;', (err, res) => {
-  if (err) throw err;
-  for (let row of res.rows) {
-    console.log(JSON.stringify(row));
-  }
-  data.end();
-});
+const Database = require("@replit/database")
+const db = new Database()
 client.Commands = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
