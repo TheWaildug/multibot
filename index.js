@@ -150,7 +150,7 @@ function updatevc(guild,number){
 
     console.log(number)
     
-    const numbervc = guild.channels.cache.find(c => c.id == "793161415828701215")
+    const numbervc = await guild.channels.cache.find(c => c.id == "793161415828701215")
  
         
         numbervc.setName(`Next Number: ${number}.`)
