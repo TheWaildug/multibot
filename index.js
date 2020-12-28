@@ -73,7 +73,7 @@ client.on("message",async message =>{
         return
     }
     var currentnum = await getnumber(message.guild.id)
-    var prevuser = await finduser(message.guild.id  )
+    var prevuser = await finduser(message.guild.id)
     if(prevuser == message.member.id){
         console.log(`${message.member.id} counted twice in a row.`)
         message.delete()
@@ -86,7 +86,7 @@ client.on("message",async message =>{
     }
     if(message.content == String(currentnum)){
         updatenumber(currentnum,message.guild.id)
-        prevuser = message.member.id
+        updateuser(message.member.id,message.guild.id)
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum)}.`)
         return;
     }
