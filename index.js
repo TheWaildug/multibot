@@ -21,7 +21,7 @@ for (const file of commandFiles) {
 client.on("ready", async () => {
     console.log("The MultiBot is ready!")
     client.user.setStatus("dnd")
-    client.user.setPresence({ activity: { name: 'the frog.', type: "WATCHING "}})
+    client.user.setPresence({ activity: { name: 'the frog.', type: "WATCHING "}, status: "dnd"})
 })
 
 client.on("message", async message => {   
