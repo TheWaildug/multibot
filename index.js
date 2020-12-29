@@ -243,7 +243,7 @@ client.on("message", async message => {
           const pre = await db.get(`Guild-${message.guild.id}-Prefix`)
           const embed = new Discord.MessageEmbed()
           .setTitle("Commands")
-          .setColor("F53E16")
+          .setColor("RANDOM")
           .setURL("https://discord.gg/qyHnGP5yMP")
           .addFields(
               {name: `${pre}ping`, value: `Shows the current ping along with a random fact or quote.`},
