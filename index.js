@@ -7,8 +7,11 @@ const quote = require("./quotes.js")
 const ms = require("ms")
 const fetch = require("node-fetch")
 const Database = require("@replit/database")
+const random = require('random')
+const jsonfile = require("jsonfile")
 const db = new Database()
 client.Commands = new Discord.Collection();
+var stats = {}
 async function getData(key){
   
   
@@ -47,8 +50,43 @@ client.on("ready", async () => {
     client.user.setActivity("the frog.", {type: "WATCHING"}, {status: "dnd"}).catch(console.error);
     
 })
+if(fs.existsSync('stats.json')){
+    stats =  jsonfile.readdirSync("stats.json")
+}
+client.on("message",async message => {
+    if(message.author.bot){
+        return;
+    }
+    if(message.channel.type == "dm"){
+        return;
+    }
+ if(message.guild.id in stats == false){
+     stats[message.guild.id] = {};
 
-
+ }
+ const guildStats = stats[message.guild.id]
+ if(message.author.id in guildStats == false){
+     guildStats[message.author.id] = {
+        xp: 0,
+        level: 0,
+        last_message: 0,
+     }
+ }
+ const userStats = guildStats[message.author.id]
+ if(Date.now() - userStats.last_message > 60000){
+    userStats.xp += random.init(15,25);
+    userStats.last_message = Date.now();
+   if(userStats.xp >= xpToNextLevel){
+       userStats.level++;
+       userStats.xp = userStats.xp - xpToNextLevel;
+       message.channel.send(`<@${message.member.id}> has leveled up to ${userStats.level}!`)
+   }
+   jsonfile.writeFileSync("stats.json",stats);
+    const xpToNextLevel = 5 * Math.pow(userStats.level, 2) * 50 * userStats.level + 100;
+    console.log(`${message.author.id} now has ${userStats.xp} xp. ${xpToNextLevel} xp needed for next level.`)
+ }
+ 
+})
 client.on("message", async message => {   
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
