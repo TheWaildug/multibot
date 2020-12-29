@@ -284,13 +284,13 @@ client.on("message", async message => {
 client.on("message",async message =>{
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
-   
-   const prefix = message.mentions.members.first()
-   if(!prefix == "<@791760755195904020>"){
+   const mentionMember = message.mentions.members.first()
+   if(!mentionMember.id == "791760755195904020"){
      return;
    }
-    if(!message.content.startsWith(prefix)) return;
-    const args = message.content.slice(prefix.length).split(" ");
+    if(!message.content.startsWith("<@!791760755195904020>")) return;
+    const dis = "<@!791760755195904020> "
+    const args = message.content.slice(dis.length).split(" ");
     const command = args.shift().toLowerCase();
     if(command == "prefix"){
         if(!message.member.hasPermission(`MANAGE_GUILD`)){
