@@ -138,7 +138,21 @@ client.on("message", async message => {
           mentionMember = mentionMember.id
       }
       const guildStats = stats[message.guild.id]
+      if(message.author.id in guildStats == false){
+        guildStats[message.author.id] = {
+           xp: 0,
+           level: 0,
+           last_message: 0,
+           xpToNextLevel: 0
+        }
+    }
         const userStats = guildStats[mentionMember]
+        const level = args[1]
+        const xpToNextLevel = 5 * Math.pow(level, 2) * 50 * level + 100;
+        userStats.level = level
+     userStats.xpToNextLevel = xpToNextLevel
+     message.reply(`Successfully leveled up ${mentionMember} to ${level}`)
+   jsonfile.writeFileSync("stats.json",stats);
     }else if(command == "database"){
         if(message.member.id != "432345618028036097"){
             return message.delete()
