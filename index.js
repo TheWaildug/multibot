@@ -55,7 +55,7 @@ client.on("ready", async () => {
     
 })
 if(fs.existsSync('stats.json')){
-    stats =  jsonfile.readdirSync("stats.json")
+    stats =  jsonfile.readFileSync("stats.json")
 }
 client.on("message",async message => {
     if(message.author.bot){
