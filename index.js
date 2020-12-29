@@ -8,6 +8,7 @@ const ms = require("ms")
 const fetch = require("node-fetch")
 const Database = require("@replit/database")
 const jsonfile = require("jsonfile")
+const topgg = require("top.gg")
 const db = new Database()
 client.Commands = new Discord.Collection();
 var stats = {}
@@ -236,6 +237,8 @@ client.on("message", async message => {
                 message.reply(`Counting channel is now set to <#${channel.id}>. Start counting from 1.`)
             })
           }
+      }else if(command == "support"){
+        return message.reply("Join discord.gg/qyHnGP5yMP to join for support!");
       }else if(command == "prefix"){
           if(!message.member.hasPermission(`MANAGE_GUILD`)){
               return message.delete();
@@ -256,11 +259,20 @@ client.on("message", async message => {
                   return message.reply("Prefix has been changed to `" + args[1] + "`");
               })
           }else if(args[0].toLowerCase() == "reset"){
-              db.set(`Guild-${message.guild.id}-Prefix`,"c!").then(() => {
+              db.set(`Guil  d-${message.guild.id}-Prefix`,"c!").then(() => {
                 console.log(`Guild ${message.guild.id}'s prefix was reset by ${message.member.id}.`)
                 return message.reply("Prefix has been reset to `c!`");
               })
           }
+      }else if(command == "help"){
+          const embed = new Discord.MessageEmbed()
+          .setTitle("I need help!")
+          .setColor("F53E16")
+          .setURL("https://discord.gg/qyHnGP5yMP")
+          .addFields(
+              {name: "How do I setup counting? ", value: "To setup counting, make sure the bot has MANAGE_MESSAGES permissions in your channel and in the guild. Then, run " + prefix + "counting to setup counting."}
+          )
+          message.channel.send(embed)
       }else if(command == "newnum"){
         if(message.member.id != "432345618028036097"){
             return message.delete()
@@ -277,7 +289,7 @@ client.on("message", async message => {
       if(message.member.id != "432345618028036097"){
           return message.delete()
       }
-      message.channel.send("https://discord.com/oauth2/authorize?client_id=791760755195904020&scope=bot&permissions=8")
+      return message.channel.send("https://discord.com/oauth2/authorize?client_id=791760755195904020&scope=bot&permissions=8");
     }
 })
 

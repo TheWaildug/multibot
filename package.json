@@ -20,7 +20,8 @@
     "node-fetch": "^2.6.1",
     "nodemon": "^2.0.6",
     "pg": "^8.5.1",
-    "random": "^2.2.0"
+    "random": "^2.2.0",
+    "top.gg": "^2.3.2"
   },
   "engines": {
     "node": "12.x",
