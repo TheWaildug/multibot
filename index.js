@@ -193,6 +193,37 @@ client.on("message", async message => {
        
         return message.delete();
        
+      }else if(command == "counting"){
+          if(!message.member.hasPermission(`MANAGE_GUILD`)){
+              return message.delete();
+          }
+          if(!args[0]){
+              return message.reply(`${prefix}counting ON/OFF/CHANNEL #CHANNEL/ID`)
+          }
+          if(args[0].toLowerCase() == "off"){
+              db.set(`Guild-${message.guild.id}-Counting`,false)
+          }else if(args[0].toLowerCase() == "on"){
+              db.set(`Guild-${message.guild.id}-Counting`,true)
+          }else if(args[0].toLowerCase() == "channel"){
+            var channel, mentionchannel;
+            var cont = true;
+            if (message.mentions.channels.first()) {
+              channel = mentionchannel = message.mentions.channels.first()
+            } else {
+              channel = mentionchannel = message.channel.guild.channels.cache.find(
+                r => r.id === args[1]
+              );
+            }
+            if (!channel && mentionchannel) {
+              message.reply("please # a channel or enter its ID .");
+              cont = false;
+            }
+            if (cont == false) {
+              return;
+            }
+            console.log(channel.name);
+            db.set(`Guild-${message.guild.id}-CountingChannel`,channel.id)
+          }
       }else if(command == "newnum"){
         if(message.member.id != "432345618028036097"){
             return message.delete()
@@ -246,7 +277,7 @@ client.on("message",async message =>{
     if(message.author.bot){
         return;
     }
-    if(message.channel.id != "791760708164911124"){
+    if(message.channel.id != await db.get(`Guild-${message.guild.id}-CountingChannel`)){
         return;
     }
     var currentnum = await getnumber(message.guild.id)
