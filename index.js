@@ -198,7 +198,7 @@ client.on("message",async message =>{
     }
     if(message.content == String(currentnum)){
         if(!message.guild.me.hasPermission(`MANAGE_MESSAGES`)){
-           return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_MESSAGES` permission enabled in this channel and under the role settings.")
+           return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_MESSAGES` permission enabled in this channel and under the role settings.");
         }
         
        
