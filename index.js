@@ -173,6 +173,7 @@ client.on("message", async message => {
       
         
       }else if(command == "purge"){
+          console.log("purge")
           var perm = false
           if(!message.member.hasPermission(`MANAGE_MESSAGES`)) return message.delete();
           const amount = args[0]
@@ -237,8 +238,27 @@ client.on("message", async message => {
                 message.reply(`Counting channel is now set to <#${channel.id}>. Start counting from 1.`)
             })
           }
+      }else if(command == "commands"){
+          console.log('command')
+          const pre = await db.get(`Guild-${message.guild.id}-Prefix`)
+          const embed = new Discord.MessageEmbed()
+          .setTitle("Commands")
+          .setColor("F53E16")
+          .setURL("https://discord.gg/qyHnGP5yMP")
+          .addFields(
+              {name: `${pre}ping`, value: `Shows the current ping along with a random fact or quote.`},
+              {name: `${pre}prefix`, value: "Changes prefix of the guild. Must have `MANAGE_SERVER` permissions."},
+              {name: `${pre}counting`,value: "Enables/Disables counting and changes counting channel."},
+              {name: `${pre}slowmode`,value: "Changes slowmode in current/specified channel. Requires `MANAGE_MESSAGES` in the guild and in the channel."},
+              {name: `${pre}purge`, value: "Purges messages in current channel from up to 14 days (blame discord api). Requires `MANAGE_MESSAGES` in guild and in the channel."},
+              {name: `${pre}support`, value: "Gives support server link."},
+              {name: `${pre}help`,value: "Gives quick faqs."},
+              {name: `${pre}invite`,value: "Shows invite of the bot."}
+          )
+          .setFooter("See a command that isn't on here? Click the title to join our support server.")
+          message.channel.send(embed)
       }else if(command == "support"){
-        return message.reply("Join https://discord.gg/qyHnGP5yMP to for support!");
+        return message.reply("Join https://discord.gg/qyHnGP5yMP for support!");
       }else if(command == "prefix"){
           if(!message.member.hasPermission(`MANAGE_GUILD`)){
               return message.delete();
