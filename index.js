@@ -285,7 +285,7 @@ client.on("message",async message =>{
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
    
-    const prefix = "<@791760755195904020>"
+    const prefix = "<@791760755195904020> "
     if(!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).split(" ");
     const command = args.shift().toLowerCase();
