@@ -147,9 +147,13 @@ client.on("message", async message => {
         }
     }
         const userStats = guildStats[mentionMember]
+        if(!args[1]){
+            return message.reply("I need a level idiot.")
+        }
         const level = args[1]
         const xpToNextLevel = 5 * Math.pow(level, 2) * 50 * level + 100;
         userStats.level = level
+        userStats.xp = 0
      userStats.xpToNextLevel = xpToNextLevel
      message.reply(`Successfully leveled up ${mentionMember} to ${level}`)
    jsonfile.writeFileSync("stats.json",stats);
