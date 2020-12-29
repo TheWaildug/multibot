@@ -285,6 +285,9 @@ client.on("message",async message =>{
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
    const mentionMember = message.mentions.members.first()
+   if(!mentionMember){
+     return;
+   }
    if(!mentionMember.id == "791760755195904020"){
      return;
    }
