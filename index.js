@@ -74,18 +74,19 @@ client.on("message",async message => {
         xp: 0,
         level: 0,
         last_message: 0,
+        xpToNextLevel: 0
      }
  }
  const userStats = guildStats[message.author.id]
  if(Date.now() - userStats.last_message > 30000){
-    userStats.xp += getRandomIntInclusive(15,25);
+    userStats.xp += getRandomIntInclusive(25,50);
     userStats.last_message = Date.now();
     const xpToNextLevel = 5 * Math.pow(userStats.level, 2) * 50 * userStats.level + 100;
     console.log(`${message.author.id} now has ${userStats.xp} xp. ${xpToNextLevel} xp needed for next level.`)
- }
-   if(userStats.xp >= xpToNextLevel){
+       if(userStats.xp >= xpToNextLevel){
        userStats.level++;
        userStats.xp = userStats.xp - xpToNextLevel;
+       userStats.xpToNextLevel = xpToNextLevel
        console.log(`${message.author.id} has leveled up to ${userStats.level}.`)
        message.channel.send(`<@${message.member.id}> has leveled up to ${userStats.level}!`)
    }
@@ -93,6 +94,8 @@ client.on("message",async message => {
     
     
  
+ }
+
 })
 client.on("message", async message => {   
     if(message.author.bot) return;
@@ -106,6 +109,11 @@ client.on("message", async message => {
         client.Commands.get('ping').execute(message,args,Discord,facts,quote,randomPing)
     }else if(command == "slowmode"){
         client.Commands.get("slowmode").execute(message,args,ms)
+    }else if(command == "rank"){
+        console.log('rank')
+        const guildStats = stats[message.guild.id]
+        const userStats = guildStats[message.author.id]
+        message.channel.send(`Your current rank is **${userStats.level}.** You need **${(userStats.xpToNextLevel - userStats.xp)}** xp to level up.`)
     }else if(command == "database"){
         if(message.member.id != "432345618028036097"){
             return message.delete()
