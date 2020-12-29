@@ -155,7 +155,7 @@ client.on("message", async message => {
         userStats.level = level
         userStats.xp = 0
      userStats.xpToNextLevel = xpToNextLevel
-     message.reply(`Successfully leveled up ${mentionMember} to ${level}`)
+     message.reply(`Successfully leveled <@${mentionMember}> to ${level}`)
    jsonfile.writeFileSync("stats.json",stats);
     }else if(command == "database"){
         if(message.member.id != "432345618028036097"){
