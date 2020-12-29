@@ -104,7 +104,7 @@ client.on("message", async message => {
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
    
-    const prefix = "c!"
+    const prefix = await db.get(`Guild-${message.guild.id}-Prefix`)
     if(!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).split(" ");
     const command = args.shift().toLowerCase();
@@ -198,7 +198,8 @@ client.on("message", async message => {
               return message.delete();
           }
           if(!args[0]){
-              return message.reply(`${prefix}counting ON/OFF/CHANNEL #CHANNEL/ID`)
+              const pre =await db.get(`Guild-${message.guild.id}-Prefix`)
+              return message.reply(`${pre}counting ON/OFF/CHANNEL #CHANNEL/ID`)
           }
           if(args[0].toLowerCase() == "off"){
               db.set(`Guild-${message.guild.id}-Counting`,false).then(() => {
