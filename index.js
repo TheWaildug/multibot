@@ -231,6 +231,31 @@ client.on("message", async message => {
                 message.reply(`Counting channel is now set to <#${channel.id}>. Start counting from 1.`)
             })
           }
+      }else if(command == "prefix"){
+          if(!message.member.hasPermission(`MANAGE_GUILD`)){
+              return message.delete();
+          }
+          console.log('prefix')
+          if(!args[0]){
+            return message.reply(`${prefix}prefix SEE/CHANGE/RESET PREFIX`);
+          } 
+          if(args[0].toLowerCase() == "see"){
+              const prefix = await db.get(`Guild-${message.guild.id}-Prefix`)
+              return message.reply("Current prefix is `" + prefix + "`");
+          }else if(args[0].toLowerCase() == "change"){
+              if(!args[1]){
+                  return message.reply("please run this command again but include a prefix.");
+              }
+              db.set(`Guild-${message.guild.id}-Prefix`,args[1]).then(() => {
+                  console.log(`Guild ${message.guild.id}'s prefix was changed to ${args[1]} by ${message.member.id}.`)
+                  return message.reply("Prefix has been changed to `" + args[1] + "`");
+              })
+          }else if(args[0].toLowerCase() == "reset"){
+              db.set(`Guild-${message.guild.id}-Prefix`,"c!").then(() => {
+                console.log(`Guild ${message.guild.id}'s prefix was reset by ${message.member.id}.`)
+                return message.reply("Prefix has been reset to `c!`");
+              })
+          }
       }else if(command == "newnum"){
         if(message.member.id != "432345618028036097"){
             return message.delete()
