@@ -58,6 +58,9 @@ if(fs.existsSync('stats.json')){
     stats =  jsonfile.readFileSync("stats.json")
 }
 client.on("message",async message => {
+    if(message.guild.id != "791760625243652127"){
+        return;
+    }
     if(message.author.bot){
         return;
     }
@@ -234,7 +237,7 @@ function ispin(number){
 
 
 client.on("message",async message =>{
-    if(await db.get(`Guild-${message.guild.id}-Counting`) == true){
+    if(await db.get(`Guild-${message.guild.id}-Counting`) == false){
         return;
     }
     if(message.channel.type == "dm"){
