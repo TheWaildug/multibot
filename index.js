@@ -201,9 +201,13 @@ client.on("message", async message => {
               return message.reply(`${prefix}counting ON/OFF/CHANNEL #CHANNEL/ID`)
           }
           if(args[0].toLowerCase() == "off"){
-              db.set(`Guild-${message.guild.id}-Counting`,false)
+              db.set(`Guild-${message.guild.id}-Counting`,false).then(() => {
+                  return message.reply("Counting is now disabled in this guild.");
+              })
           }else if(args[0].toLowerCase() == "on"){
-              db.set(`Guild-${message.guild.id}-Counting`,true)
+              db.set(`Guild-${message.guild.id}-Counting`,true).then(() => {
+                  return message.reply(`Counting is now enabled in this guild.`)
+              })
           }else if(args[0].toLowerCase() == "channel"){
             var channel, mentionchannel;
             var cont = true;
@@ -222,7 +226,10 @@ client.on("message", async message => {
               return;
             }
             console.log(channel.name);
-            db.set(`Guild-${message.guild.id}-CountingChannel`,channel.id)
+            db.set(`Guild-${message.guild.id}-CountingChannel`,channel.id).then(() => {
+                db.set(`Guild-${message.guild.id}-CountingNum`,1)
+                message.reply(`Counting channel is now set to <#${channel.id}>. Start counting from 1.`)
+            })
           }
       }else if(command == "newnum"){
         if(message.member.id != "432345618028036097"){
