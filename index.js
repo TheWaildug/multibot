@@ -238,7 +238,7 @@ client.on("message", async message => {
             })
           }
       }else if(command == "support"){
-        return message.reply("Join discord.gg/qyHnGP5yMP to join for support!");
+        return message.reply("Join https://discord.gg/qyHnGP5yMP to for support!");
       }else if(command == "prefix"){
           if(!message.member.hasPermission(`MANAGE_GUILD`)){
               return message.delete();
@@ -270,8 +270,11 @@ client.on("message", async message => {
           .setColor("F53E16")
           .setURL("https://discord.gg/qyHnGP5yMP")
           .addFields(
-              {name: "How do I setup counting? ", value: "To setup counting, make sure the bot has MANAGE_MESSAGES permissions in your channel and in the guild. Then, run " + prefix + "counting to setup counting."}
+              {name: "How do I setup counting? ", value: "To setup counting, make sure the bot has `MANAGE_MESSAGES` permissions in your channel and in the guild. Then, run **" + prefix + "counting** to setup counting."},
+              {name: "How do I change my prefix?",value: "If you have forgotten your prefix, do **@MultiBot prefix see** to view the prefix. If you want to change or reset your prefix, do **" + prefix + "prefix change/reset** OR **@MultiBot prefix change/reset**."},
+
           )
+          .setFooter("Still need help? Click the title above to join our support server!")
           message.channel.send(embed)
       }else if(command == "newnum"){
         if(message.member.id != "432345618028036097"){
