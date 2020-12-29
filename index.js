@@ -104,7 +104,11 @@ client.on("message", async message => {
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
    
-    const prefix = await db.get(`Guild-${message.guild.id}-Prefix`)
+    var prefix = await db.get(`Guild-${message.guild.id}-Prefix`)
+    if(prefix == null){
+      db.set(`Guild-${message.guild.id}-Prefix`,"c!")
+      prefix = "c!"
+    }
     if(!message.content.startsWith(prefix)) return;
     const args = message.content.slice(prefix.length).split(" ");
     const command = args.shift().toLowerCase();
@@ -274,6 +278,42 @@ client.on("message", async message => {
           return message.delete()
       }
       message.channel.send("https://discord.com/oauth2/authorize?client_id=791760755195904020&scope=bot&permissions=8")
+    }
+})
+
+client.on("message",async message =>{
+    if(message.author.bot) return;
+    if(message.channel.type == "dm") return;
+   
+    const prefix = "<@791760755195904020>"
+    if(!message.content.startsWith(prefix)) return;
+    const args = message.content.slice(prefix.length).split(" ");
+    const command = args.shift().toLowerCase();
+    if(command == "prefix"){
+        if(!message.member.hasPermission(`MANAGE_GUILD`)){
+            return message.delete();
+        }
+        console.log('prefix')
+        if(!args[0]){
+          return message.reply(`@MultiBot prefix SEE/CHANGE/RESET PREFIX`);
+        } 
+        if(args[0].toLowerCase() == "see"){
+            const prefix = await db.get(`Guild-${message.guild.id}-Prefix`)
+            return message.reply("Current prefix is `" + prefix + "`");
+        }else if(args[0].toLowerCase() == "change"){
+            if(!args[1]){
+                return message.reply("please run this command again but include a prefix.");
+            }
+            db.set(`Guild-${message.guild.id}-Prefix`,args[1]).then(() => {
+                console.log(`Guild ${message.guild.id}'s prefix was changed to ${args[1]} by ${message.member.id}.`)
+                return message.reply("Prefix has been changed to `" + args[1] + "`");
+            })
+        }else if(args[0].toLowerCase() == "reset"){
+            db.set(`Guild-${message.guild.id}-Prefix`,"c!").then(() => {
+              console.log(`Guild ${message.guild.id}'s prefix was reset by ${message.member.id}.`)
+              return message.reply("Prefix has been reset to `c!`");
+            })
+        }
     }
 })
 async function updatenumber(currentnum,guild){
