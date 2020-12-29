@@ -83,10 +83,10 @@ client.on("message",async message => {
     userStats.last_message = Date.now();
     const xpToNextLevel = 5 * Math.pow(userStats.level, 2) * 50 * userStats.level + 100;
     console.log(`${message.author.id} now has ${userStats.xp} xp. ${xpToNextLevel} xp needed for next level.`)
+     userStats.xpToNextLevel = xpToNextLevel
        if(userStats.xp >= xpToNextLevel){
        userStats.level++;
        userStats.xp = userStats.xp - xpToNextLevel;
-       userStats.xpToNextLevel = xpToNextLevel
        console.log(`${message.author.id} has leveled up to ${userStats.level}.`)
        message.channel.send(`<@${message.member.id}> has leveled up to ${userStats.level}!`)
    }
@@ -113,7 +113,7 @@ client.on("message", async message => {
         console.log('rank')
         const guildStats = stats[message.guild.id]
         const userStats = guildStats[message.author.id]
-        message.channel.send(`Your current rank is **${userStats.level}.** You need **${(userStats.xpToNextLevel - userStats.xp)}** xp to level up.`)
+        message.channel.send(`Your current rank is **${userStats.level}.** You need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`)
     }else if(command == "database"){
         if(message.member.id != "432345618028036097"){
             return message.delete()
