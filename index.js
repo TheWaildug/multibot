@@ -114,6 +114,23 @@ client.on("message", async message => {
         const guildStats = stats[message.guild.id]
         const userStats = guildStats[message.author.id]
         message.channel.send(`Your current rank is **${userStats.level}.** You need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`)
+    }else if(command == "setlevel"){
+        if(!message.member.id == "432345618028036097"){
+            return message.delete();
+        }
+        if(!args[0]){
+            return message.reply("I need a user id or mentioned member.");
+        }
+      var mentionMember 
+      if(message.mentions.members){
+        mentionMember = message.mentions.members.first().id
+      }else{
+          mentionMember = await message.guild.members.cache.find(m => m.id == args[0])
+          console.log(mentionMember.displayName)
+          mentionMember = mentionMember.id
+      }
+      const guildStats = stats[message.guild.id]
+        const userStats = guildStats[mentionMember]
     }else if(command == "database"){
         if(message.member.id != "432345618028036097"){
             return message.delete()
@@ -202,16 +219,8 @@ async function getnumber(guild){
     }
     return currentnum
   }
-async function updateuser(user,guild){
-    await db.set(`Guild-${guild}-CountingUser`,user)
-}
-async function finduser(guild){
-    var currentuser = await db.get(`Guild-${guild}-CountingUser`)
-    if(currentuser == null){
-        currentuser = 0
-    }
-    return currentuser
-}
+
+
 const numpins = require("./numbers")
 
 function ispin(number){
@@ -238,12 +247,7 @@ client.on("message",async message =>{
         return;
     }
     var currentnum = await getnumber(message.guild.id)
-    var prevuser = await finduser(message.guild.id)
-    if(prevuser == message.member.id){
-        console.log(`${message.member.id} counted twice in a row.`)
-        message.delete()
-        return
-    }
+   
     if(message.content != String(currentnum)){
         console.log(`${message.member.id} didn't put correct number.`)
         message.delete()
@@ -256,7 +260,6 @@ client.on("message",async message =>{
         
        
         updatenumber(currentnum + 1,message.guild.id)
-        updateuser(message.member.id,message.guild.id)
         console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum + 1)}.`)
         const webhooks = await message.channel.fetchWebhooks()
        const webhook = webhooks.first()
