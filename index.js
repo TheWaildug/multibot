@@ -7,11 +7,15 @@ const quote = require("./quotes.js")
 const ms = require("ms")
 const fetch = require("node-fetch")
 const Database = require("@replit/database")
-const random = require('random')
 const jsonfile = require("jsonfile")
 const db = new Database()
 client.Commands = new Discord.Collection();
 var stats = {}
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+}
 async function getData(key){
   
   
@@ -74,7 +78,7 @@ client.on("message",async message => {
  }
  const userStats = guildStats[message.author.id]
  if(Date.now() - userStats.last_message > 60000){
-    userStats.xp += random.init(min = 15, max = 25);
+    userStats.xp += getRandomIntInclusive(15,25);
     userStats.last_message = Date.now();
    if(userStats.xp >= xpToNextLevel){
        userStats.level++;
