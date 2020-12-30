@@ -219,6 +219,9 @@ client.on("message", async message => {
        
         return message.delete();
        
+      }else if(command == "lock"){
+         console.log('lock')
+         client.Commands.get("lock").execute(message,args) 
       }else if(command == "counting"){
           if(!message.member.hasPermission(`MANAGE_GUILD`)){
               return message.delete();
