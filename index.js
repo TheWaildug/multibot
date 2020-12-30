@@ -229,6 +229,7 @@ client.on("message", async message => {
           }
           if(args[0].toLowerCase() == "off"){
               db.set(`Guild-${message.guild.id}-Counting`,false).then(() => {
+                  
                   return message.reply("Counting is now disabled in this guild.");
               })
           }else if(args[0].toLowerCase() == "on"){
