@@ -86,7 +86,7 @@ client.on("message",async message => {
     userStats.xp += getRandomIntInclusive(25,50);
     userStats.last_message = Date.now();
     const xpToNextLevel = 5 * Math.pow(userStats.level, 2) * 50 * userStats.level + 100;
-    console.log(`${message.author.id} now has ${userStats.xp} xp. ${xpToNextLevel} xp needed for next level.`)
+    console.log(`${message.author.id} now has ${userStats.xp} xp. ${xpToNextLevel - userStats.xp} xp needed for next level.`)
      userStats.xpToNextLevel = xpToNextLevel
        if(userStats.xp >= xpToNextLevel){
        userStats.level++;
@@ -100,6 +100,12 @@ client.on("message",async message => {
  
  }
 
+})
+client.on("message",async message =>{
+    if(message.author.bot) return;
+    if(message.channel.type == "dm"){
+
+    }
 })
 client.on("message", async message => {   
     if(message.author.bot) return;
@@ -265,7 +271,8 @@ client.on("message", async message => {
             })
           }
       }else if(command == "commands"){
-          console.log('command')
+          console.log(`commands ${message.guild.id}`)
+          console.log(`command ${message.member.id}`)
           const pre = await db.get(`Guild-${message.guild.id}-Prefix`)
           const embed = new Discord.MessageEmbed()
           .setTitle("Commands")
