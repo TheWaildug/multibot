@@ -130,10 +130,12 @@ client.on("message", async message => {
             return message.reply("I need a user id or mentioned member.");
         }
       var mentionMember 
-      if(message.mentions.members){
+      if(message.mentions.members.first()){
         mentionMember = message.mentions.members.first().id
       }else{
-          mentionMember = await message.guild.members.cache.find(m => m.id == args[0])
+          mentionMember = await message.guild.members.cache.find(m => m.id == args[0]).catch(error =>{
+             return console.erro(`${message.guild.id} rank error: ${error}`)
+          })
           console.log(mentionMember.displayName)
           mentionMember = mentionMember.id
       }
