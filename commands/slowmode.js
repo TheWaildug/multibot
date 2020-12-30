@@ -13,19 +13,14 @@ module.exports = {
           return;
         }
         if(!message.guild.me.hasPermission(`MANAGE_CHANNELS`)){
-          return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to lock and under the role settings.");
+          return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to change slowmode in and under the role settings.");
        }
         if (!args[0]) {
-          const myperm = message.guild.me.permissionsFor(message.channel).toArray();
-          var yesperm = false
-          myperm.forEach(function(item,index,array){
-            if(item == "MANAGE_CHANNEL"){
-                yesperm = true
-            }
-          })
-          if(yesperm == false){
-            return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to change slowmode and under the role settings.");
-          }
+        const myperm = message.guild.me.permissionIn(message.channel.id).hasPermission(`MANAGE_CHANNEL`); 
+        
+        if(myperm == false){
+          return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to change slowmode in and under the role settings.");
+        }
           if(message.channel.rateLimitPerUser == 0){
             return message.channel.send(
                 "Current Slowmode in " +
