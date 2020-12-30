@@ -46,18 +46,9 @@ module.exports = {
         if (!canchat.SEND_MESSAGES) {
           yes = false;
           cont = false;
-          return message.reply("bro they already can't chat here.");
+          return message.reply("They already can't chat here.");
         }
-        const myperm = message.guild.me.permissionsFor(channel).toArray();
-        var yesperm = false
-        myperm.forEach(function(item,index,array){
-          if(item == "MANAGE_CHANNEL"){
-              yesperm = true
-          }
-        })
-        if(yesperm == false){
-          return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to lock and under the role settings.");
-        }
+        
         const perms = message.member.permissionsIn(channel).toArray();
     
         perms.forEach(function(item, index, array) {

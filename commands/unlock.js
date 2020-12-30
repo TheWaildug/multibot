@@ -50,16 +50,7 @@ module.exports = {
             cont = false;
             return message.reply("They already can chat here.");
           }
-          const myperm = message.guild.me.permissionsFor(message.channel).toArray();
-          var yesperm = false
-          myperm.forEach(function(item,index,array){
-            if(item == "MANAGE_CHANNEL"){
-                yesperm = true
-            }
-          })
-          if(yesperm == false){
-            return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to unlock and under the role settings.");
-          }
+        
           const perms = message.member.permissionsIn(channel).toArray();
           if (cont == false) {
             return;
