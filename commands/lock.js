@@ -3,11 +3,13 @@ module.exports = {
     name: "lock",
     description: "locks channels",
     async execute(message,args){
-        if(!message.member.hasPermission(`MANAGE_MESSAGES`)){
+        if(!message.member.hasPermission(`MANAGE_CHANNELS`)){
             return message.delete();
         }
         var channel;
-
+        if(!message.guild.me.hasPermission(`MANAGE_CHANNELS`)){
+          return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to lock and under the role settings.");
+       }
         var cont = true;
         if (message.mentions.channels.first()) {
           channel = message.mentions.channels.first();
@@ -46,11 +48,21 @@ module.exports = {
           cont = false;
           return message.reply("bro they already can't chat here.");
         }
+        const myperm = message.guild.me.permissionsFor(channel).toArray();
+        var yesperm = false
+        myperm.forEach(function(item,index,array){
+          if(item == "MANAGE_CHANNEL"){
+              yesperm = true
+          }
+        })
+        if(yesperm == false){
+          return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to lock and under the role settings.");
+        }
         const perms = message.member.permissionsIn(channel).toArray();
     
         perms.forEach(function(item, index, array) {
           
-          if (item === "MANAGE_MESSAGES") {
+          if (item === "MANAGE_CHANNEL") {
             console.log("idk man");
             yes = true;
             const everyone = message.channel.guild.roles.cache.find(

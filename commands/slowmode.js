@@ -5,14 +5,27 @@ module.exports = {
         var yes = false;
         console.log("slowmode command sent");
         //Then check if user have permissions to do that
-    if(!message.member.hasPermission("MANAGE_MESSAGES")){
+    if(!message.member.hasPermission("MANAGE_CHANNELS")){
         console.log(`${message.member.id} tried to run the slowmode command in the guild ${message.guild.id}`)
           message.delete(
     
           )
           return;
         }
+        if(!message.guild.me.hasPermission(`MANAGE_CHANNELS`)){
+          return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to lock and under the role settings.");
+       }
         if (!args[0]) {
+          const myperm = message.guild.me.permissionsFor(message.channel).toArray();
+          var yesperm = false
+          myperm.forEach(function(item,index,array){
+            if(item == "MANAGE_CHANNEL"){
+                yesperm = true
+            }
+          })
+          if(yesperm == false){
+            return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to change slowmode and under the role settings.");
+          }
           if(message.channel.rateLimitPerUser == 0){
             return message.channel.send(
                 "Current Slowmode in " +
@@ -49,10 +62,20 @@ module.exports = {
         if (cont == false) {
           return;
         }
+        const myperm = message.guild.me.permissionsFor(channel).toArray();
+        var yesperm = false
+        myperm.forEach(function(item,index,array){
+          if(item == "MANAGE_CHANNEL"){
+              yesperm = true
+          }
+        })
+        if(yesperm == false){
+          return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to change slowmode and under the role settings.");
+        }
         console.log(channel.name);
         const perms = message.member.permissionsIn(channel).toArray();
         perms.forEach(function(item,index,array){
-          if (item === "MANAGE_MESSAGES") {
+          if (item === "MANAGE_CHANNEL") {
             yes = true;
             if (!args[1])
             if(channel.rateLimitPerUser == 0){

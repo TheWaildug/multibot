@@ -3,9 +3,12 @@ module.exports = {
     name: "unlock",
     description: "unlocks channels",
     async execute(message,args){
-        if(!message.member.hasPermission("MANAGE_MESSAGES")){
+        if(!message.member.hasPermission("MANAGE_CHANNELS")){
             return message.delete();
           }
+          if(!message.guild.me.hasPermission(`MANAGE_CHANNELS`)){
+            return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to lock and under the role settings.");
+         }
           console.log("unlock em down");
           var channel;
       
@@ -47,6 +50,16 @@ module.exports = {
             cont = false;
             return message.reply("They already can chat here.");
           }
+          const myperm = message.guild.me.permissionsFor(message.channel).toArray();
+          var yesperm = false
+          myperm.forEach(function(item,index,array){
+            if(item == "MANAGE_CHANNEL"){
+                yesperm = true
+            }
+          })
+          if(yesperm == false){
+            return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to unlock and under the role settings.");
+          }
           const perms = message.member.permissionsIn(channel).toArray();
           if (cont == false) {
             return;
@@ -55,7 +68,7 @@ module.exports = {
             if (yes === false) {
               return;
             }
-            if (item === "MANAGE_MESSAGES") {
+            if (item === "MANAGE_CHANNEL") {
               console.log("perhaps");
               yes = false;
               const everyone = message.channel.guild.roles.cache.find(
