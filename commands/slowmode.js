@@ -3,7 +3,8 @@ module.exports = {
     description: "changes the slowmode in specified channel",
     execute(message,args,ms){
         var yes = false;
-        console.log("slowmode command sent");
+        console.log(`slowmode ${message.guild.id}`);
+        console.log(`slowmode ${message.member.id}`)
         //Then check if user have permissions to do that
     if(!message.member.hasPermission("MANAGE_CHANNELS")){
         console.log(`${message.member.id} tried to run the slowmode command in the guild ${message.guild.id}`)
