@@ -52,7 +52,7 @@ for (const file of commandFiles) {
 client.on("ready", async () => {
     console.log("The MultiBot is ready!")
    
-    client.user.setActivity("for a new avatar.", {type: `LISTENING`}, {status: "dnd"}).catch(console.error);
+    client.user.setActivity("a new avatar.", {type: `LISTENING`}, {status: "dnd"}).catch(console.error);
     
 })
 if(fs.existsSync('stats.json')){
