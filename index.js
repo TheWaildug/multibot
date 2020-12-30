@@ -337,10 +337,8 @@ client.on("message", async message => {
         })
       
       }else if(command == "invite"){
-      if(message.member.id != "432345618028036097"){
-          return message.delete()
-      }
-      return message.channel.send("https://discord.com/oauth2/authorize?client_id=791760755195904020&scope=bot&permissions=8");
+      
+      return message.channel.send("https://discord.com/oauth2/authorize?client_id=791760755195904020&scope=bot&permissions=125969");
     }
 })
 
