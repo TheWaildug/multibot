@@ -279,9 +279,11 @@ client.on("message", async message => {
               {name: `${pre}purge`, value: "Purges messages in current channel from up to 14 days (blame discord api). Requires `MANAGE_MESSAGES` in guild and in the channel."},
               {name: `${pre}support`, value: "Gives support server link."},
               {name: `${pre}help`,value: "Gives quick faqs."},
-              {name: `${pre}invite`,value: "Shows invite of the bot."}
+              {name: `${pre}invite`,value: "Shows invite of the bot."},
+              {name: `${pre}lock`, value: "Locks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel"},
+              {name: `${pre}lock`, value: "Unlocks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel"}
           )
-          .setFooter("See a command that isn't on here? Click the title to join our support server.")
+          .setFooter("See a problem? Click the title to join our support server.")
           message.channel.send(embed)
       }else if(command == "support"){
         return message.reply("Join https://discord.gg/qyHnGP5yMP for support!");
