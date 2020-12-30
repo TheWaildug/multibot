@@ -49,7 +49,7 @@ module.exports = {
         const perms = message.member.permissionsIn(channel).toArray();
     
         perms.forEach(function(item, index, array) {
-          console.log(item, index);
+          
           if (item === "MANAGE_MESSAGES") {
             console.log("idk man");
             yes = true;

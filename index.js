@@ -130,7 +130,7 @@ client.on("message", async message => {
             return message.reply("I need a user id or mentioned member.");
         }
       var mentionMember 
-      if(message.mentions.members.first()){
+      if(message.mentions.members.first){
         mentionMember = message.mentions.members.first().id
       }else{
           mentionMember = await message.guild.members.cache.find(m => m.id == args[0]).catch(error =>{
@@ -222,6 +222,8 @@ client.on("message", async message => {
       }else if(command == "lock"){
          console.log('lock')
          client.Commands.get("lock").execute(message,args) 
+      }else if(command == "unlock"){
+        client.Commands.get("unlock").execute(message,args)
       }else if(command == "counting"){
           if(!message.member.hasPermission(`MANAGE_GUILD`)){
               return message.delete();
