@@ -305,7 +305,7 @@ client.on("message", async message => {
                   return message.reply("Prefix has been changed to `" + args[1] + "`");
               })
           }else if(args[0].toLowerCase() == "reset"){
-              db.set(`Guil  d-${message.guild.id}-Prefix`,"c!").then(() => {
+              db.set(`Guild-${message.guild.id}-Prefix`,"c!").then(() => {
                 console.log(`Guild ${message.guild.id}'s prefix was reset by ${message.member.id}.`)
                 return message.reply("Prefix has been reset to `c!`");
               })
