@@ -53,7 +53,7 @@ module.exports = {
     
         perms.forEach(function(item, index, array) {
           
-          if (item === "MANAGE_CHANNEL") {
+          if (item === "MANAGE_CHANNELS") {
             console.log("idk man");
             yes = true;
             const everyone = message.channel.guild.roles.cache.find(

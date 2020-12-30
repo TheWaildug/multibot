@@ -59,7 +59,7 @@ module.exports = {
             if (yes === false) {
               return;
             }
-            if (item === "MANAGE_CHANNEL") {
+            if (item === "MANAGE_CHANNELS") {
               console.log("perhaps");
               yes = false;
               const everyone = message.channel.guild.roles.cache.find(

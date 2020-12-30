@@ -54,11 +54,10 @@ module.exports = {
         if (cont == false) {
           return;
         }
-      
         console.log(channel.name);
         const perms = message.member.permissionsIn(channel).toArray();
         perms.forEach(function(item,index,array){
-          if (item === "MANAGE_CHANNEL") {
+          if (item === "MANAGE_CHANNELS") {
             yes = true;
             if (!args[1])
             if(channel.rateLimitPerUser == 0){
