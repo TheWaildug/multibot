@@ -430,18 +430,23 @@ client.on("message",async message =>{
     var currentnum = await getnumber(message.guild.id)
    
     if(message.content != String(currentnum)){
-        console.log(`${message.member.id} didn't put correct number.`)
+        if(!message.guild.me.hasPermission(`MANAGE_MESSAGES`)){
+            console.log(`Guild ${message.guild.id} does not have correct perms for counting.`)
+           return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_MESSAGES` permission enabled in this channel and under the role settings.");
+        }
+        console.log(`${message.member.id} didn't put correct number in guild ${message.guild.id}.`)
         message.delete()
         return
     }
     if(message.content == String(currentnum)){
         if(!message.guild.me.hasPermission(`MANAGE_MESSAGES`)){
+            console.log(`Guild ${message.guild.id} does not have correct perms for counting.`)
            return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_MESSAGES` permission enabled in this channel and under the role settings.");
         }
         
        
         updatenumber(currentnum + 1,message.guild.id)
-        console.log(`${message.member.id} counted correctly. Number is now ${String(currentnum + 1)}.`)
+        console.log(`${message.member.id} counted correctly in guild ${message.guild.id}. Number is now ${String(currentnum + 1)}.`)
         const webhooks = await message.channel.fetchWebhooks()
        const webhook = webhooks.first()
         if(webhook){
