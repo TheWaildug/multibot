@@ -315,7 +315,7 @@ client.on("message", async message => {
       }else if(command == "help"){
           const embed = new Discord.MessageEmbed()
           .setTitle("I need help!")
-          .setColor("F53E16")
+          .setColor("RANDOM")
           .setURL("https://discord.gg/qyHnGP5yMP")
           .addFields(
               {name: "How do I setup counting? ", value: "To setup counting, make sure the bot has `MANAGE_MESSAGES` permissions in your channel and in the guild. Then, run **" + prefix + "counting** to setup counting."},
