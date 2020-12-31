@@ -38,9 +38,9 @@ async function getData(key){
   }
   
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-async function run(kay,message) {
+async function run(key,message) {
     console.log('run function')
-    const key = String.raw(kay)
+    
     const data = await getData(key);
     console.log(data); // will print your data
     if(message){
@@ -108,7 +108,7 @@ client.on("message",async message =>{
     if(message.author.bot) return;
     if(message.channel.type == "dm"){
         console.log(`New DM to MultiBot from ${message.author.id}. Message: ${message.content}.`)
-      const lastmsg = await db.get(`${message.author.id}-LastDm`)
+      const lastmsg = await db.get(`LastDm-${message.author.id}`)
       console.log(Date.now() - Number(lastmsg))
       if(Date.now() - Number(lastmsg) > 300000){
         const embed = new Discord.MessageEmbed()
@@ -124,7 +124,7 @@ client.on("message",async message =>{
             msg.react("📣"),
             msg.react("⚒️"),
             msg.react("❌")
-            db.set(`${message.author.id}-LastDm`,String(Date.now()))
+            db.set(`LastDm-${message.author.id}`,String(Date.now()))
         })
       
       
