@@ -491,7 +491,7 @@ client.on("message",async message =>{
            return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_MESSAGES` permission enabled in this channel and under the role settings.");
         }
         console.log(`${message.member.id} didn't put correct number in guild ${message.guild.id}.`)
-        message.delete()
+        message.delete().catch(console.error())
         return
     }
     if(message.content == String(currentnum)){
@@ -517,7 +517,7 @@ client.on("message",async message =>{
         }
       
 
-        return message.delete()
+        return message.delete().catch(console.error());
     } 
 
    
