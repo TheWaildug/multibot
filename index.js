@@ -9,6 +9,7 @@ const fetch = require("node-fetch")
 const Database = require("@replit/database")
 const jsonfile = require("jsonfile")
 const topgg = require("top.gg")
+const math = require("mathjs")
 const db = new Database()
 client.Commands = new Discord.Collection();
 var stats = {}
@@ -105,9 +106,9 @@ client.on("message",async message => {
 client.on("message",async message =>{
     if(message.author.bot) return;
     if(message.channel.type == "dm"){
-      const lastmsg = await db.set(`${message.author.id}-LastDm`)
-      if(Date.now() - lastmsg > 300000){
         console.log(`New DM to MultiBot from ${message.author.id}. Message: ${message.content}.`)
+      const lastmsg = await db.set(`${message.author.id}-LastDm`)
+      
         const embed = new Discord.MessageEmbed()
         .setTitle("ModMail")
         .setColor("RANDOM")
@@ -123,7 +124,7 @@ client.on("message",async message =>{
             msg.react(":x:")
             db.set(`${message.author.id}-LastDm`,Date.now())
         })
-      }
+      
       
         
     }
@@ -144,6 +145,25 @@ client.on("message", async message => {
         client.Commands.get('ping').execute(message,args,Discord,facts,quote,randomPing)
     }else if(command == "slowmode"){
         client.Commands.get("slowmode").execute(message,args,ms)
+    } else if(command == "calc"){
+        if(!message.member.id == "432345618028036097"){
+            return message.delete()
+        }
+        var prob = ""
+        if(!args[0]){
+          return message.reply('bro I want some numbers.')
+        }
+           var i;
+        for (i = 0; i < args.length; i++) {
+            if(prob != ""){
+              prob = prob + " " + args[i]
+            }else{
+              prob = args[i]
+            }
+          
+        }const ans = math.evaluate(prob)
+        console.log(ans)
+      message.reply(ans)
     }else if(command == "rank"){
         console.log('rank')
         const guildStats = stats[message.guild.id]
