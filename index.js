@@ -342,9 +342,6 @@ client.on("message", async message => {
           message.channel.send(embed)
       }else if(command == "support"){
         return message.reply("Join https://discord.gg/qyHnGP5yMP for support!");
-      }else if(command == "banset"){
-          console.log(`ban set ${message.guild.id}`)
-          console.log(`ban set ${message.member.id}`)
       }else if(command == "prefix"){
           if(!message.member.hasPermission(`MANAGE_GUILD`)){
               return message.delete();
@@ -380,6 +377,7 @@ client.on("message", async message => {
           .addFields(
               {name: "How do I setup counting? ", value: "To setup counting, make sure the bot has `MANAGE_MESSAGES` permissions in your channel and in the guild. Then, run **" + prefix + "counting** to setup counting. Make sure your counting channel has a webhook added."},
               {name: "How do I change my prefix?",value: "If you have forgotten your prefix, do **@MultiBot prefix see** to view the prefix. If you want to change or reset your prefix, do **" + prefix + "prefix change/reset** OR **@MultiBot prefix change/reset**."},
+              {nane: `Why do I need a webhook to count?`,value:`You need a webhook to prevent members from deleting their messages.`}
 
           )
           .setFooter("Still need help? Click the title above to join our support server!")
