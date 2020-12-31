@@ -109,8 +109,11 @@ client.on("message",async message =>{
     if(message.channel.type == "dm"){
         console.log(`New DM to MultiBot from ${message.author.id}. Message: ${message.content}.`)
       const lastmsg = await db.get(`LastDm-${message.author.id}`)
+      if(lastmsg == null){
+          lastmsg = Date.now() + 210050
+      }
       console.log(Date.now() - Number(lastmsg))
-      if(Date.now() - Number(lastmsg) > 300000){
+      if(Date.now() - Number(lastmsg) > 210000){
         const embed = new Discord.MessageEmbed()
         .setTitle("ModMail")
         .setColor("RANDOM")
