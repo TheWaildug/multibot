@@ -104,7 +104,19 @@ client.on("message",async message => {
 client.on("message",async message =>{
     if(message.author.bot) return;
     if(message.channel.type == "dm"){
-
+        const embed = new Discord.MessageEmbed()
+        .setTitle("ModMail")
+        .setColor("RANDOM")
+        .setDescription(`You have activated ModMail. Please react to the emoji that corresponds to your reason.`)
+        .addFields(
+            {name: `📣`,value: `Make a suggestion for the bot.`},
+            {name: `⚒️`,value: `Coming soon...`}
+        )
+        message.channel.send(embed).then(msg => {
+            msg.react("📣"),
+            msg.react("⚒️")
+        })
+        
     }
 })
 client.on("message", async message => {   
@@ -292,7 +304,7 @@ client.on("message", async message => {
               {name: `${pre}help`,value: "Gives quick faqs."},
               {name: `${pre}invite`,value: "Shows invite of the bot."},
               {name: `${pre}lock`, value: "Locks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel"},
-              {name: `${pre}unlock`, value: "Unlocks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel"}
+              {name: `${pre}un      lock`, value: "Unlocks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel"}
           )
           .setFooter("See a problem? Click the title to join our support server.")
           message.channel.send(embed)
