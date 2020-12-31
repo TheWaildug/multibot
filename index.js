@@ -308,12 +308,12 @@ client.on("message", async message => {
               {name: `${pre}prefix`, value: "Changes prefix of the guild. Must have `MANAGE_SERVER` permissions."},
               {name: `${pre}counting`,value: "Enables/Disables counting and changes counting channel."},
               {name: `${pre}slowmode`,value: "Changes slowmode in current/specified channel. Requires `MANAGE_MESSAGES` in the guild and in the channel."},
-              {name: `${pre}purge`, value: "Purges messages in current channel from up to 14 days (blame discord api). Requires `MANAGE_MESSAGES` in guild and in the channel."},
+              {name: `${pre}purge`, value: "Purges messages in current channel from up to 14 days (blame discord api). Requires `MANAGE_MESSAGES` in the guild and in the channel."},
               {name: `${pre}support`, value: "Gives support server link."},
               {name: `${pre}help`,value: "Gives quick faqs."},
               {name: `${pre}invite`,value: "Shows invite of the bot."},
-              {name: `${pre}lock`, value: "Locks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel"},
-              {name: `${pre}un      lock`, value: "Unlocks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel"}
+              {name: `${pre}lock`, value: "Locks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel."},
+              {name: `${pre}un      lock`, value: "Unlocks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel."}
           )
           .setFooter("See a problem? Click the title to join our support server.")
           message.channel.send(embed)
