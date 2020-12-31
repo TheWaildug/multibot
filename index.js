@@ -41,7 +41,7 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 async function run(key,message) {
     console.log('run function')
     const data = await getData(key);
-    console.log('' + data); // will print your data
+    console.log(data); // will print your data
     if(message){
     return message.reply("Here's the data I found from the key " + key + ": `" +   data + '`')
     }
