@@ -154,7 +154,7 @@ client.on("message", async message => {
         client.Commands.get("slowmode").execute(message,args,ms)
     } else if(command == "calc"){
         if(!message.member.id == "432345618028036097"){
-            return message.delete()
+            return message.delete();
         }
         var prob = ""
         if(!args[0]){
