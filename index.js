@@ -105,18 +105,26 @@ client.on("message",async message => {
 client.on("message",async message =>{
     if(message.author.bot) return;
     if(message.channel.type == "dm"){
+      const lastmsg = await db.set(`${message.author.id}-LastDm`)
+      if(Date.now() - lastmsg > 300000){
+        console.log(`New DM to MultiBot from ${message.author.id}. Message: ${message.content}.`)
         const embed = new Discord.MessageEmbed()
         .setTitle("ModMail")
         .setColor("RANDOM")
         .setDescription(`You have activated ModMail. Please react to the emoji that corresponds to your reason.`)
         .addFields(
             {name: `📣`,value: `Make a suggestion for the bot.`},
-            {name: `⚒️`,value: `Coming soon...`}
+            {name: `⚒️`,value: `Coming soon...`},
+            {name: `:x:`,valie: `Cancel.`}
         )
         message.channel.send(embed).then(msg => {
             msg.react("📣"),
-            msg.react("⚒️")
+            msg.react("⚒️"),
+            msg.react(":x:")
+            db.set(`${message.author.id}-LastDm`,Date.now())
         })
+      }
+      
         
     }
 })
