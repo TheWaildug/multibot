@@ -108,7 +108,7 @@ client.on("message",async message =>{
     if(message.author.bot) return;
     if(message.channel.type == "dm"){
         console.log(`New DM to MultiBot from ${message.author.id}. Message: ${message.content}.`)
-      const lastmsg = await db.get(`LastDm-${message.author.id}`)
+      var lastmsg = await db.get(`LastDm-${message.author.id}`)
       if(lastmsg == null){
           lastmsg = Date.now() + 210050
       }
