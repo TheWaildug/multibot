@@ -108,7 +108,7 @@ client.on("message",async message =>{
     if(message.channel.type == "dm"){
         console.log(`New DM to MultiBot from ${message.author.id}. Message: ${message.content}.`)
       const lastmsg = await db.set(`${message.author.id}-LastDm`)
-      
+      if(Date.now() - lastmsg > 300000){
         const embed = new Discord.MessageEmbed()
         .setTitle("ModMail")
         .setColor("RANDOM")
@@ -116,17 +116,19 @@ client.on("message",async message =>{
         .addFields(
             {name: `📣`,value: `Make a suggestion for the bot.`},
             {name: `⚒️`,value: `Coming soon...`},
-            {name: `:x:`,valie: `Cancel.`}
+            {name: `:x:`,value: `Cancel.`}
         )
         message.channel.send(embed).then(msg => {
             msg.react("📣"),
             msg.react("⚒️"),
-            msg.react(":x:")
+            msg.react("❌")
             db.set(`${message.author.id}-LastDm`,Date.now())
         })
       
       
         
+      }
+   
     }
 })
 client.on("message", async message => {   
