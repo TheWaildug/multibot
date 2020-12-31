@@ -104,13 +104,14 @@ client.on("message",async message => {
  }
 
 })
+//ModMail
 client.on("message",async message =>{
     if(message.author.bot) return;
     if(message.channel.type == "dm"){
         console.log(`New DM to MultiBot from ${message.author.id}. Message: ${message.content}.`)
       var lastmsg = await db.get(`LastDm-${message.author.id}`)
       if(lastmsg == null){
-          lastmsg = Date.now() + 210050
+          lastmsg = Date.now() + -210070
       }
       console.log(Date.now() - Number(lastmsg))
       if(Date.now() - Number(lastmsg) > 210000){
@@ -123,6 +124,7 @@ client.on("message",async message =>{
             {name: `⚒️`,value: `Coming soon...`},
             {name: `:x:`,value: `Cancel.`}
         )
+        .setFooter(`This message will be invalid in 30 seconds.`)
         message.channel.send(embed).then(msg => {
             msg.react("📣"),
             msg.react("⚒️"),
@@ -131,7 +133,28 @@ client.on("message",async message =>{
         })
       
       
-        
+        message.awaitReactions((reaction, user) => user.id == message.author.id && (reaction.emoji.name == '❌' || reaction.emoji.name == '📣' || reaction.emoji.name == "⚒️"),
+        { max: 1, time: 30000 }).then(collected => {
+            if(collected.first().emoji.name == "❌"){
+                message.reply("Cancelling...")
+                const embed = new Discord.MessageEmbed()
+        .setTitle("ModMail")
+        .setColor("RANDOM")
+        .setDescription(`This message is now invalid`)
+        .setFooter(`This message was cancelled by you.`)
+        msg.edit(embed)
+        msg.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
+            }
+        }).catch(() => {
+            const embed = new Discord.MessageEmbed()
+            .setTitle("ModMail")
+            .setColor("RANDOM")
+            .setDescription(`This message is now invalid`)
+            .setFooter(`This message was cancelled by you.`)
+            msg.edit(embed)
+            msg.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
+            return message.reply(`No response after 30 seconds. Cancelled.`)
+        })
       }
    
     }
