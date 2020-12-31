@@ -292,7 +292,7 @@ client.on("message", async message => {
               {name: `${pre}help`,value: "Gives quick faqs."},
               {name: `${pre}invite`,value: "Shows invite of the bot."},
               {name: `${pre}lock`, value: "Locks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel"},
-              {name: `${pre}lock`, value: "Unlocks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel"}
+              {name: `${pre}unlock`, value: "Unlocks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel"}
           )
           .setFooter("See a problem? Click the title to join our support server.")
           message.channel.send(embed)
