@@ -59,15 +59,16 @@ if(fs.existsSync('stats.json')){
     stats =  jsonfile.readFileSync("stats.json")
 }
 client.on("message",async message => {
+   if(message.channel.type == "dm"){
+        return;
+    }
     if(message.guild.id != "791760625243652127"){
         return;
     }
     if(message.author.bot){
         return;
     }
-    if(message.channel.type == "dm"){
-        return;
-    }
+   
  if(message.guild.id in stats == false){
      stats[message.guild.id] = {};
 
@@ -436,12 +437,13 @@ function ispin(number){
 
 
 client.on("message",async message =>{
+   if(message.channel.type == "dm"){
+        return;
+    }
     if(await db.get(`Guild-${message.guild.id}-Counting`) == false){
         return;
     }
-    if(message.channel.type == "dm"){
-        return;
-    }
+   
     if(message.author.bot){
         return;
     }
