@@ -114,6 +114,7 @@ client.on("message",async message =>{
           lastmsg = Date.now() + -210070
       }
       console.log(Date.now() - Number(lastmsg))
+      console.log((Date.now() - Number(lastmsg)) / 60000)
       if(Date.now() - Number(lastmsg) > 210000){
         const embed = new Discord.MessageEmbed()
         .setTitle("ModMail")
@@ -134,9 +135,11 @@ client.on("message",async message =>{
             db.set(`LastDm-${message.author.id}`,String(Date.now()))
         })
       
-      
-        message.awaitReactions((reaction, user) => user.id == message.author.id && (reaction.emoji.name == '❌' || reaction.emoji.name == '📣' || reaction.emoji.name == "⚒️"),
-        { max: 1, time: 30000 }).then(collected => {
+        const filter = (reaction, user) => {
+            return ['📣', '⚒️','❌'].includes(reaction.emoji.name) && user.id === message.author.id;
+        };
+        message.awaitReactions(filter,{max: 1, time:60000, errors: ['time']}).then(collected => {
+            console.log(collected.first().emoji.name)
             if(collected.first().emoji.name == "❌"){
                 message.reply("Cancelling...")
                 const embed = new Discord.MessageEmbed()
@@ -145,16 +148,16 @@ client.on("message",async message =>{
         .setDescription(`This message is now invalid`)
         .setFooter(`This message was cancelled by you.`)
         msg.edit(embed)
-        msg.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
+            
             }
         }).catch(() => {
             const embed = new Discord.MessageEmbed()
             .setTitle("ModMail")
             .setColor("RANDOM")
             .setDescription(`This message is now invalid`)
-            .setFooter(`This message was cancelled by you.`)
+            .setFooter(`This message was cancelled because you were inactive for 30 seconds.`)
             msg.edit(embed)
-            msg.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
+            
             return message.reply(`No response after 30 seconds. Cancelled.`)
         })
       }
