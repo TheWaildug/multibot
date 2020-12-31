@@ -125,10 +125,12 @@ client.on("message",async message =>{
             {name: `:x:`,value: `Cancel.`}
         )
         .setFooter(`This message will be invalid in 30 seconds.`)
-        message.channel.send(embed).then(msg => {
-            msg.react("📣"),
-            msg.react("⚒️"),
-            msg.react("❌")
+        var msg 
+        message.channel.send(embed).then(massage => {
+            msg = massage
+            massage.react("📣"),
+            massage.react("⚒️"),
+            massage.react("❌")
             db.set(`LastDm-${message.author.id}`,String(Date.now()))
         })
       
