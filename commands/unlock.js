@@ -69,7 +69,7 @@ module.exports = {
                 .updateOverwrite(
                   everyone,
                   {
-                    SEND_MESSAGES: null
+                    SEND_MESSAGES: true
                   },
                   `This has been changed by ${message.member.user.tag}`
                 )
