@@ -134,7 +134,7 @@ client.on("message",async message =>{
             db.set(`LastDm-${message.author.id}`,String(Date.now()))
         })
         const filter = (reaction, user) => {
-            return (reaction.emoji.name === '📣' || reaction.emoji.name === "⚒️" || reaction.emoji.name === "❌") && user.id === message.author.id;
+            return user.id === message.author.id;
         };
  var on = true      
 const collector = message.createReactionCollector(filter, { time: 15000 });
@@ -151,24 +151,22 @@ collector.on('collect', (reaction, user) => {
             msg.edit(embed)
                return on = false;
                 })
-               
-            }
-           setTimeout(async function(){
-               if(on == false){
-                   return on = true;
-               }
-               collector.on("end", () => {
-                const embed = new Discord.MessageEmbed()
-            .setTitle("ModMail")
-            .setColor("RANDOM")
-            .setDescription(`This message is now invalid`)
-            .setFooter(`This message was cancelled because you were inactive for 30 seconds.`)
-            msg.edit(embed)
-            message.channel.send(`No response after 30 seconds. Cancelled`)
-               })
-           },60000);
-        })
-        collector.on('end', collected => console.log(`Collected ${collected.size} items`));
+        }
+    })      
+    collector.on('end',collected => {
+        console.log(`Collected ${collected.size} items.`)
+        if(on == false){
+            return on = true;
+        }
+      
+         const embed = new Discord.MessageEmbed()
+     .setTitle("ModMail")
+     .setColor("RANDOM")
+     .setDescription(`This message is now invalid`)
+     .setFooter(`This message was cancelled because you were inactive for 30 seconds.`)
+     msg.edit(embed)
+     message.channel.send(`No response after 30 seconds. Cancelled`)
+    })
       }
     }
 })
