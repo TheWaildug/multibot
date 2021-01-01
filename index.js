@@ -127,7 +127,7 @@ client.on("message",async message =>{
         .setFooter(`This message will be invalid in 30 seconds.`)
       
         message.channel.send(embed).then(msg => {
-            msg
+          
             msg.react("📣"),
             msg.react("⚒️"),
             msg.react("❌")
@@ -141,7 +141,7 @@ const collector = msg.createReactionCollector(filter, { time: 30000 });
 collector.on('collect', (reaction, user) => {
     console.log(`Collected ${reaction.emoji.name}`)
             if(reaction.emoji.name == "❌"){
-                collector.end("Cancelled by user.",() => {  
+                collector.stop("Cancelled by user.")
                     message.reply("Cancelling...")  
                     const embed = new Discord.MessageEmbed()
             .setTitle("ModMail")
@@ -150,10 +150,9 @@ collector.on('collect', (reaction, user) => {
             .setFooter(`This message was cancelled by you.`)
             msg.edit(embed)
                return on = false;
-                })
         }
         setTimeout(async function(){
-            collector.stop('Timeout',collected => {
+            collector.stop('Timeout')
                 console.log(`Collected ${collected.size} items.`)
                 if(on == false){
                     return on = true;
@@ -167,8 +166,6 @@ collector.on('collect', (reaction, user) => {
              msg.edit(embed)
              message.channel.send(`No response after 30 seconds. Cancelled`)
             },30000)
-        })
-       
     })      
 })
       }
