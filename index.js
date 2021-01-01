@@ -133,16 +133,15 @@ client.on("message",async message =>{
             massage.react("❌")
             db.set(`LastDm-${message.author.id}`,String(Date.now()))
         })
-      
         const filter = (reaction, user) => {
-            return ['📣', '⚒️','❌'].includes(reaction.emoji.name) && user.id === message.author.id;
+            return (reaction.emoji.name === '📣' || reaction.emoji.name === "⚒️" || reaction.emoji.name === "❌") && user.id === message.author.id;
         };
  var on = true      
 const collector = message.createReactionCollector(filter, { time: 60000 });
 collector.on('collect', (reaction, user) => {
             console.log(reaction.emoji.name)
             if(reaction.emoji.name == "❌"){
-                collector.on("end",() => {
+                collector.on("end",() => {  
                     message.reply("Cancelling...")  
                     const embed = new Discord.MessageEmbed()
             .setTitle("ModMail")
