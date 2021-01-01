@@ -137,9 +137,9 @@ client.on("message",async message =>{
             return (reaction.emoji.name === '📣' || reaction.emoji.name === "⚒️" || reaction.emoji.name === "❌") && user.id === message.author.id;
         };
  var on = true      
-const collector = message.createReactionCollector(filter, { time: 60000 });
+const collector = message.createReactionCollector(filter, { time: 15000 });
 collector.on('collect', (reaction, user) => {
-            console.log(reaction.emoji.name)
+    console.log(`Collected ${reaction.emoji.name}`)
             if(reaction.emoji.name == "❌"){
                 collector.on("end",() => {  
                     message.reply("Cancelling...")  
@@ -168,6 +168,7 @@ collector.on('collect', (reaction, user) => {
                })
            },60000);
         })
+        collector.on('end', collected => console.log(`Collected ${collected.size} items`));
       }
     }
 })
