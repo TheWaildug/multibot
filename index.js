@@ -60,6 +60,29 @@ client.on("ready", async () => {
 if(fs.existsSync('stats.json')){
     stats =  jsonfile.readFileSync("stats.json")
 }
+async function blacklist(message,args){
+     let user
+    if(message.mentions.members.first()){
+       user = await client.users.fetch(message.mentions.members.first().toLocaleString().replace("<@","").replace(">","").replace("!",""))
+     }else if(!message.mentions.members.first()){
+       console.log(args[0])
+       user = await client.users.fetch(args[0])
+     }
+     console.log(user.id)
+     if(!user){
+       return message.reply('Please specify a user or their id.')
+     }
+   const isblack = await db.get(`IsBlacklisted-${user.id}`)
+   if(isblack !== null){
+      db.remove(`IsBlacklisted-${user.id}`).then(() =>{
+       return message.reply(`Successfully unblacklisted <@${user.id}>.`)
+     })
+   }else if(isblack == null){
+     db.set(`IsBlacklisted-${user.id}`,true).then(() =>{
+       return message.reply(`Sucessfully blacklisted <@${user.id}>`)
+     })
+   }
+ }
 client.on("message",async message => {
    if(message.channel.type == "dm"){
         return;
@@ -161,7 +184,7 @@ collector.on('collect', (reaction, user) => {
             .setFooter(`You reacted to 📣.`)
             msg.edit(embed)
             on = false
-               return makesuggestion(message,db)
+               return makesuggestion(message,db,client)
         }
         setTimeout(async function(){
             collector.stop('Timeout')
@@ -223,7 +246,14 @@ client.on("message", async message => {
         const guildStats = stats[message.guild.id]
         const userStats = guildStats[message.author.id]
         message.channel.send(`Your current rank is **${userStats.level}.** You need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`)
-    }else if(command == "setlevel"){
+    }else if(command == "blacklist"){
+    let user
+    console.log('blacklist command sent')
+    if(!message.member.hasPermission('MANAGE_CHANNELS')){
+      return message.delete()
+    }
+   blacklist(message,args)
+  }else if(command == "setlevel"){
         if(!message.member.id == "432345618028036097"){
             return message.delete();
         }

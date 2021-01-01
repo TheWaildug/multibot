@@ -1,5 +1,5 @@
 const Discord = require("discord.js")
-module.exports = async (message,db) => {
+module.exports = async (message,db,client) => {
         console.log(`make suggestion ${message.author.id}`)
         let suggestion
          const isblack = await db.get(`IsBlacklisted-${message.author.id}`)
@@ -26,14 +26,14 @@ module.exports = async (message,db) => {
                     console.log("collect 2 " + mg.content)
                    collector2.stop("User has collected.")
                         if(mg.content.toLowerCase() === "yes"){
-                          mg.reply('attemping to send suggestion.')
+                          message.reply('Attemping to send suggestion.')
                           suggestion = msg.content
         console.log('suggestion function sent')
         const guild = client.guilds.cache.get('791760625243652127');
         if(!guild) return console.warn('Cannot find guild!')
         const channel = guild.channels.cache.find(c => c.id === '794614913359151126')
         if(!channel) return console.warn('Cannot find channel!')
-        var suggestionId = await db.get('SuggestionId')
+        let suggestionId = await db.get('SuggestionId')
         if(suggestionId === null){
           suggestionId = "1"
           setData('SuggestionId',"1")
