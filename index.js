@@ -236,7 +236,7 @@ client.on("message", async message => {
         allowVideo: true
     
     }).then(post => {
-        console.table(post);
+        message.channel.send(post);
     });
     } else if(command == "calc"){
         if(!message.member.id == "432345618028036097"){
