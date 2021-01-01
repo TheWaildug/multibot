@@ -396,17 +396,19 @@ client.on("message", async message => {
                 message.reply("Please # a channel or enter it's id.")
                 const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 10000 });
                 collector2.on("collect",async chan => {
-                  let channel, mentionchannel;
-                  let cont = true;
-                  if (message.mentions.channels.first()) {
-                    channel = mentionchannel = chan.mentions.channels.first()
+
+               
+                  let channel
+                  let cont = true
+                  if (chan.mentions.channels.first()) {
+                    channel = await message.guild.channels.cache.find(r => r.id === chan.mentions.channels.first().toLocaleString().replace("<#","").replace(">",""))
                   } else {
-                    channel = mentionchannel = await chan.channel.guild.channels.cache.find(
-                      r => r.id === chan.content
+                    channel = await chan.channel.guild.channels.cache.find(
+                      r => r.id == chan.content
                     );
                   }
-                  if (!channel && mentionchannel) {
-                    message.reply("please # a channel or enter its ID.");
+                  if (!channel) {
+                    message.reply("please run this command again but include a channel.");
                     cont = false;
                   }
                   if (cont == false) {
@@ -418,6 +420,23 @@ client.on("message", async message => {
                       message.reply(`Counting channel is now set to <#${channel.id}>. Start counting from 1.`)
                   })
                 })
+              }else if(msg.content.toLowerCase() == "repeat"){
+                message.reply("Please chat ON or OFF.")
+                const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 10000 });
+                collector2.on("collect",async mas => {
+                  console.log(mas.content)
+                  if(mas.content.toLowerCase() == "on"){
+                    message.reply("Changing repeat to true...")
+                    return db.set(`Guild-${message.guild.id}-Repeat`,true);
+                  }else if(mas.content.toLowerCase() == "off"){
+                    message.reply("Changing repeat to false.")
+                    return db.set(`Guild-${message.guild.id}-Repeat`,false);
+                  }else{
+                    return message.reply("Please run this command again except tell me options.")
+                  }
+                })
+              }else if(msg.content.toLowerCase() == "webhook"){
+
               }
             })
              
@@ -500,7 +519,7 @@ client.on("message", async message => {
           .addFields(
               {name: "How do I setup counting? ", value: "To setup counting, make sure the bot has `MANAGE_MESSAGES` permissions in your channel and in the guild. Then, run **" + prefix + "counting** to setup counting. Make sure your counting channel has a webhook added."},
               {name: "How do I change my prefix?",value: "If you have forgotten your prefix, do **@MultiBot prefix see** to view the prefix. If you want to change or reset your prefix, do **" + prefix + "prefix change/reset** OR **@MultiBot prefix change/reset**."},
-              {name: `Why do I need a webhook to count?`,value:`You need a webhook to prevent members from deleting/editing their message. You can disable this will the **${prefix}counting** command.`}
+              {name: `Why do I need a webhook to count?`,value:`You need a webhook to prevent members from deleting/editing their message. You can disable this with the **${prefix}counting** command.`}
 
           )
           .setFooter("Still need help? Click the title above to join our support server!")
@@ -574,8 +593,6 @@ async function getnumber(guild){
     }
     return currentnum
   }
-
-
 const numpins = require("./numbers")
 
 function ispin(number){
@@ -602,8 +619,9 @@ client.on("message",async message =>{
     if(message.channel.id != await db.get(`Guild-${message.guild.id}-CountingChannel`)){
         return;
     }
+    let prevuser = await db.get(`Guild-${message.guild.id}-PrevUser`)
     let currentnum = await getnumber(message.guild.id)
-   
+    let repeat = await db.get(`Guild-${message.guild.id}-Repeat`)
     if(message.content != String(currentnum)){
         if(!message.guild.me.hasPermission(`MANAGE_MESSAGES`)){
             console.log(`Guild ${message.guild.id} does not have correct perms for counting.`)
@@ -613,13 +631,23 @@ client.on("message",async message =>{
         message.delete().catch(console.error())
         return
     }
+    if(repeat == false || repeat == null){
+      if(prevuser == message.member.id){
+        if(!message.guild.me.hasPermission(`MANAGE_MESSAGES`)){
+          console.log(`Guild ${message.guild.id} does not have correct perms for counting.`)
+         return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_MESSAGES` permission enabled in this channel and under the role settings.");
+      }
+      console.log(`${message.member.id} repeated in the guild ${message.guild.id}.`)
+      return message.delete();
+      }
+    }
     if(message.content == String(currentnum)){
         if(!message.guild.me.hasPermission(`MANAGE_MESSAGES`)){
             console.log(`Guild ${message.guild.id} does not have correct perms for counting.`)
            return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_MESSAGES` permission enabled in this channel and under the role settings.");
         }
         
-       
+        db.set(`Guild-${message.guild.id}-PrevUser`,message.member.id)
         updatenumber(currentnum + 1,message.guild.id)
         console.log(`${message.member.id} counted correctly in guild ${message.guild.id}. Number is now ${String(currentnum + 1)}.`)
         const webhooks = await message.channel.fetchWebhooks()
