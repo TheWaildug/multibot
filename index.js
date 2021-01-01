@@ -232,11 +232,18 @@ client.on("message", async message => {
         sort: 'hot',
         allowNSFW: false,
         allowModPost: false,
-        allowCrossPost: true,
+        allowCrossPost: false,
         allowVideo: true
     
     }).then(post => {
-        return message.channel.send(post);
+      const embed = new Discord.MessageEmbed()
+      .setTitle(`Hot post from r/${post.subreddit} by u/${post.author_fullname}`)
+      .setURL(`https://reddit.com/${post.permalink}`)
+      .setDescription(`Title: ${post.title}`)
+      if(post.image){
+        embed.setImage(`${post.url}`)
+      }
+        return message.channel.send(embed);
     }).catch(error => {
       return console.log(error);
     })
