@@ -225,7 +225,7 @@ client.on("message", async message => {
         client.Commands.get("slowmode").execute(message,args,ms)
     }else if(command == "reddit"){
       console.log(`reddit ${message.guild.id}`)
-      console.log(`reddit ${message.member.id}`)
+      console.log(`redit ${message.member.id}`)
       if(args[0]){
         let reddit = args[0].replace("r/","")
         redditFetch({
@@ -238,22 +238,34 @@ client.on("message", async message => {
           allowVideo: false
       
       }).then(post => {
-        const embed = new Discord.MessageEmbed()
+        console.log(post.url)
+        if(!post.url.endsWith(".jpg")){
+            const embed = new Discord.MessageEmbed()
         .setTitle(`Hot post, ${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
-        .setURL(`https://reddit.com/${post.permalink}`)
+        .setURL(`https://reddit.com${post.permalink}`)
         .setDescription(`${prefix}reddit`)
+        .setColor("RANDOM")
+        .setTimestamp()
+       
+          return message.channel.send(post.url,embed);
+        }else{
+           const embed = new Discord.MessageEmbed()
+        .setTitle(`Hot post, ${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
+        .setURL(`https://reddit.com${post.permalink}`)
+        .setDescription(`!reddit`)
         .setImage(`${post.url}`)
         .setColor("RANDOM")
         .setTimestamp()
        
           return message.channel.send(embed);
+        }
+       
       }).catch(error => {
         console.warn("Error: " + error)
-        return message.reply("Something went wrong! Error: " + error)
+        return message.reply("Something went wrong: `" + error + "`")
        
-      })
-        
-        }else{redditFetch({
+        })
+      }else{redditFetch({
   
           subreddit: 'all',
           sort: 'hot',
@@ -263,22 +275,35 @@ client.on("message", async message => {
           allowVideo: false
       
       }).then(post => {
-        const embed = new Discord.MessageEmbed()
+        console.log(post.url)
+        if(!post.url.endsWith(".jpg")){
+            const embed = new Discord.MessageEmbed()
         .setTitle(`Hot post, ${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
-        .setURL(`https://reddit.com/${post.permalink}`)
+        .setURL(`https://reddit.com${post.permalink}`)
         .setDescription(`${prefix}reddit`)
+        .setColor("RANDOM")
+        .setTimestamp()
+       
+          return message.channel.send(post.url,embed);
+        }else{
+           const embed = new Discord.MessageEmbed()
+        .setTitle(`Hot post, ${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
+        .setURL(`https://reddit.com${post.permalink}`)
+        .setDescription(`!reddit`)
         .setImage(`${post.url}`)
         .setColor("RANDOM")
         .setTimestamp()
        
           return message.channel.send(embed);
+        }
+       
       }).catch(error => {
         console.warn("Error: " + error)
-        return message.reply("Something went wrong! Error: " + error)
+        return message.reply("Something went wrong: `" + error + "`")
        
         })
       }
-    }else if(command == "setnsfw"){
+  }else if(command == "setnsfw"){
       if(!message.member.id == "432345618028036097"){
         return message.delete();
     }
@@ -520,7 +545,21 @@ client.on("message", async message => {
                   }
                 })
               }else if(msg.content.toLowerCase() == "webhook"){
-
+                message.reply("Please chat ON or OFF.")
+                const collector3 = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 10000 });
+                collector3.on("collect",async mas => {
+                  console.log(mas.content)
+                  collector3.stop("Answered")
+                  if(mas.content.toLowerCase() == "on"){
+                    message.reply("Changing webhook to true...")
+                    return db.set(`Guild-${message.guild.id}-Webhook`,true);
+                  }else if(mas.content.toLowerCase() == "off"){
+                    message.reply("Changing webhook to false.")
+                    return db.set(`Guild-${message.guild.id}-Webhook`,false);
+                  }else{
+                    return message.reply("Please run this command again except tell me options.")
+                  }
+                })
               }
             })
              
@@ -536,12 +575,13 @@ client.on("message", async message => {
           .addFields(
               {name: `${pre}ping`, value: `Shows the current ping along with a random fact or quote.`},
               {name: `${pre}prefix`, value: "Changes prefix of the guild. Must have `MANAGE_SERVER` permissions."},
-              {name: `${pre}counting`,value: "Enables/Disables counting and changes counting channel."},
+              {name: `${pre}counting`,value: "Enables/Disables counting and other settings."},
               {name: `${pre}slowmode`,value: "Changes slowmode in current/specified channel. Requires `MANAGE_MESSAGES` in the guild and in the channel."},
               {name: `${pre}purge`, value: "Purges messages in current channel from up to 14 days (blame discord api). Requires `MANAGE_MESSAGES` in the guild and in the channel."},
               {name: `${pre}support`, value: "Gives support server link."},
               {name: `${pre}help`,value: "Gives quick faqs."},
               {name: `${pre}invite`,value: "Shows invite of the bot."},
+              {name: `${pre}reddit`, value: `Shows a reddit post from a random subreddit or a reddit of your choice. If channel is SFW all NSFW posts will be filtered.`},
               {name: `${pre}lock`, value: "Locks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel."},
               {name: `${pre}unlock`, value: "Unlocks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel."}
           )
@@ -705,7 +745,14 @@ client.on("message",async message =>{
     }
     let prevuser = await db.get(`Guild-${message.guild.id}-PrevUser`)
     let currentnum = await getnumber(message.guild.id)
+    let webhook = await db.get(`Guild-${message.guild.id}-Webhook`)
     let repeat = await db.get(`Guild-${message.guild.id}-Repeat`)
+    if(repeat == null){
+      repeat = false
+    }
+    if(webhook == null){
+      webhook = false
+    }
     if(message.content != String(currentnum)){
         if(!message.guild.me.hasPermission(`MANAGE_MESSAGES`)){
             console.log(`Guild ${message.guild.id} does not have correct perms for counting.`)
@@ -715,7 +762,7 @@ client.on("message",async message =>{
         message.delete().catch(console.error())
         return
     }
-    if(repeat == false || repeat == null){
+    if(repeat == false){
       if(prevuser == message.member.id){
         if(!message.guild.me.hasPermission(`MANAGE_MESSAGES`)){
           console.log(`Guild ${message.guild.id} does not have correct perms for counting.`)
@@ -734,21 +781,22 @@ client.on("message",async message =>{
         db.set(`Guild-${message.guild.id}-PrevUser`,message.member.id)
         updatenumber(currentnum + 1,message.guild.id)
         console.log(`${message.member.id} counted correctly in guild ${message.guild.id}. Number is now ${String(currentnum + 1)}.`)
-        const webhooks = await message.channel.fetchWebhooks()
-       const webhook = webhooks.first()
-        if(webhook){
-            webhook.send(currentnum, {
-                username: message.member.displayName,
-                avatarURL: message.member.user.avatarURL()
-            }).then(msg => {
-                if(ispin(currentnum)){
-                    msg.pin()
-                }
-            })
+        if(webhook == true){
+          const webhooks = await message.channel.fetchWebhooks()
+          const webhook = webhooks.first()
+           if(webhook){
+               webhook.send(currentnum, {
+                   username: message.member.displayName,
+                   avatarURL: message.member.user.avatarURL()
+               }).then(msg => {
+                   if(ispin(currentnum)){
+                       msg.pin()
+                   }
+                   return message.delete().catch(console.error());
+               })
+           }
         }
       
-
-        return message.delete().catch(console.error());
     } 
 
    
