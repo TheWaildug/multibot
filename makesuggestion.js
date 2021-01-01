@@ -2,7 +2,7 @@ const Discord = require("discord.js")
 module.exports = async (message,db) => {
         console.log(`make suggestion ${message.author.id}`)
         let suggestion
-         const isblack = await db.get(`IsBlacklisted-${message.member.id}`)
+         const isblack = await db.get(`IsBlacklisted-${message.author.id}`)
           console.log(isblack)
           if(isblack !== null)    { return message.reply('You have been blacklisted from making suggestions!')
           }
@@ -42,7 +42,7 @@ module.exports = async (message,db) => {
          const exampleEmbed = new Discord.MessageEmbed()
             .setColor("#FF0000")
             .setTitle("Suggestions")
-            .setDescription(`New Suggestion from <@${message.member.id}>`)
+            .setDescription(`New Suggestion from <@${message.author.id}>`)
             .addFields(
               { name: "Suggestion: ", value: `${suggestion}`},
               { name: "Guild: ", value: `${message.guild}` },
