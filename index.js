@@ -393,8 +393,10 @@ client.on("message", async message => {
               if(msg.content.toLowerCase() == "channel"){
                 collector.stop("Answered.")
                 
-                message.reply("Please # a channel or send it's id.")
-                collector.on("collect",async chan => {
+                message.reply("Please # a channel or enter it's id.")
+                const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 10000 });
+          
+                collector2.on("collect",async chan => {
                   let channel, mentionchannel;
                   let cont = true;
                   if (message.mentions.channels.first()) {
