@@ -11,14 +11,16 @@ module.exports = async (message,db) => {
               const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 10000 });
               collector.on('collect', msg => {
                 console.log(msg.content)
-                collector.stop('User has inputted.')
-        
+              
                 if(msg.content.toLowerCase() === "cancel"){
-                    
+                    collector.stop('User has cancelled.')
+        
                   return msg.reply('Canceling...')
                 }
                 
                   msg.reply(`You have entered ${msg.content} . Is that correct? (Yes or No)`);
+                  collector.stop('User has inputted.')
+        
                   const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 10000 });
                   collector2.on('collect', async (mg) =>{
                     console.log("collect 2 " + mg.content)
