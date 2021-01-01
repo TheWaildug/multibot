@@ -226,28 +226,59 @@ client.on("message", async message => {
     }else if(command == "reddit"){
       console.log(`reddit ${message.guild.id}`)
       console.log(`reddit ${message.member.id}`)
-      redditFetch({
+      if(args[0]){
+        let reddit = args[0].replace("r/","")
+        redditFetch({
 
-        subreddit: 'all',
-        sort: 'hot',
-        allowNSFW: false,
-        allowModPost: false,
-        allowCrossPost: false,
-        allowVideo: true
-    
-    }).then(post => {
-      const embed = new Discord.MessageEmbed()
-      .setTitle(`Hot post from r/${post.subreddit} by u/${post.author_fullname}`)
-      .setURL(`https://reddit.com/${post.permalink}`)
-      .setDescription(`Title: ${post.title}`)
-      if(post.image){
-        embed.setImage(`${post.url}`)
+          subreddit: reddit,
+          sort: 'hot',
+          allowNSFW: message.channel.nsfw,
+          allowModPost: false,
+          allowCrossPost: false,
+          allowVideo: false
+      
+      }).then(post => {
+        const embed = new Discord.MessageEmbed()
+        .setTitle(`Hot post, ${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
+        .setURL(`https://reddit.com/${post.permalink}`)
+        .setDescription(`${prefix}reddit`)
+        .setImage(`${post.url}`)
+        .setColor("RANDOM")
+        .setTimestamp()
+       
+          return message.channel.send(embed);
+      }).catch(error => {
+        console.warn("Error: " + error)
+        return message.reply("Something went wrong! Error: " + error)
+       
+      })
+        
+        }else{redditFetch({
+  
+          subreddit: 'all',
+          sort: 'hot',
+          allowNSFW: message.channel.nsfw,
+          allowModPost: false,
+          allowCrossPost: false,
+          allowVideo: false
+      
+      }).then(post => {
+        const embed = new Discord.MessageEmbed()
+        .setTitle(`Hot post, ${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
+        .setURL(`https://reddit.com/${post.permalink}`)
+        .setDescription(`${prefix}reddit`)
+        .setImage(`${post.url}`)
+        .setColor("RANDOM")
+        .setTimestamp()
+       
+          return message.channel.send(embed);
+      }).catch(error => {
+        console.warn("Error: " + error)
+        return message.reply("Something went wrong! Error: " + error)
+       
+        })
       }
-        return message.channel.send(embed);
-    }).catch(error => {
-      return console.log(error);
-    })
-    } else if(command == "calc"){
+    }else if(command == "calc"){
         if(!message.member.id == "432345618028036097"){
             return message.delete();
         }
