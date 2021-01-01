@@ -365,7 +365,7 @@ client.on("message", async message => {
           }
           if(!args[0]){
               const pre =await db.get(`Guild-${message.guild.id}-Prefix`)
-              return message.reply(`${pre}counting ON/OFF/CHANNEL #CHANNEL/ID`)
+              return message.reply(`${pre}counting ON/OFF/SETTINGS `)
           }
           if(args[0].toLowerCase() == "off"){
               db.set(`Guild-${message.guild.id}-Counting`,false).then(() => {
@@ -376,28 +376,50 @@ client.on("message", async message => {
               db.set(`Guild-${message.guild.id}-Counting`,true).then(() => {
                   return message.reply(`Counting is now enabled in this guild.`)
               })
-          }else if(args[0].toLowerCase() == "channel"){
-            let channel, mentionchannel;
-            let cont = true;
-            if (message.mentions.channels.first()) {
-              channel = mentionchannel = message.mentions.channels.first()
-            } else {
-              channel = mentionchannel = message.channel.guild.channels.cache.find(
-                r => r.id === args[1]
-              );
-            }
-            if (!channel && mentionchannel) {
-              message.reply("please # a channel or enter its ID .");
-              cont = false;
-            }
-            if (cont == false) {
-              return;
-            }
-            console.log(channel.name);
-            db.set(`Guild-${message.guild.id}-CountingChannel`,channel.id).then(() => {
-                db.set(`Guild-${message.guild.id}-CountingNum`,1)
-                message.reply(`Counting channel is now set to <#${channel.id}>. Start counting from 1.`)
+          }else if(args[0].toLowerCase() == "settings"){
+            const embed = new Discord.MessageEmbed()
+            .setTitle(`Counting Settings`)
+            .setColor("RANDOM")
+            .setDescription("Please select one of the following:")
+            .addFields(
+              {name: "Channel", value: `Change the channel in which counting happens.`},
+              {name: "Repeat", value: "Change whether or not users can count on their own."},
+              {name: "Webhook", value: "Changes whether a webhook in place of a user is sent to prevent deleting/editing."}
+            )
+            message.channel.send(`<@${message.member.id}>`,embed)
+            const collector = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 10000 });
+            collector.on("collect", async msg =>{
+              console.log(msg.content)
+              if(msg.content.toLowerCase() == "channel"){
+                collector.stop("Answered.")
+                
+                message.reply("Please # a channel or send it's id.")
+                collector.on("collect",async chan => {
+                  let channel, mentionchannel;
+                  let cont = true;
+                  if (message.mentions.channels.first()) {
+                    channel = mentionchannel = message.mentions.channels.first()
+                  } else {
+                    channel = mentionchannel = await message.channel.guild.channels.cache.find(
+                      r => r.id === chan.content
+                    );
+                  }
+                  if (!channel && mentionchannel) {
+                    message.reply("please # a channel or enter its ID.");
+                    cont = false;
+                  }
+                  if (cont == false) {
+                    return;
+                  }
+                  console.log(channel.name);
+                  db.set(`Guild-${message.guild.id}-CountingChannel`,channel.id).then(() => {
+                      db.set(`Guild-${message.guild.id}-CountingNum`,1)
+                      message.reply(`Counting channel is now set to <#${channel.id}>. Start counting from 1.`)
+                  })
+                })
+              }
             })
+             
           }
       }else if(command == "commands"){
           console.log(`commands ${message.guild.id}`)

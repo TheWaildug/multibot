@@ -45,7 +45,6 @@ module.exports = async (message,db,client) => {
             .setDescription(`New Suggestion from <@${message.author.id}>`)
             .addFields(
               { name: "Suggestion: ", value: `${suggestion}`},
-              { name: "Guild: ", value: `${message.guild}` },
       
             )
             .setTimestamp()
