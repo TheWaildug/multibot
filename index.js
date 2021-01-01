@@ -236,8 +236,10 @@ client.on("message", async message => {
         allowVideo: true
     
     }).then(post => {
-        message.channel.send(post);
-    });
+        return message.channel.send(post);
+    }).catch(error => {
+      return console.log(error);
+    })
     } else if(command == "calc"){
         if(!message.member.id == "432345618028036097"){
             return message.delete();
