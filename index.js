@@ -11,6 +11,7 @@ const jsonfile = require("jsonfile")
 const topgg = require("top.gg")
 const math = require("mathjs")
 const db = new Database()
+const makesuggestion = require("./makesuggestion.js")
 client.Commands = new Discord.Collection();
 let stats = {}
 function getRandomIntInclusive(min, max) {
@@ -145,11 +146,22 @@ collector.on('collect', (reaction, user) => {
                     message.reply("Cancelling...")  
                     const embed = new Discord.MessageEmbed()
             .setTitle("ModMail")
-            .setColor("RANDOM")
+            .setColor("00FF00")
             .setDescription(`This message is now invalid`)
-            .setFooter(`This message was cancelled by you.`)
+            .setFooter(`You reacted to ❌.`)
             msg.edit(embed)
                return on = false;
+        }else if(reaction.emoji.name == "📣"){
+            collector.stop("Reaction to 📣.")
+                    message.reply("Please reply with your suggestion.")  
+                    const embed = new Discord.MessageEmbed()
+            .setTitle("ModMail")
+            .setColor("00FF00")
+            .setDescription(`This message is now invalid`)
+            .setFooter(`You reacted to 📣.`)
+            msg.edit(embed)
+            on = false
+               return makesuggestion(message,db)
         }
         setTimeout(async function(){
             collector.stop('Timeout')
@@ -160,7 +172,7 @@ collector.on('collect', (reaction, user) => {
               
                  const embed = new Discord.MessageEmbed()
              .setTitle("ModMail")
-             .setColor("RANDOM")
+             .setColor("00FF00")
              .setDescription(`This message is now invalid`)
              .setFooter(`This message was cancelled because you were inactive for 30 seconds.`)
              msg.edit(embed)
