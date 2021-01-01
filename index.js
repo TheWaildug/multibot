@@ -137,9 +137,11 @@ client.on("message",async message =>{
         const filter = (reaction, user) => {
             return ['📣', '⚒️','❌'].includes(reaction.emoji.name) && user.id === message.author.id;
         };
-        message.awaitReactions(filter,{max: 1, time:60000, errors: ['time']}).then(collected => {
-            console.log(collected.first().emoji.name)
-            if(collected.first().emoji.name == "❌"){
+       
+const collector = message.createReactionCollector(filter, { time: 60000 });
+collector.on('collect', (reaction, user) => {
+            console.log(reaction.emoji.name)
+            if(reaction.emoji.name == "❌"){
                 message.reply("Cancelling...")  
                 const embed = new Discord.MessageEmbed()
         .setTitle("ModMail")
