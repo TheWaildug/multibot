@@ -399,9 +399,9 @@ client.on("message", async message => {
                   let channel, mentionchannel;
                   let cont = true;
                   if (message.mentions.channels.first()) {
-                    channel = mentionchannel = message.mentions.channels.first()
+                    channel = mentionchannel = chan.mentions.channels.first()
                   } else {
-                    channel = mentionchannel = await message.channel.guild.channels.cache.find(
+                    channel = mentionchannel = await chan.channel.guild.channels.cache.find(
                       r => r.id === chan.content
                     );
                   }
@@ -492,8 +492,6 @@ client.on("message", async message => {
                 return message.reply("Prefix has been reset to `c!`");
               })
           }
-      }else if(command == "ban"){
-
       }else if(command == "help"){
           const embed = new Discord.MessageEmbed()
           .setTitle("I need help!")
