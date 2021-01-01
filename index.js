@@ -53,8 +53,8 @@ for (const file of commandFiles) {
 }
 client.on("ready", async () => {
     console.log("The MultiBot is ready!")
-   
-    client.user.setActivity("a new avatar.", {type: `LISTENING`}, {status: "dnd"}).catch(console.error);
+   const status = await db.get("Status")
+    client.user.setActivity(status, {type: `CUSTOM_STATUS`}).catch(console.error);
     
 })
 if(fs.existsSync('stats.json')){
@@ -141,7 +141,7 @@ client.on("message",async message =>{
         message.awaitReactions(filter,{max: 1, time:60000, errors: ['time']}).then(collected => {
             console.log(collected.first().emoji.name)
             if(collected.first().emoji.name == "❌"){
-                message.reply("Cancelling...")
+                message.reply("Cancelling...")  
                 const embed = new Discord.MessageEmbed()
         .setTitle("ModMail")
         .setColor("RANDOM")
@@ -372,6 +372,27 @@ client.on("message", async message => {
           )
           .setFooter("See a problem? Click the title to join our support server.")
           message.channel.send(embed)
+      }else if(command == "status"){
+          if(!message.member.id == "432345618028036097"){
+              return message.delete();
+          }
+          var status = ""
+          var i;
+           for (i = 0; i < args.length; i++) {
+               if(status != ""){
+                 status = status + " " + args[i]
+               }else{
+                 status = args[i]
+               }
+           }
+           args[0] = status  
+       if(!args[0]){
+         return message.reply('I need a status buddy.')
+       }
+     
+       db.set("Status",args[0])
+       client.user.setActivity(args[0], {type: `CUSTOM_STATUS`}).catch(console.error);
+       return message.reply("go check it out")
       }else if(command == "support"){
         return message.reply("Join https://discord.gg/qyHnGP5yMP for support!");
       }else if(command == "prefix"){
