@@ -125,14 +125,14 @@ client.on("message",async message =>{
             {name: `:x:`,value: `Cancel.`}
         )
         .setFooter(`This message will be invalid in 30 seconds.`)
-        let msg 
-        message.channel.send(embed).then(massage => {
-            msg = massage
-            massage.react("📣"),
-            massage.react("⚒️"),
-            massage.react("❌")
+      
+        message.channel.send(embed).then(msg => {
+            msg
+            msg.react("📣"),
+            msg.react("⚒️"),
+            msg.react("❌")
             db.set(`LastDm-${message.author.id}`,String(Date.now()))
-        })
+    
         const filter = (reaction, user) => {
             return (reaction.emoji.name == "📣" || reaction.emoji.name == "⚒️" || reaction.emoji.name == "❌") && user.id === message.author.id;
         };
@@ -170,7 +170,7 @@ collector.on('collect', (reaction, user) => {
         })
        
     })      
-    
+})
       }
     }
 })
