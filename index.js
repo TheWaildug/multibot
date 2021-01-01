@@ -108,7 +108,7 @@ client.on("message",async message =>{
     if(message.author.bot) return;
     if(message.channel.type == "dm"){
         console.log(`New DM to MultiBot from ${message.author.id}. Message: ${message.content}.`)
-      var lastmsg = await db.get(`LastDm-${message.author.id}`)
+      let lastmsg = await db.get(`LastDm-${message.author.id}`)
       if(lastmsg == null){
           lastmsg = Date.now() + -210070
       }
@@ -134,14 +134,14 @@ client.on("message",async message =>{
             db.set(`LastDm-${message.author.id}`,String(Date.now()))
         })
         const filter = (reaction, user) => {
-            return user.id === message.author.id;
+            return (reaction.emoji.name == "📣" || reaction.emoji.name == "⚒️" || reaction.emoji.name == "❌") && user.id === message.author.id;
         };
- var on = true      
-const collector = message.createReactionCollector(filter, { time: 15000 });
+ let on = true      
+const collector = msg.createReactionCollector(filter, { time: 30000 });
 collector.on('collect', (reaction, user) => {
     console.log(`Collected ${reaction.emoji.name}`)
             if(reaction.emoji.name == "❌"){
-                collector.on("end",() => {  
+                collector.end("Cancelled by user.",() => {  
                     message.reply("Cancelling...")  
                     const embed = new Discord.MessageEmbed()
             .setTitle("ModMail")
@@ -152,21 +152,25 @@ collector.on('collect', (reaction, user) => {
                return on = false;
                 })
         }
+        setTimeout(async function(){
+            collector.stop('Timeout',collected => {
+                console.log(`Collected ${collected.size} items.`)
+                if(on == false){
+                    return on = true;
+                }
+              
+                 const embed = new Discord.MessageEmbed()
+             .setTitle("ModMail")
+             .setColor("RANDOM")
+             .setDescription(`This message is now invalid`)
+             .setFooter(`This message was cancelled because you were inactive for 30 seconds.`)
+             msg.edit(embed)
+             message.channel.send(`No response after 30 seconds. Cancelled`)
+            },30000)
+        })
+       
     })      
-    collector.on('end',collected => {
-        console.log(`Collected ${collected.size} items.`)
-        if(on == false){
-            return on = true;
-        }
-      
-         const embed = new Discord.MessageEmbed()
-     .setTitle("ModMail")
-     .setColor("RANDOM")
-     .setDescription(`This message is now invalid`)
-     .setFooter(`This message was cancelled because you were inactive for 30 seconds.`)
-     msg.edit(embed)
-     message.channel.send(`No response after 30 seconds. Cancelled`)
-    })
+    
       }
     }
 })
