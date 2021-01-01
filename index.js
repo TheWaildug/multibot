@@ -11,6 +11,7 @@ const jsonfile = require("jsonfile")
 const topgg = require("top.gg")
 const math = require("mathjs")
 const db = new Database()
+const redditFetch = require("reddit-fetch")
 const makesuggestion = require("./makesuggestion.js")
 client.Commands = new Discord.Collection();
 let stats = {}
@@ -222,6 +223,21 @@ client.on("message", async message => {
         client.Commands.get('ping').execute(message,args,Discord,facts,quote,randomPing)
     }else if(command == "slowmode"){
         client.Commands.get("slowmode").execute(message,args,ms)
+    }else if(command == "reddit"){
+      console.log(`reddit ${message.guild.id}`)
+      console.log(`reddit ${message.member.id}`)
+      redditFetch({
+
+        subreddit: 'all',
+        sort: 'hot',
+        allowNSFW: false,
+        allowModPost: false,
+        allowCrossPost: true,
+        allowVideo: true
+    
+    }).then(post => {
+        console.table(post);
+    });
     } else if(command == "calc"){
         if(!message.member.id == "432345618028036097"){
             return message.delete();
@@ -383,7 +399,7 @@ client.on("message", async message => {
             .setDescription("Please select one of the following:")
             .addFields(
               {name: "Channel", value: `Change the channel in which counting happens.`},
-              {name: "Repeat", value: "Change whether or not users can count on their own."},
+              {name: "Repeat", value: "Change whether or not users can count on their own. ON = Can repeat. OFF = Can't repeat."},
               {name: "Webhook", value: "Changes whether a webhook in place of a user is sent to prevent deleting/editing."}
             )
             message.channel.send(`<@${message.member.id}>`,embed)
@@ -392,11 +408,11 @@ client.on("message", async message => {
               console.log(msg.content)
               if(msg.content.toLowerCase() == "channel"){
                 collector.stop("Answered.")
-                
+    
                 message.reply("Please # a channel or enter it's id.")
                 const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 10000 });
                 collector2.on("collect",async chan => {
-
+                  collector2.stop("Answered")
                
                   let channel
                   let cont = true
@@ -425,6 +441,7 @@ client.on("message", async message => {
                 const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 10000 });
                 collector2.on("collect",async mas => {
                   console.log(mas.content)
+                  collector2.stop("Answered")
                   if(mas.content.toLowerCase() == "on"){
                     message.reply("Changing repeat to true...")
                     return db.set(`Guild-${message.guild.id}-Repeat`,true);
