@@ -176,7 +176,7 @@ collector.on('collect', (reaction, user) => {
                return on = false;
         }else if(reaction.emoji.name == "📣"){
             collector.stop("Reaction to 📣.")
-                    message.reply("Please reply with your suggestion.")  
+                         
                     const embed = new Discord.MessageEmbed()
             .setTitle("ModMail")
             .setColor("00FF00")

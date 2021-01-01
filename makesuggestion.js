@@ -36,7 +36,7 @@ module.exports = async (message,db,client) => {
         let suggestionId = await db.get('SuggestionId')
         if(suggestionId === null){
           suggestionId = "1"
-          setData('SuggestionId',"1")
+          db.set('SuggestionId',"1")
         }
         console.log(suggestionId)
          const exampleEmbed = new Discord.MessageEmbed()
@@ -54,7 +54,7 @@ module.exports = async (message,db,client) => {
            channel.send(exampleEmbed).then(sentEmbed => {
           sentEmbed.react("👍")
           sentEmbed.react("👎")
-          setData('SuggestionId',Number(suggestionId) + 1)
+          db.set('SuggestionId',Number(suggestionId) + 1)
       })
                     }else if(mg.content.toLowerCase() === "no")
                     return mg.reply('Please wait 3.5 minutes and run modmail again.')
