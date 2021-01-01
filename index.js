@@ -137,32 +137,39 @@ client.on("message",async message =>{
         const filter = (reaction, user) => {
             return ['📣', '⚒️','❌'].includes(reaction.emoji.name) && user.id === message.author.id;
         };
-       
+ var on = true      
 const collector = message.createReactionCollector(filter, { time: 60000 });
 collector.on('collect', (reaction, user) => {
             console.log(reaction.emoji.name)
             if(reaction.emoji.name == "❌"){
-                message.reply("Cancelling...")  
-                const embed = new Discord.MessageEmbed()
-        .setTitle("ModMail")
-        .setColor("RANDOM")
-        .setDescription(`This message is now invalid`)
-        .setFooter(`This message was cancelled by you.`)
-        msg.edit(embed)
-            
+                collector.on("end",() => {
+                    message.reply("Cancelling...")  
+                    const embed = new Discord.MessageEmbed()
+            .setTitle("ModMail")
+            .setColor("RANDOM")
+            .setDescription(`This message is now invalid`)
+            .setFooter(`This message was cancelled by you.`)
+            msg.edit(embed)
+               return on = false;
+                })
+               
             }
-        }).catch(() => {
-            const embed = new Discord.MessageEmbed()
+           setTimeout(async function(){
+               if(on == false){
+                   return on = true;
+               }
+               collector.on("end", () => {
+                const embed = new Discord.MessageEmbed()
             .setTitle("ModMail")
             .setColor("RANDOM")
             .setDescription(`This message is now invalid`)
             .setFooter(`This message was cancelled because you were inactive for 30 seconds.`)
             msg.edit(embed)
-            
-            return message.reply(`No response after 30 seconds. Cancelled.`)
+            message.channel.send(`No response after 30 seconds. Cancelled`)
+               })
+           },60000);
         })
       }
-   
     }
 })
 client.on("message", async message => {   
