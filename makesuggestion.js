@@ -1,7 +1,7 @@
 const Discord = require("discord.js")
 module.exports = async (message,db) => {
-    async function makeSuggestion(message){
-        var suggestion
+        console.log(`make suggestion ${message.author.id}`)
+        let suggestion
          const isblack = await db.get(`IsBlacklisted-${message.member.id}`)
           console.log(isblack)
           if(isblack !== null)    { return message.reply('You have been blacklisted from making suggestions!')
@@ -63,7 +63,4 @@ module.exports = async (message,db) => {
                     })
                    
       });
-        
-       
-      }
 }
