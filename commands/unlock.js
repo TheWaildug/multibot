@@ -10,10 +10,10 @@ module.exports = {
             return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to lock and under the role settings.");
          }
           console.log("unlock em down");
-          var channel;
+          let channel;
       
-          var cont = true;
-          var yes = true;
+          let cont = true;
+          let yes = true;
           if (message.mentions.channels.first()) {
             channel = message.mentions.channels.first();
           } else {
@@ -29,8 +29,8 @@ module.exports = {
             return;
           }
           console.log(channel.name);
-          var i;
-          var e = "";
+          let i;
+          let e = "";
           for (i = 0; i < args.length; i++) {
             if (i >= "1") {
               e = e + args[i] + " ";

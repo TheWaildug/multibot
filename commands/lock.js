@@ -6,11 +6,11 @@ module.exports = {
         if(!message.member.hasPermission(`MANAGE_CHANNELS`)){
             return message.delete();
         }
-        var channel;
+        let channel;
         if(!message.guild.me.hasPermission(`MANAGE_CHANNELS`)){
           return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to lock and under the role settings.");
        }
-        var cont = true;
+        let cont = true;
         if (message.mentions.channels.first()) {
           channel = message.mentions.channels.first();
         } else {
@@ -26,15 +26,15 @@ module.exports = {
           return;
         }
         console.log(channel.name);
-        var i;
-        var e = "";
+        let i;
+        let e = "";
         for (i = 0; i < args.length; i++) {
           if (i >= "1") {
             e = e + args[i] + " ";
           }
         }
         args[1] = e;
-        var yes = false;
+        let yes = false;
         console.log(args[1]);
         const everyone = message.guild.roles.cache.find(
           r => r.name === "@everyone"

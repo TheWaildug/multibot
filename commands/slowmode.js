@@ -2,7 +2,7 @@ module.exports = {
     name: "slowmode",
     description: "changes the slowmode in specified channel",
     execute(message,args,ms){
-        var yes = false;
+        let yes = false;
         console.log(`slowmode ${message.guild.id}`);
         console.log(`slowmode ${message.member.id}`)
         //Then check if user have permissions to do that
@@ -38,8 +38,8 @@ module.exports = {
           args[1] = args[0]
           args[0] = message.channel.id
         }
-        var channel, mentionchannel;
-        var cont = true;
+        let channel, mentionchannel;
+        let cont = true;
         if (message.mentions.channels.first()) {
           channel = mentionchannel = message.mentions.channels.first();
         } else {
@@ -78,7 +78,7 @@ module.exports = {
               return message.reply("You can only go up to "+  ms(21600 * 1000, { long: true }) +".");
             }
             if (channel.type === "text") {
-              var e = ms(args[1])
+              let e = ms(args[1])
               e = e/1000
               console.log(e);
               channel

@@ -12,7 +12,7 @@ const topgg = require("top.gg")
 const math = require("mathjs")
 const db = new Database()
 client.Commands = new Discord.Collection();
-var stats = {}
+let stats = {}
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -125,7 +125,7 @@ client.on("message",async message =>{
             {name: `:x:`,value: `Cancel.`}
         )
         .setFooter(`This message will be invalid in 30 seconds.`)
-        var msg 
+        let msg 
         message.channel.send(embed).then(massage => {
             msg = massage
             massage.react("📣"),
@@ -178,7 +178,7 @@ client.on("message", async message => {
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
    
-    var prefix = await db.get(`Guild-${message.guild.id}-Prefix`)
+    let prefix = await db.get(`Guild-${message.guild.id}-Prefix`)
     if(prefix == null){
       db.set(`Guild-${message.guild.id}-Prefix`,"c!")
       prefix = "c!"
@@ -194,11 +194,11 @@ client.on("message", async message => {
         if(!message.member.id == "432345618028036097"){
             return message.delete();
         }
-        var prob = ""
+        let prob = ""
         if(!args[0]){
           return message.reply('bro I want some numbers.')
         }
-           var i;
+           let i;
         for (i = 0; i < args.length; i++) {
             if(prob != ""){
               prob = prob + " " + args[i]
@@ -221,7 +221,7 @@ client.on("message", async message => {
         if(!args[0]){
             return message.reply("I need a user id or mentioned member.");
         }
-      var mentionMember 
+      let mentionMember 
       if(message.mentions.members.first){
         mentionMember = message.mentions.members.first().id
       }else{
@@ -265,8 +265,8 @@ client.on("message", async message => {
         } else if(args[0] === "Change"){
            if(!args[1]) return message.reply('Please specify a key.')
            console.log(args[1])
-           var e = "";
-        for (var i = 0; i < args.length; i++) {
+           let e = "";
+        for (let i = 0; i < args.length; i++) {
        if(i >= 2){
             e = e + args[i] + " ";
        }
@@ -287,7 +287,7 @@ client.on("message", async message => {
       }else if(command == "purge"){
           console.log(`purge ${message.guild.id}`)
           console.log(`purge ${message.member.id}`)
-          var perm = false
+          let perm = false
           if(!message.member.hasPermission(`MANAGE_MESSAGES`)) return message.delete();
           const amount = args[0]
           const perms = message.member.permissionsIn(message.channel).toArray();
@@ -338,8 +338,8 @@ client.on("message", async message => {
                   return message.reply(`Counting is now enabled in this guild.`)
               })
           }else if(args[0].toLowerCase() == "channel"){
-            var channel, mentionchannel;
-            var cont = true;
+            let channel, mentionchannel;
+            let cont = true;
             if (message.mentions.channels.first()) {
               channel = mentionchannel = message.mentions.channels.first()
             } else {
@@ -386,8 +386,8 @@ client.on("message", async message => {
           if(!message.member.id == "432345618028036097"){
               return message.delete();
           }
-          var status = ""
-          var i;
+          let status = ""
+          let i;
            for (i = 0; i < args.length; i++) {
                if(status != ""){
                  status = status + " " + args[i]
@@ -508,7 +508,7 @@ async function updatenumber(currentnum,guild){
   await db.set(`Guild-${guild}-CountingNum`,currentnum)
 }
 async function getnumber(guild){
-    var currentnum = await db.get(`Guild-${guild}-CountingNum`)
+    let currentnum = await db.get(`Guild-${guild}-CountingNum`)
     if(currentnum == null){
         currentnum = 1
     }
@@ -519,7 +519,7 @@ async function getnumber(guild){
 const numpins = require("./numbers")
 
 function ispin(number){
-    for (var i = 0; i < numpins.length; i++) {
+    for (let i = 0; i < numpins.length; i++) {
         if(numpins[i] == number){
             return true
         }
@@ -542,7 +542,7 @@ client.on("message",async message =>{
     if(message.channel.id != await db.get(`Guild-${message.guild.id}-CountingChannel`)){
         return;
     }
-    var currentnum = await getnumber(message.guild.id)
+    let currentnum = await getnumber(message.guild.id)
    
     if(message.content != String(currentnum)){
         if(!message.guild.me.hasPermission(`MANAGE_MESSAGES`)){
