@@ -118,7 +118,7 @@ client.on("message",async message =>{
       if(Date.now() - Number(lastmsg) > 210000){
         const embed = new Discord.MessageEmbed()
         .setTitle("ModMail")
-        .setColor("RANDOM")
+        .setColor("00FF00")
         .setDescription(`You have activated ModMail. Please react to the emoji that corresponds to your reason.`)
         .addFields(
             {name: `📣`,value: `Make a suggestion for the bot.`},
