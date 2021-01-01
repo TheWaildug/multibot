@@ -278,6 +278,33 @@ client.on("message", async message => {
        
         })
       }
+    }else if(command == "setnsfw"){
+      if(!message.member.id == "432345618028036097"){
+        return message.delete();
+    }
+    let channel
+    let cont = true
+    if (message.mentions.channels.first()) {
+      channel = await message.guild.channels.cache.find(r => r.id === message.mentions.channels.first().toLocaleString().replace("<#","").replace(">",""))
+    } else {
+      channel = await message.guild.channels.cache.find(
+        r => r.id == args[0])
+    }
+    if (!channel) {
+      message.reply("please run this command again but include a channel.");
+      cont = false;
+    }
+    if (cont == false) {
+      return;
+    }
+    console.log(channel.name);
+    if(channel.nsfw == true){
+      channel.setNSFW(false,"Changed by the froggo.")
+      return message.reply("it's a shame you can't post anime thighs anymore")
+    }else if(channel.nsfw == false){
+      channel.setNSFW(true,"Changed by the froggo.")
+      return message.reply("go post some anime thighs now.")
+    }
     }else if(command == "calc"){
         if(!message.member.id == "432345618028036097"){
             return message.delete();
