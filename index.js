@@ -54,8 +54,7 @@ for (const file of commandFiles) {
 client.on("ready", async () => {
     console.log("The MultiBot is ready!")
    const status = await db.get("Status")
-    client.user.setActivity(status, {type: `PLAYING`}).catch(console.error);
-    
+   client.user.setPresence({ activity: { name: status, type: `PLAYING` }, status: 'dnd' })
 })
 if(fs.existsSync('stats.json')){
     stats =  jsonfile.readFileSync("stats.json")
@@ -391,7 +390,7 @@ client.on("message", async message => {
        }
      
        db.set("Status",args[0])
-       client.user.setActivity(args[0], {type: `PLAYING`}).catch(console.error);
+       client.user.setPresence({ activity: { name: args[0], type: `PLAYING` }, status: 'dnd' })
        return message.reply("go check it out")
       }else if(command == "support"){
         return message.reply("Join https://discord.gg/qyHnGP5yMP for support!");
