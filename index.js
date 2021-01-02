@@ -289,7 +289,7 @@ client.on("message", async message => {
            const embed = new Discord.MessageEmbed()
         .setTitle(`Hot post, ${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
         .setURL(`https://reddit.com${post.permalink}`)
-        .setDescription(`!reddit`)
+        .setDescription(`${prefix}reddit`)
         .setImage(`${post.url}`)
         .setColor("RANDOM")
         .setTimestamp()
