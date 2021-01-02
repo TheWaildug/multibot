@@ -239,27 +239,17 @@ client.on("message", async message => {
       
       }).then(post => {
         console.log(post.url)
-        if(!post.url.endsWith(".jpg") || !post.url.endsWith("png")){
+      
             const embed = new Discord.MessageEmbed()
         .setTitle(`${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
         .setURL(`https://reddit.com${post.permalink}`)
         .setDescription(`${prefix}reddit`)
         .setColor("RANDOM")
-        .setTimestamp()
-       
-          return message.channel.send(post.url,embed);
-        }else{
-           const embed = new Discord.MessageEmbed()
-        .setTitle(`Hot post, ${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
-        .setURL(`https://reddit.com${post.permalink}`)
-        .setDescription(`!reddit`)
-        .setImage(`${post.url}`)
-        .setColor("RANDOM")
+        .attachFiles(post.url)
         .setTimestamp()
        
           return message.channel.send(embed);
-        }
-       
+
       }).catch(error => {
         console.warn("Error: " + error)
         return message.reply("Something went wrong: `" + error + "`")
@@ -276,26 +266,16 @@ client.on("message", async message => {
       
       }).then(post => {
         console.log(post.url)
-        if(!post.url.endsWith(".jpg") || !post.url.endsWith(".png")){
+        
             const embed = new Discord.MessageEmbed()
         .setTitle(`${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
         .setURL(`https://reddit.com${post.permalink}`)
         .setDescription(`${prefix}reddit`)
         .setColor("RANDOM")
-        .setTimestamp()
-       
-          return message.channel.send(post.url,embed);
-        }else{
-           const embed = new Discord.MessageEmbed()
-        .setTitle(`Hot post, ${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
-        .setURL(`https://reddit.com${post.permalink}`)
-        .setDescription(`${prefix}reddit`)
-        .setImage(`${post.url}`)
-        .setColor("RANDOM")
+        .attachFiles(post.url)
         .setTimestamp()
        
           return message.channel.send(embed);
-        }
        
       }).catch(error => {
         console.warn("Error: " + error)
