@@ -330,10 +330,22 @@ client.on("message", async message => {
         console.log(ans)
       message.reply(ans)
     }else if(command == "rank"){
-        console.log('rank')
+        console.log(`rank ${message.guild.id}`)
+        console.log(`rank ${message.member.id}`)
+        
         const guildStats = stats[message.guild.id]
-        const userStats = guildStats[message.author.id]
-        message.channel.send(`Your current rank is **${userStats.level}.** You need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`)
+        let userStats
+        if(message.mentions.members.first()){
+          const mm = message.mentions.members.first()
+           userStats = guildStats[mm.id]
+           message.channel.send(`<@${mm.id}>'s current rank is **${userStats.level}.** They need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`)
+        }else{
+          message.channel.send(`Your current rank is **${userStats.level}.** You need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`)
+           userStats = guildStats[message.author.id]
+        }
+
+        
+        
     }else if(command == "blacklist"){
     let user
     console.log('blacklist command sent')
