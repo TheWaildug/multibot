@@ -239,9 +239,9 @@ client.on("message", async message => {
       
       }).then(post => {
         console.log(post.url)
-        if(!post.url.endsWith(".jpg")){
+        if(!post.url.endsWith(".jpg") || !post.url.endsWith("png")){
             const embed = new Discord.MessageEmbed()
-        .setTitle(`Hot post, ${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
+        .setTitle(`${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
         .setURL(`https://reddit.com${post.permalink}`)
         .setDescription(`${prefix}reddit`)
         .setColor("RANDOM")
@@ -276,9 +276,9 @@ client.on("message", async message => {
       
       }).then(post => {
         console.log(post.url)
-        if(!post.url.endsWith(".jpg")){
+        if(!post.url.endsWith(".jpg") || !post.url.endsWith(".png")){
             const embed = new Discord.MessageEmbed()
-        .setTitle(`Hot post, ${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
+        .setTitle(`${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
         .setURL(`https://reddit.com${post.permalink}`)
         .setDescription(`${prefix}reddit`)
         .setColor("RANDOM")
