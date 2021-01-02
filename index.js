@@ -449,7 +449,9 @@ client.on("message", async message => {
                 if (amount < 1) return message.reply('You have to delete at least 1 message!'); // Checks if the `amount` integer is smaller than 1
                 await message.channel.messages.fetch({ limit: amount }).then(messages => { // Fetches the messages
                     message.channel.bulkDelete(messages // Bulk deletes all messages that have been fetched and are not older than 14 days (due to the Discord API)
-                )}).catch(console.error).then(() => message.channel.send(`Done!`).then(msg => {
+                )}).catch(error => {
+                  console.log(`Error: ${error}`)
+                }).then(() => message.channel.send(`Done!`).then(msg => {
                    msg.delete({ timeout: 5000 })
 
                 }) )
