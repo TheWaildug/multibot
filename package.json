@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@replit/database": "^2.0.0",
+    "@top-gg/sdk": "^3.0.6",
     "discord.js": "^12.5.1",
     "express": "^4.17.1",
     "fs": "0.0.1-security",

@@ -8,7 +8,6 @@ const ms = require("ms")
 const fetch = require("node-fetch")
 const Database = require("@replit/database")
 const jsonfile = require("jsonfile")
-const topgg = require("top.gg")
 const math = require("mathjs")
 const db = new Database()
 const redditFetch = require("reddit-fetch")
@@ -84,6 +83,10 @@ async function blacklist(message,args){
      })
    }
  }
+ const Topgg = require('@top-gg/sdk')
+
+const api = new Topgg.Api(process.env.toptoken)
+
 client.on("message",async message => {
    if(message.channel.type == "dm"){
         return;
@@ -335,7 +338,7 @@ client.on("message", async message => {
         
         const guildStats = stats[message.guild.id]
         let userStats
-        if(message.mentions.members.first()){
+        if(args[0] && message.mentions.members.first()){
           const mm = message.mentions.members.first()
            userStats = guildStats[mm.id]
            message.channel.send(`<@${mm.id}>'s current rank is **${userStats.level}.** They need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`)
