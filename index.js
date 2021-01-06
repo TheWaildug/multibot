@@ -100,6 +100,13 @@ server.post('/dblwebhook', webhook.middleware(), async (req, res) => {
     return console.log(`Cannot find user!`);
   }
     console.log(user.id + " just voted for MultiBot!")
+    const embed = new Discord.MessageEmbed()
+.setColor("RANDOM")
+.setTitle("Thanks For Voting!")
+.setDescription(`Thanks you for voting for MultiBot. You will have the "Voted" role for 12 hours in our server. https://discord.gg/qyHnGP5yMP.`)
+user.send(embed).catch(error => {
+  console.log(`Error: ${error}`)
+})
     return;
     const guild = client.guilds.cache.find(u => u.id == "791760625243652127")
     if(guild){
