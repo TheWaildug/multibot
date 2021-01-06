@@ -94,9 +94,43 @@ setInterval(() => {
   })
 }, 300000)
 const webhook = new Topgg.Webhook(process.env.webauth) 
-server.post('/dblwebhook', webhook.middleware(), (req, res) => {
- 
-  console.log(req.vote.user)
+server.post('dblwebhook', webhook.middleware(), (req, res) => {
+  client.users.cache.find(req.vote.user).then(user =>{
+    console.log(user.id)
+    const guild = client.guilds.cache.find("791760625243652127")
+    if(guild){
+      if(guild.users.cache.find(user)){
+        const guilduser = guild.users.cache.find(user)
+        const embed = new Discord.MessageEmbed()
+.setColor("RANDOM")
+.setTitle("Thanks For Voting!")
+.setDescription(`Thanks you for voting for MultiBot. You will have the "Voted" role for 12 hours.`)
+user.send(embed).catch(error => {
+  console.log(`Error: ${error}`)
+})
+const role = guild.roles.cache.find("796439384940871701")
+if(role){
+  guilduser.roles.add(role).catch(console.error)
+}
+      }else if(!guild.users.cache.find(user)){
+        const embed = new Discord.MessageEmbed()
+        .setColor("RANDOM")
+        .setTitle("Thanks For Voting!")
+        .setDescription(`Thanks you for voting for MultiBot.`)
+        user.send(embed).catch(error => {
+          console.log(`Error: ${error}`)
+        })
+      }
+     
+      const channel = guild.channels.cache.find("793598695382843402")
+      if(channel){
+        channel.send(`<@${user.id}> has voted for MultiBot!`)
+      }
+    }
+  }).catch(error => {
+    console.log("Error: " + error)
+  })
+  
 }) 
 
 
