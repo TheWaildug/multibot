@@ -847,7 +847,9 @@ client.on("message",async message =>{
    
 })
 client.login(process.env.token)
-
+server.all('/', (req, res)=>{
+  res.send('Your bot is alive!')
+})
 
   server.listen(3000, ()=>{console.log("Server is Ready!")});
 
