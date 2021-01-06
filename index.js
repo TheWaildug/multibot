@@ -95,13 +95,12 @@ setInterval(() => {
 }, 300000)
 const webhook = new Topgg.Webhook(process.env.webauth) 
 server.post('/dblwebhook', webhook.middleware(), async (req, res) => {
-  return;
-  console.log(req.vote.user)
   const user = await client.users.fetch(req.vote.user)
   if(!user){
     return console.log(`Cannot find user!`);
   }
-    console.log(user.id)
+    console.log(user.id + " just voted for MultiBot!")
+    return;
     const guild = client.guilds.cache.find(u => u.id == "791760625243652127")
     if(guild){
       if(guild.members.fetch(user)){
