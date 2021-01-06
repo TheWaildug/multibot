@@ -90,9 +90,7 @@ async function blacklist(message,args){
 const api = new Topgg.Api(process.env.toptoken)
 setInterval(() => {
   api.postStats({
-    serverCount: client.guilds.cache.size,
-    shardId: client.shard.ids[0], 
-    shardCount: client.options.shardCount
+    serverCount: client.guilds.cache.size
   })
 }, 300000)
 const webhook = new Topgg.Webhook(process.env.webauth) 
@@ -815,10 +813,7 @@ client.on("message",async message =>{
    
 })
 client.login(process.env.token)
-server.all('/', (req, res)=>{
-  res.send('Your bot is alive!')
-})
-function keepAlive(){
+
+
   server.listen(3000, ()=>{console.log("Server is Ready!")});
-}
-keepAlive()
+
