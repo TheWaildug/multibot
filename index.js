@@ -127,8 +127,6 @@ if(role){
         channel.send(`<@${user.id}> has voted for MultiBot!`)
       }
     }
-  }).catch(error => {
-    console.log("Error: " + error)
   })
 
 
