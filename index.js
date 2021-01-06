@@ -94,7 +94,7 @@ setInterval(() => {
   })
 }, 300000)
 const webhook = new Topgg.Webhook(process.env.webauth) 
-server.post('/dblwebhook', webhook.middleware(), (req, res) => {
+server.post('/dblwebhook', webhook.middleware(), async (req, res) => {
   console.log(req.vote.user)
   const user = await client.users.fetch(req.vote.user)
   if(!user){
