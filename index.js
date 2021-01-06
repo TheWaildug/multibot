@@ -96,11 +96,11 @@ setInterval(() => {
 const webhook = new Topgg.Webhook(process.env.webauth) 
 server.post('/dblwebhook', webhook.middleware(), (req, res) => {
   console.log(req.vote.user)
-  const user = client.users.fetch(req.vote.user)
+  const user = await client.users.fetch(req.vote.user)
   if(!user){
     return console.log(`Cannot find user!`);
   }
-    
+    console.log(user.id)
     const guild = client.guilds.cache.find(u => u.id == "791760625243652127")
     if(guild){
       if(guild.members.fetch(user)){
