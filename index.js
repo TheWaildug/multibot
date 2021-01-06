@@ -108,6 +108,7 @@ server.post('/dblwebhook', webhook.middleware(), async (req, res) => {
         if(!guilduser){
           return console.log(`Cannot find guild user.`);
         }
+        console.log(`Guild user ${guilduser.id}`)
         const embed = new Discord.MessageEmbed()
 .setColor("RANDOM")
 .setTitle("Thanks For Voting!")
