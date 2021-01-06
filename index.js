@@ -95,12 +95,16 @@ setInterval(() => {
 }, 300000)
 const webhook = new Topgg.Webhook(process.env.webauth) 
 server.post('/dblwebhook', webhook.middleware(), (req, res) => {
+  console.log(req.vote.user)
   const user = client.users.fetch(req.vote.user)
-    console.log(req.vote.user)
+  if(!user){
+    return console.log(`Cannot find user!`)
+  }
+    
     const guild = client.guilds.cache.find(u => u.id == "791760625243652127")
     if(guild){
       if(guild.members.fetch(user)){
-        const guilduser = guild.members.cache.find(u => u.id == user)
+        const guilduser = guild.members.fetch(user)
         const embed = new Discord.MessageEmbed()
 .setColor("RANDOM")
 .setTitle("Thanks For Voting!")
@@ -112,7 +116,7 @@ const role = guild.roles.cache.find(u => u.id == "796439384940871701")
 if(role){
   guilduser.roles.add(role).catch(console.error)
 }
-      }else if(!guild.members.cache.find(u => u.id == user)){
+      }else if(!guild.members.fetch(user)){
         const embed = new Discord.MessageEmbed()
         .setColor("RANDOM")
         .setTitle("Thanks For Voting!")
