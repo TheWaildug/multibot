@@ -99,7 +99,7 @@ server.post('/dblwebhook', webhook.middleware(), (req, res) => {
     console.log(user.id)
     const guild = client.guilds.cache.find(u => u.id == "791760625243652127")
     if(guild){
-      if(guild.users.cache.find(u => u.id == user)){
+      if(guild.members.fetch(user)){
         const guilduser = guild.users.cache.find(user)
         const embed = new Discord.MessageEmbed()
 .setColor("RANDOM")
