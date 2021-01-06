@@ -95,7 +95,7 @@ setInterval(() => {
 }, 300000)
 const webhook = new Topgg.Webhook(process.env.webauth) 
 server.post('/dblwebhook', webhook.middleware(), (req, res) => {
-  client.users.cache.find(u => u.id == req.vote.user).then(user =>{
+  const user = client.users.fetch(req.vote.user)
     console.log(user.id)
     const guild = client.guilds.cache.find(u => u.id == "791760625243652127")
     if(guild){
@@ -130,8 +130,6 @@ if(role){
   }).catch(error => {
     console.log("Error: " + error)
   })
-  
-}) 
 
 
 client.on("message",async message => {
