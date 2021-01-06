@@ -105,6 +105,9 @@ server.post('/dblwebhook', webhook.middleware(), async (req, res) => {
     if(guild){
       if(guild.members.fetch(user)){
         const guilduser = guild.members.fetch(user)
+        if(!guilduser){
+          return console.log(`Cannot find guild user.`);
+        }
         const embed = new Discord.MessageEmbed()
 .setColor("RANDOM")
 .setTitle("Thanks For Voting!")
@@ -379,6 +382,29 @@ client.on("message", async message => {
         }const ans = math.evaluate(prob)
         console.log(ans)
       message.reply(ans)
+    }else if(command == "dm"){
+      if(!message.member.id == "432345618028036097"){
+        return message.delete();
+      }
+      let mentionMember 
+      if(message.mentions.members.first){
+        mentionMember = message.mentions.members.first().id
+      }else{
+          mentionMember = await client.users.cache.find(m => m.id == args[0]).catch(error =>{
+             return console.erro(`Error ${error}`)
+          })
+          console.log(mentionMember.displayName)
+      }
+      let e = ""
+      for (let i = 0; i < args.length; i++) {
+        if(i >= 1){
+             e = e + args[i] + " ";
+        }
+         }
+         if(args[0] == ""){
+           return message.reply("give me something to tell him")
+         }
+        mentionMember.send(`New DM from <@${message.member.id}>. Message: ${e}. ***To OPT out of this, please DM me and react to the OPT OUT option.***`) 
     }else if(command == "rank"){
         console.log(`rank ${message.guild.id}`)
         console.log(`rank ${message.member.id}`)
