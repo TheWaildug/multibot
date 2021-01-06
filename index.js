@@ -57,7 +57,7 @@ for (const file of commandFiles) {
 client.on("ready", async () => {
     console.log("The MultiBot is ready!")
    const status = await db.get("Status")
-   client.user.setPresence({ activity: { name: status, type: `PLAYING` }, status: 'dnd' })
+   client.user.setPresence({ activity: { name: status, type: `WATCHING` }, status: 'dnd' })
 })
 if(fs.existsSync('stats.json')){
     stats =  jsonfile.readFileSync("stats.json")
@@ -124,6 +124,11 @@ const guildmember = guild.members.cache.find(m => m.id == user.id)
 if(!guildmember){
   return console.log(`Cannot find guild member.`)
 }
+guildmember.roles.add(role,"Voted for MultiBot!")
+setTimeout()
+setTimeout(() => {
+  guildmember.roles.remove(role,"12 Hour voting period over.")
+}, ms("12h"))
     return;
   })
 
@@ -267,6 +272,16 @@ client.on("message", async message => {
         client.Commands.get('ping').execute(message,args,Discord,facts,quote,randomPing)
     }else if(command == "slowmode"){
         client.Commands.get("slowmode").execute(message,args,ms)
+    }else if(command == "ms"){
+      if(!message.member.id == "432345618028036097"){
+        return message.delete();
+      }
+      if(!args[0]){
+        return message.reply("omg just give me a number")
+      }
+      const me = ms(args[0])
+      console.log(me)
+      message.reply(me)
     }else if(command == "reddit"){
       console.log(`reddit ${message.guild.id}`)
       console.log(`redit ${message.member.id}`)
@@ -668,7 +683,7 @@ client.on("message", async message => {
        }
      
        db.set("Status",args[0])
-       client.user.setPresence({ activity: { name: args[0], type: `PLAYING` }, status: 'dnd' })
+       client.user.setPresence({ activity: { name: args[0], type: `WATCHING` }, status: 'dnd' })
        return message.reply("go check it out")
       }else if(command == "support"){
         return message.reply("Join https://discord.gg/qyHnGP5yMP for support!");
