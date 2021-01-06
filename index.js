@@ -94,7 +94,7 @@ setInterval(() => {
   })
 }, 300000)
 const webhook = new Topgg.Webhook(process.env.webauth) 
-server.post('dblwebhook', webhook.middleware(), (req, res) => {
+server.post('/dblwebhook', webhook.middleware(), (req, res) => {
   client.users.cache.find(req.vote.user).then(user =>{
     console.log(user.id)
     const guild = client.guilds.cache.find("791760625243652127")
@@ -850,6 +850,6 @@ client.login(process.env.token)
 server.all('/', (req, res)=>{
   res.send('Your bot is alive!')
 })
-
+x
   server.listen(3000, ()=>{console.log("Server is Ready!")});
 
