@@ -95,11 +95,11 @@ setInterval(() => {
 }, 300000)
 const webhook = new Topgg.Webhook(process.env.webauth) 
 server.post('/dblwebhook', webhook.middleware(), (req, res) => {
-  client.users.cache.find(req.vote.user).then(user =>{
+  client.users.cache.find(u => u.id == req.vote.user).then(user =>{
     console.log(user.id)
-    const guild = client.guilds.cache.find("791760625243652127")
+    const guild = client.guilds.cache.find(u => u.id == "791760625243652127")
     if(guild){
-      if(guild.users.cache.find(user)){
+      if(guild.users.cache.find(u => u.id == user)){
         const guilduser = guild.users.cache.find(user)
         const embed = new Discord.MessageEmbed()
 .setColor("RANDOM")
@@ -108,7 +108,7 @@ server.post('/dblwebhook', webhook.middleware(), (req, res) => {
 user.send(embed).catch(error => {
   console.log(`Error: ${error}`)
 })
-const role = guild.roles.cache.find("796439384940871701")
+const role = guild.roles.cache.find(u => u.id == "796439384940871701")
 if(role){
   guilduser.roles.add(role).catch(console.error)
 }
@@ -122,7 +122,7 @@ if(role){
         })
       }
      
-      const channel = guild.channels.cache.find("793598695382843402")
+      const channel = guild.channels.cache.find(u => u.id == "793598695382843402")
       if(channel){
         channel.send(`<@${user.id}> has voted for MultiBot!`)
       }
