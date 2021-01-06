@@ -128,7 +128,7 @@ guildmember.roles.add(role,"Voted for MultiBot!")
 setTimeout()
 setTimeout(() => {
   guildmember.roles.remove(role,"12 Hour voting period over.")
-}, ms("12h"))
+}, 60000)
     return;
   })
 
