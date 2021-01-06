@@ -100,7 +100,7 @@ server.post('/dblwebhook', webhook.middleware(), (req, res) => {
     const guild = client.guilds.cache.find(u => u.id == "791760625243652127")
     if(guild){
       if(guild.members.fetch(user)){
-        const guilduser = guild.users.cache.find(user)
+        const guilduser = guild.members.cache.find(user)
         const embed = new Discord.MessageEmbed()
 .setColor("RANDOM")
 .setTitle("Thanks For Voting!")
@@ -112,7 +112,7 @@ const role = guild.roles.cache.find(u => u.id == "796439384940871701")
 if(role){
   guilduser.roles.add(role).catch(console.error)
 }
-      }else if(!guild.users.cache.find(user)){
+      }else if(!guild.members.cache.find(user)){
         const embed = new Discord.MessageEmbed()
         .setColor("RANDOM")
         .setTitle("Thanks For Voting!")
