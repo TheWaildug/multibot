@@ -339,14 +339,14 @@ client.on("message", async message => {
         const guildStats = stats[message.guild.id]
         let userStats
         if(!message.mentions.members.first()){
-          message.channel.send(`Your current rank is **${userStats.level}.** You need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`)
           userStats = guildStats[message.author.id]
+          return message.channel.send(`Your current rank is **${userStats.level}.** You need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`);
+        
           
         }else{
           const mm = message.mentions.members.first()
           userStats = guildStats[mm.id]
-          message.channel.send(`<@${mm.id}>'s current rank is **${userStats.level}.** They need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`)
-        }
+          return message.channel.send(`<@${mm.id}>'s current rank is **${userStats.level}.** They need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`);        }
 
         
         
