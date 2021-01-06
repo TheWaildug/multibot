@@ -86,7 +86,13 @@ async function blacklist(message,args){
  const Topgg = require('@top-gg/sdk')
 
 const api = new Topgg.Api(process.env.toptoken)
-
+setInterval(() => {
+  api.postStats({
+    serverCount: client.guilds.cache.size,
+    shardId: client.shard.ids[0], // if you're sharding
+    shardCount: client.options.shardCount
+  })
+}, 300000) // post every 30 minutes
 client.on("message",async message => {
    if(message.channel.type == "dm"){
         return;
