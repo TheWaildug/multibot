@@ -10,6 +10,8 @@ const Database = require("@replit/database")
 const jsonfile = require("jsonfile")
 const math = require("mathjs")
 const db = new Database()
+const express = require("express")
+const server = express()
 const redditFetch = require("reddit-fetch")
 const makesuggestion = require("./makesuggestion.js")
 client.Commands = new Discord.Collection();
@@ -89,10 +91,17 @@ const api = new Topgg.Api(process.env.toptoken)
 setInterval(() => {
   api.postStats({
     serverCount: client.guilds.cache.size,
-    shardId: client.shard.ids[0], // if you're sharding
+    shardId: client.shard.ids[0], 
     shardCount: client.options.shardCount
   })
-}, 300000) // post every 30 minutes
+}, 300000)
+const webhook = new Topgg.Webhook(process.env.webauth) 
+server.post('/dblwebhook', webhook.middleware(), (req, res) => {
+ 
+  console.log(req.vote.user)
+}) 
+
+app.listen(3000) // your port
 client.on("message",async message => {
    if(message.channel.type == "dm"){
         return;
