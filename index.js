@@ -98,7 +98,7 @@ server.post('/dblwebhook', webhook.middleware(), (req, res) => {
   console.log(req.vote.user)
   const user = client.users.fetch(req.vote.user)
   if(!user){
-    return console.log(`Cannot find user!`)
+    return console.log(`Cannot find user!`);
   }
     
     const guild = client.guilds.cache.find(u => u.id == "791760625243652127")
