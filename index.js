@@ -815,5 +815,10 @@ client.on("message",async message =>{
    
 })
 client.login(process.env.token)
-const wakeup = require("./server.js")  
-wakeup() 
+server.all('/', (req, res)=>{
+  res.send('Your bot is alive!')
+})
+function keepAlive(){
+  server.listen(3000, ()=>{console.log("Server is Ready!")});
+}
+keepAlive()
