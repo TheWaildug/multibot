@@ -338,13 +338,14 @@ client.on("message", async message => {
         
         const guildStats = stats[message.guild.id]
         let userStats
-        if(args[0] && message.mentions.members.first()){
-          const mm = message.mentions.members.first()
-           userStats = guildStats[mm.id]
-           message.channel.send(`<@${mm.id}>'s current rank is **${userStats.level}.** They need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`)
-        }else{
+        if(!message.mentions.members.first()){
           message.channel.send(`Your current rank is **${userStats.level}.** You need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`)
-           userStats = guildStats[message.author.id]
+          userStats = guildStats[message.author.id]
+          
+        }else{
+          const mm = message.mentions.members.first()
+          userStats = guildStats[mm.id]
+          message.channel.send(`<@${mm.id}>'s current rank is **${userStats.level}.** They need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`)
         }
 
         
@@ -573,14 +574,14 @@ client.on("message", async message => {
               {name: `${pre}ping`, value: `Shows the current ping along with a random fact or quote.`},
               {name: `${pre}prefix`, value: "Changes prefix of the guild. Must have `MANAGE_SERVER` permissions."},
               {name: `${pre}counting`,value: "Enables/Disables counting and other settings."},
-              {name: `${pre}slowmode`,value: "Changes slowmode in current/specified channel. Requires `MANAGE_MESSAGES` in the guild and in the channel."},
-              {name: `${pre}purge`, value: "Purges messages in current channel from up to 14 days (blame discord api). Requires `MANAGE_MESSAGES` in the guild and in the channel."},
+              {name: `${pre}slowmode`,value: "Changes slowmode in current/specified channel. Requires `MANAGE_CHANNELS` in the guild and in the channel."},
+              {name: `${pre}purge`, value: "Purges messages in current channel from up to 14 days (blame discord api). Requires `MANAGE_CHANNELS` in the guild and in the channel."},
               {name: `${pre}support`, value: "Gives support server link."},
               {name: `${pre}help`,value: "Gives quick faqs."},
               {name: `${pre}invite`,value: "Shows invite of the bot."},
               {name: `${pre}reddit`, value: `Shows a reddit post from a random subreddit or a reddit of your choice. If channel is SFW all NSFW posts will be filtered.`},
-              {name: `${pre}lock`, value: "Locks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel."},
-              {name: `${pre}unlock`, value: "Unlocks a specified channel with a reason. Must have `MANAGE_MESSAGES` permission in the guild and the channel."}
+              {name: `${pre}lock`, value: "Locks a specified channel with a reason. Must have `MANAGE_CHANNELS` permission in the guild and the channel."},
+              {name: `${pre}unlock`, value: "Unlocks a specified channel with a reason. Must have `MANAGE_CHANNELS` permission in the guild and the channel."}
           )
           .setFooter("See a problem? Click the title to join our support server.")
           message.channel.send(embed)
