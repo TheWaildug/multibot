@@ -76,7 +76,7 @@ async function blacklist(message,args){
      }
    const isblack = await db.get(`IsBlacklisted-${user.id}`)
    if(isblack !== null){
-      db.remove(`IsBlacklisted-${user.id}`).then(() =>{
+      db.delete(`IsBlacklisted-${user.id}`).then(() =>{
        return message.reply(`Successfully unblacklisted <@${user.id}>.`)
      })
    }else if(isblack == null){
