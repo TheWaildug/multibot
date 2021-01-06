@@ -393,13 +393,14 @@ client.on("message", async message => {
       }
       let mentionMember 
       if(message.mentions.members.first){
-        mentionMember = message.mentions.members.first().id
+        mentionMember = message.mentions.members.first()
       }else{
           mentionMember = await client.users.cache.find(m => m.id == args[0]).catch(error =>{
              return console.erro(`Error ${error}`)
           })
-          console.log(mentionMember.displayName)
+         
       }
+      console.log(mentionMember.displayName)
       let e = ""
       for (let i = 0; i < args.length; i++) {
         if(i >= 1){
