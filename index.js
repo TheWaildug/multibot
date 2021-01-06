@@ -103,45 +103,28 @@ server.post('/dblwebhook', webhook.middleware(), async (req, res) => {
     const embed = new Discord.MessageEmbed()
 .setColor("RANDOM")
 .setTitle("Thanks For Voting!")
-.setDescription(`Thanks you for voting for MultiBot. You will have the "Voted" role for 12 hours in our server. https://discord.gg/qyHnGP5yMP.`)
+.setDescription(`Thanks you for voting for MultiBot. You will have the "Voted" role in our server, https://discord.gg/qyHnGP5yMP for 12 hours.`)
 user.send(embed).catch(error => {
   console.log(`Error: ${error}`)
 })
-    return;
-    const guild = client.guilds.cache.find(u => u.id == "791760625243652127")
-    if(guild){
-      if(guild.members.fetch(user)){
-        const guilduser = guild.members.fetch(user)
-        if(!guilduser){
-          return console.log(`Cannot find guild user.`);
-        }
-        console.log(`Guild user ${guilduser.id}`)
-        const embed = new Discord.MessageEmbed()
-.setColor("RANDOM")
-.setTitle("Thanks For Voting!")
-.setDescription(`Thanks you for voting for MultiBot. You will have the "Voted" role for 12 hours.`)
-user.send(embed).catch(error => {
-  console.log(`Error: ${error}`)
-})
-const role = guild.roles.cache.find(u => u.id == "796439384940871701")
-if(role){
-  guilduser.roles.add(role).catch(console.error)
+const guild = client.guilds.cache.find(g => g.id == "791760625243652127")
+if(!guild){
+  return console.log(`Cannot find guild!`);
 }
-      }else if(!guild.members.fetch(user)){
-        const embed = new Discord.MessageEmbed()
-        .setColor("RANDOM")
-        .setTitle("Thanks For Voting!")
-        .setDescription(`Thanks you for voting for MultiBot.`)
-        user.send(embed).catch(error => {
-          console.log(`Error: ${error}`)
-        })
-      }
-     
-      const channel = guild.channels.cache.find(u => u.id == "793598695382843402")
-      if(channel){
-        channel.send(`<@${user.id}> has voted for MultiBot!`)
-      }
-    }
+const channel = guild.channels.cache.find(c => c.id == "793598695382843402")
+if(!channel){
+  return console.log(`Cannot find channel!`)
+}
+channel.send(`<@${user.id}> has voted for MultiBot!`)
+const role = guild.roles.cache.find(r => r.id == "796439384940871701")
+if(!role){
+  return console.log(`Cannot find role!`)
+}
+const guildmember = guild.members.cache.find(m => m.id == user.id)
+if(!guildmember){
+  return console.log(`Cannot find guild member.`)
+}
+    return;
   })
 
 
