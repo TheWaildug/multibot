@@ -101,7 +101,7 @@ server.post('/dblwebhook', webhook.middleware(), (req, res) => {
   console.log(req.vote.user)
 }) 
 
-app.listen(3000) // your port
+
 client.on("message",async message => {
    if(message.channel.type == "dm"){
         return;
