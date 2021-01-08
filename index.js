@@ -194,7 +194,8 @@ client.on("message",async message =>{
         .setDescription(`You have activated ModMail. Please react to the emoji that corresponds to your reason.`)
         .addFields(
             {name: `📣`,value: `Make a suggestion for the bot.`},
-            {name: `⚒️`,value: `Coming soon...`},
+            {name: `⚒️`,value: `Contact Staff (Coming soon...)`},
+            {name: `✉️`, value: `Opt in/out of DMs from people.`},
             {name: `:x:`,value: `Cancel.`}
         )
         .setFooter(`This message will be invalid in 30 seconds.`)
@@ -203,11 +204,12 @@ client.on("message",async message =>{
           
             msg.react("📣"),
             msg.react("⚒️"),
-            msg.react("❌")
+            msg.react("✉️"),
+            msg.react("❌"),
             db.set(`LastDm-${message.author.id}`,String(Date.now()))
     
         const filter = (reaction, user) => {
-            return (reaction.emoji.name == "📣" || reaction.emoji.name == "⚒️" || reaction.emoji.name == "❌") && user.id === message.author.id;
+            return (reaction.emoji.name == "📣" || reaction.emoji.name == "✉️" || reaction.emoji.name == "⚒️" || reaction.emoji.name == "❌") && user.id === message.author.id;
         };
  let on = true      
 const collector = msg.createReactionCollector(filter, { time: 30000 });
@@ -223,6 +225,32 @@ collector.on('collect', (reaction, user) => {
             .setFooter(`You reacted to ❌.`)
             msg.edit(embed)
                return on = false;
+        }else if(reaction.emoji.name == "✉️"){
+          collector.stop("Reaction to ✉️.")
+          const embed = new Discord.MessageEmbed()
+          .setTitle("ModMail")
+          .setColor("00FF00")
+          .setDescription(`This message is now invalid`)
+          .setFooter(`You reacted to ✉️.`)
+          msg.edit(embed)
+          message.reply(`Please reply with **In** or **Out**.`)
+          const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 30000 });
+          collector2.on("collect", massage => {
+            if(massage.content.toLowerCase() == "in"){
+              collector2.stop("Opting in.")
+              message.reply(`You have opted in to DMs from people.`)
+              return db.set(`${message.author.id}-DMS`,true);
+            }else if(massage.content.toLowerCase() == "out"){
+              collector2.stop(`Opting out.`)
+              message.reply(`You have opted out of DMs from people.`)
+              return db.delete(`${message.author.id}-DMS`);
+            }
+            setTimeout(async function(){
+              collector2.stop('Timeout')
+                  console.log(`Collected ${collected.size} items.`)
+                message.reply(`Cancelling because you were inactve for 30 seconds.`)
+              },30000)
+          })
         }else if(reaction.emoji.name == "📣"){
             collector.stop("Reaction to 📣.")
                          
@@ -411,6 +439,10 @@ client.on("message", async message => {
          
       }
       console.log(mentionMember.displayName)
+      let dm = await db.get(`${mentionMember.id}-DMS`)
+      if(dm == null){
+        return message.reply(`This user has opted out of DMs.`)
+      }
       let e = ""
       for (let i = 0; i < args.length; i++) {
         if(i >= 1){
@@ -418,7 +450,7 @@ client.on("message", async message => {
         }
          }
          if(args[0] == ""){
-           return message.reply("give me something to tell him")
+           return message.reply("give me something to tell them")
          }
         mentionMember.send(`New DM from <@${message.member.id}>. Message: ${e}. ***To OPT out of this, please DM me and react to the OPT OUT option.***`) 
     }else if(command == "rank"){
@@ -442,8 +474,11 @@ client.on("message", async message => {
     }else if(command == "blacklist"){
     let user
     console.log('blacklist command sent')
+    if(!message.guild.id == "791760625243652127"){
+      return message.delete();
+    }
     if(!message.member.hasPermission('MANAGE_CHANNELS')){
-      return message.delete()
+      return message.delete();
     }
    blacklist(message,args)
   }else if(command == "setlevel"){
@@ -654,11 +689,10 @@ client.on("message", async message => {
       }else if(command == "commands"){
           console.log(`commands ${message.guild.id}`)
           console.log(`command ${message.member.id}`)
-          const pre = await db.get(`Guild-${message.guild.id}-Prefix`)
+          const pre = prefix
           const embed = new Discord.MessageEmbed()
           .setTitle("Commands")
           .setColor("RANDOM")
-          .setURL("https://discord.gg/qyHnGP5yMP")
           .addFields(
               {name: `${pre}ping`, value: `Shows the current ping along with a random fact or quote.`},
               {name: `${pre}prefix`, value: "Changes prefix of the guild. Must have `MANAGE_SERVER` permissions."},
@@ -666,13 +700,14 @@ client.on("message", async message => {
               {name: `${pre}slowmode`,value: "Changes slowmode in current/specified channel. Requires `MANAGE_CHANNELS` in the guild and in the channel."},
               {name: `${pre}purge`, value: "Purges messages in current channel from up to 14 days (blame discord api). Requires `MANAGE_CHANNELS` in the guild and in the channel."},
               {name: `${pre}support`, value: "Gives support server link."},
+              {name: `${pre}vote`, value: `Shows links to vote for MultiBot.`},
               {name: `${pre}help`,value: "Gives quick faqs."},
               {name: `${pre}invite`,value: "Shows invite of the bot."},
               {name: `${pre}reddit`, value: `Shows a reddit post from a random subreddit or a reddit of your choice. If channel is SFW all NSFW posts will be filtered.`},
               {name: `${pre}lock`, value: "Locks a specified channel with a reason. Must have `MANAGE_CHANNELS` permission in the guild and the channel."},
               {name: `${pre}unlock`, value: "Unlocks a specified channel with a reason. Must have `MANAGE_CHANNELS` permission in the guild and the channel."}
           )
-          .setFooter("See a problem? Click the title to join our support server.")
+          .setFooter("See a problem? Click [here](https://discord.gg/qyHnGP5yMP) to join our support server.")
           message.channel.send(embed)
       }else if(command == "status"){
           if(!message.member.id == "432345618028036097"){
@@ -726,14 +761,13 @@ client.on("message", async message => {
           const embed = new Discord.MessageEmbed()
           .setTitle("I need help!")
           .setColor("RANDOM")
-          .setURL("https://discord.gg/qyHnGP5yMP")
           .addFields(
               {name: "How do I setup counting? ", value: "To setup counting, make sure the bot has `MANAGE_MESSAGES` permissions in your channel and in the guild. Then, run **" + prefix + "counting** to setup counting. Make sure your counting channel has a webhook added."},
               {name: "How do I change my prefix?",value: "If you have forgotten your prefix, do **@MultiBot prefix see** to view the prefix. If you want to change or reset your prefix, do **" + prefix + "prefix change/reset** OR **@MultiBot prefix change/reset**."},
               {name: `Why do I need a webhook to count?`,value:`You need a webhook to prevent members from deleting/editing their message. You can disable this with the **${prefix}counting** command.`}
 
           )
-          .setFooter("Still need help? Click the title above to join our support server!")
+          .setFooter("Still need help? Click [here](https://discord.gg/qyHnGP5yMP) to join our support server!")
           message.channel.send(embed)
       }else if(command == "newnum"){
         if(message.member.id != "432345618028036097"){
