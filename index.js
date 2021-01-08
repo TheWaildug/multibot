@@ -549,7 +549,7 @@ client.on("message", async message => {
               return message.delete();
           }
           if(!args[0]){
-              const pre =await db.get(`Guild-${message.guild.id}-Prefix`)
+              const pre = prefix
               return message.reply(`${pre}counting ON/OFF/SETTINGS `)
           }
           if(args[0].toLowerCase() == "off"){
