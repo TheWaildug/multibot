@@ -275,7 +275,7 @@ client.on("message", async message => {
       console.log(`vote ${message.guild.id}`)
       console.log(`vote ${message.member.id}`)
       const embed = new Discord.MessageEmbed()
-        .setTitle(`Vote:`)
+        .setTitle(`Voting`)
         .setDescription(`Click one of the link(s) below to vote!`)
         .addField("Top.gg", "[Click here.](https://top.gg/bot/791760755195904020/vote)")
         .setColor("RANDOM")
