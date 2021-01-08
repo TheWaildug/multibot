@@ -280,8 +280,8 @@ client.on("message", async message => {
         .setFooter(`https://top.gg/bot/791760755195904020/vote`)
         .setURL(`https://top.gg/bot/791760755195904020/vote`)
         .setColor("RANDOM")
-        
         .setTimestamp()
+        message.channel.send(embed)
     }else if(command == "ms"){
       if(!message.member.id == "432345618028036097"){
         return message.delete();
