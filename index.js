@@ -239,15 +239,20 @@ collector.on('collect', (reaction, user) => {
             if(massage.content.toLowerCase() == "in"){
               collector2.stop("Opting in.")
               message.reply(`You have opted in to DMs from people.`)
+              on = false
               return db.set(`${message.author.id}-DMS`,true);
             }else if(massage.content.toLowerCase() == "out"){
               collector2.stop(`Opting out.`)
               message.reply(`You have opted out of DMs from people.`)
+              on = false
               return db.delete(`${message.author.id}-DMS`);
             }
             setTimeout(async function(){
+              if(on == false){
+                return;
+              }
               collector2.stop('Timeout')
-                  console.log(`Collected ${collected.size} items.`)
+                  
                 message.reply(`Cancelling because you were inactve for 30 seconds.`)
               },30000)
           })
@@ -265,7 +270,7 @@ collector.on('collect', (reaction, user) => {
         }
         setTimeout(async function(){
             collector.stop('Timeout')
-                console.log(`Collected ${collected.size} items.`)
+              
                 if(on == false){
                     return on = true;
                 }
