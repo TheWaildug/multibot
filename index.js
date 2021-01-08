@@ -271,6 +271,17 @@ client.on("message", async message => {
         client.Commands.get('ping').execute(message,args,Discord,facts,quote,randomPing)
     }else if(command == "slowmode"){
         client.Commands.get("slowmode").execute(message,args,ms)
+    }else if(command == "vote"){
+      console.log(`vote ${message.guild.id}`)
+      console.log(`vote ${message.member.id}`)
+      const embed = new Discord.MessageEmbed()
+        .setTitle(`Vote:`)
+        .setDescription(`Click one of the link(s) below to vote!`)
+        .setFooter(`https://top.gg/bot/791760755195904020/vote`)
+        .setURL(`https://top.gg/bot/791760755195904020/vote`)
+        .setColor("RANDOM")
+        
+        .setTimestamp()
     }else if(command == "ms"){
       if(!message.member.id == "432345618028036097"){
         return message.delete();
