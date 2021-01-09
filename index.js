@@ -951,17 +951,43 @@ client.on("message",async message =>{
           webhooks = await message.channel.fetchWebhooks()
           webhook = webhooks.first();
            if(webhook){
-               webhook.send(currentnum, {
-                   username: message.member.displayName,
-                   avatarURL: message.member.user.avatarURL()
-               }).then(msg => {
-                   if(ispin(currentnum)){
-                       msg.pin()
-                   }
-                   return message.delete().catch(console.error());
-               }).catch(error => {
-                 console.log(`Guild ${message.guild.id} Counting Error ${error}`)
-               })
+            if(currrentnum == 69){
+              webhook.send(`${currentnum} nice bro 👌`, {
+                username: message.member.displayName,
+                avatarURL: message.member.user.avatarURL()
+            }).then(msg => {
+                
+                return message.delete().catch(console.error());
+            }).catch(error => {
+              console.log(`Guild ${message.guild.id} Counting Error ${error}`)
+            })
+            }else if(currentnum == 420){
+              
+                webhook.send(`${currentnum} nice bro 👌`, {
+                  username: message.member.displayName,
+                  avatarURL: message.member.user.avatarURL()
+              }).then(msg => {
+                  
+                  return message.delete().catch(console.error());
+              }).catch(error => {
+                console.log(`Guild ${message.guild.id} Counting Error ${error}`)
+              })
+              
+            }else{
+              webhook.send(currentnum, {
+                username: message.member.displayName,
+                avatarURL: message.member.user.avatarURL()
+            }).then(msg => {
+                if(ispin(currentnum)){
+                    msg.pin()
+                }
+                
+                return message.delete().catch(console.error());
+            }).catch(error => {
+              console.log(`Guild ${message.guild.id} Counting Error ${error}`)
+            })
+            }
+               
            }
         }
       
