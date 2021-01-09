@@ -730,7 +730,7 @@ client.on("message", async message => {
               {name: `${pre}lock`, value: "Locks a specified channel with a reason. Must have `MANAGE_CHANNELS` permission in the guild and the channel."},
               {name: `${pre}unlock`, value: "Unlocks a specified channel with a reason. Must have `MANAGE_CHANNELS` permission in the guild and the channel."}
           )
-          .setFooter("See a problem? Click [here](https://discord.gg/qyHnGP5yMP) to join our support server.")
+          .setFooter("See a problem? Join our support server: https://discord.gg/qyHnGP5yMPt.")
           message.channel.send(embed)
       }else if(command == "status"){
           if(!message.member.id == "432345618028036097"){
@@ -793,10 +793,11 @@ client.on("message", async message => {
           .addFields(
               {name: "How do I setup counting? ", value: "To setup counting, make sure the bot has `MANAGE_MESSAGES` permissions in your channel and in the guild. Then, run **" + prefix + "counting** to setup counting. Make sure your counting channel has a webhook added."},
               {name: "How do I change my prefix?",value: "If you have forgotten your prefix, do **@MultiBot prefix see** to view the prefix. If you want to change or reset your prefix, do **" + prefix + "prefix change/reset** OR **@MultiBot prefix change/reset**."},
-              {name: `Why do I need a webhook to count?`,value:`You need a webhook to prevent members from deleting/editing their message. You can disable this with the **${prefix}counting** command.`}
+              {name: `Why do I need a webhook to count?`,value:`You need a webhook to prevent members from deleting/editing their message. You can disable this with the **${prefix}counting** command.`},
+              {name: `When I run a command, why does it delete my message?`, value: `You must have the required permission. Run ${prefix}commands to see what permissions you need.`}
 
           )
-          .setFooter("Still need help? Click [here](https://discord.gg/qyHnGP5yMP) to join our support server!")
+          .setFooter("Still need help? Join our support server: https://discord.gg/qyHnGP5yMPt.")
           message.channel.send(embed)
       }else if(command == "guildcount"){
         if(!message.member.id == '432345618028036097'){
