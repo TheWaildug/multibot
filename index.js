@@ -54,6 +54,12 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.Commands.set(command.name, command);
 }
+function UpdateGuilds(){
+  setInterval(() => {
+    let guildcount = client.guilds.cache.size
+    client.user.setPresence({ activity: { name: `${guildcount} guilds.`, type: `WATCHING` }, status: 'dnd' });
+  }, "300000")
+}
 client.on("ready", async () => {
     console.log("The MultiBot is ready!")
    const status = await db.get("Status")
@@ -62,7 +68,8 @@ client.on("ready", async () => {
     client.guilds.cache.forEach(() => {
       guildcount = guildcount + 1
     })
-    return client.user.setPresence({ activity: { name: `${guildcount} guilds.`, type: `WATCHING` }, status: 'dnd' });
+    client.user.setPresence({ activity: { name: `${guildcount} guilds.`, type: `WATCHING` }, status: 'dnd' });
+    return UpdateGuilds();
    }
    client.user.setPresence({ activity: { name: status, type: `WATCHING` }, status: 'dnd' })
 })
@@ -740,12 +747,10 @@ client.on("message", async message => {
        }  
        if(status == "guilds"){
          db.set("Status","GuildCount")
-         let guildcount = 0
-         client.guilds.cache.forEach(() => {
-           guildcount = guildcount + 1
-         })
+         let guildcount = client.guilds.cache.size
          client.user.setPresence({ activity: { name: `${guildcount} guilds.`, type: `WATCHING` }, status: 'dnd' })
-       return message.reply("go check it out");
+       message.reply("go check it out");
+       return UpdateGuilds();
        }
        db.set("Status",args[0])
        client.user.setPresence({ activity: { name: args[0], type: `WATCHING` }, status: 'dnd' })
@@ -793,10 +798,7 @@ client.on("message", async message => {
         if(!message.member.id == '432345618028036097'){
           return message.delete();
         }
-        let guildcount = 0
-        client.guilds.cache.forEach(() => {
-          guildcount = guildcount + 1
-        })
+        let guildcount = client.guilds.cache.size
         message.channel.send(`MultiBot is in ${guildcount} guilds.`)
       }else if(command == "newnum"){
         if(message.member.id != "432345618028036097"){
