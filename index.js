@@ -471,7 +471,11 @@ client.on("message", async message => {
          if(args[0] == ""){
            return message.reply("give me something to tell them")
          }
-        mentionMember.send(`New DM from <@${message.member.id}>. Message: ${e}. ***To OPT out of this, please DM me and react to the OPT OUT option.***`) 
+        mentionMember.send(`New DM from <@${message.member.id}>. Message: ${e}. ***To OPT out of this, please DM me and react to the OPT OUT option.***`).catch(error => {
+          console.log(`Guild ${message.guild.id} DM error: ${error}`)
+          return message.channel.send(`Something went wrong! `  + "`" + `${error}` + "`");
+        })
+        return;
     }else if(command == "rank"){
         console.log(`rank ${message.guild.id}`)
         console.log(`rank ${message.member.id}`)
