@@ -174,7 +174,7 @@ client.on("message",async message => {
  if(Date.now() - userStats.last_message > 30000){
     userStats.xp += getRandomIntInclusive(25,50);
     userStats.last_message = Date.now();
-    const xpToNextLevel = 5 * Math.pow(userStats.level, 2) * 50 * userStats.level + 100;
+    const xpToNextLevel = 5 * (userStats.level ^ 2) + 50 * userStats.level + 100
     console.log(`${message.author.id} now has ${userStats.xp} xp. ${xpToNextLevel - userStats.xp} xp needed for next level.`)
      userStats.xpToNextLevel = xpToNextLevel
        if(userStats.xp >= xpToNextLevel){
@@ -182,6 +182,7 @@ client.on("message",async message => {
        userStats.xp = userStats.xp - xpToNextLevel;
        console.log(`${message.author.id} has leveled up to ${userStats.level}.`)
        message.channel.send(`<@${message.member.id}> has leveled up to ${userStats.level}!`)
+       userStats.xpToNextLevel = 5 * (userStats.level ^ 2) + 50 * userStats.level + 100
    }
    jsonfile.writeFileSync("stats.json",stats);
     
@@ -535,7 +536,7 @@ client.on("message", async message => {
             return message.reply("I need a level idiot.")
         }
         const level = args[1]
-        const xpToNextLevel = 5 * Math.pow(level, 2) * 50 * level + 100;
+        const xpToNextLevel = 5 * (level ^ 2) + 50 * level + 100
         userStats.level = level
         userStats.xp = 0
      userStats.xpToNextLevel = xpToNextLevel
