@@ -908,7 +908,7 @@ client.on("message",async message =>{
         updatenumber(currentnum + 1,message.guild.id)
         console.log(`${message.member.id} counted correctly in guild ${message.guild.id}. Number is now ${String(currentnum + 1)}.`)
         if(webhook == true){
-          const webhooks = await message.channel.fetchWebhooks()
+          let webhooks = await message.channel.fetchWebhooks()
           let webhook = webhooks.first()
           if(!webhook){
            message.channel.createWebhook(`Counting Webhook`, {reason: `No counting webhook found. Created new one.`}).catch(error => {
@@ -916,6 +916,7 @@ client.on("message",async message =>{
              message.channel.send(`Something went wrong! `  + "`" + `${error}` + "`")
            })
           }
+          webhooks = await message.channel.fetchWebhooks()
           webhook = webhooks.first();
            if(webhook){
                webhook.send(currentnum, {
