@@ -1,3 +1,8 @@
 node_modules
+<<<<<<< HEAD:ignore/.gitignore
 stats.
 ignore
+=======
+stats.json
+.replit
+>>>>>>> origin/master:.gitignore
