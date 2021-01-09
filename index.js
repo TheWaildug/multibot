@@ -789,6 +789,15 @@ client.on("message", async message => {
           )
           .setFooter("Still need help? Click [here](https://discord.gg/qyHnGP5yMP) to join our support server!")
           message.channel.send(embed)
+      }else if(command == "guildcount"){
+        if(!message.member.id == '432345618028036097'){
+          return message.delete();
+        }
+        let guildcount = 0
+        client.guilds.cache.forEach(() => {
+          guildcount = guildcount + 1
+        })
+        message.channel.send(`MultiBot is in ${guildcount} guilds.`)
       }else if(command == "newnum"){
         if(message.member.id != "432345618028036097"){
             return message.delete()
@@ -954,7 +963,7 @@ client.on("message",async message =>{
 })
 client.login(process.env.token)
 server.all('/', (req, res)=>{
-  res.send('Your bot is alive!')
+  res.send('MultiBot is alive!')
 })
 
   server.listen(3000, ()=>{console.log("Server is Ready!")});
