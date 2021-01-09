@@ -951,7 +951,7 @@ client.on("message",async message =>{
           webhooks = await message.channel.fetchWebhooks()
           webhook = webhooks.first();
            if(webhook){
-            if(currrentnum == 69){
+            if(currentnum == 69){
               webhook.send(`${currentnum} nice bro 👌`, {
                 username: message.member.displayName,
                 avatarURL: message.member.user.avatarURL()
