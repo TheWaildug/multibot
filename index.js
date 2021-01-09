@@ -57,6 +57,13 @@ for (const file of commandFiles) {
 client.on("ready", async () => {
     console.log("The MultiBot is ready!")
    const status = await db.get("Status")
+   if(status == "GuildCount"){
+    let guildcount = 0
+    client.guilds.cache.forEach(() => {
+      guildcount = guildcount + 1
+    })
+    return client.user.setPresence({ activity: { name: `${guildcount} guilds.`, type: `WATCHING` }, status: 'dnd' });
+   }
    client.user.setPresence({ activity: { name: status, type: `WATCHING` }, status: 'dnd' })
 })
 if(fs.existsSync('stats.json')){
@@ -730,8 +737,16 @@ client.on("message", async message => {
            args[0] = status  
        if(!args[0]){
          return message.reply('I need a status buddy.')
+       }  
+       if(status == "guilds"){
+         db.set("Status","GuildCount")
+         let guildcount = 0
+         client.guilds.cache.forEach(() => {
+           guildcount = guildcount + 1
+         })
+         client.user.setPresence({ activity: { name: `${guildcount} guilds.`, type: `WATCHING` }, status: 'dnd' })
+       return message.reply("go check it out");
        }
-     
        db.set("Status",args[0])
        client.user.setPresence({ activity: { name: args[0], type: `WATCHING` }, status: 'dnd' })
        return message.reply("go check it out")
