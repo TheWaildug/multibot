@@ -911,11 +911,12 @@ client.on("message",async message =>{
           const webhooks = await message.channel.fetchWebhooks()
           let webhook = webhooks.first()
           if(!webhook){
-           webhook = message.channel.createWebhook(`Counting Webhook`, {reason: `No counting webhook found. Created new one.`}).catch(error => {
+           message.channel.createWebhook(`Counting Webhook`, {reason: `No counting webhook found. Created new one.`}).catch(error => {
              console.log(`Guild ${message.guild.id} Webhook Error: ${error}`)
              message.channel.send(`Something went wrong! `  + "`" + `${error}` + "`")
            })
           }
+          webhook = webhooks.first();
            if(webhook){
                webhook.send(currentnum, {
                    username: message.member.displayName,
@@ -925,6 +926,8 @@ client.on("message",async message =>{
                        msg.pin()
                    }
                    return message.delete().catch(console.error());
+               }).catch(error => {
+                 console.log(`Guild ${message.guild.id} Counting Error ${error}`)
                })
            }
         }
