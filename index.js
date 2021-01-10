@@ -378,7 +378,7 @@ client.on("message", async message => {
       try {
         evaluated = asynceval(result)
     } catch (e) {
-        if (e instanceof SyntaxError) {
+      
           const embed = new Discord.MessageEmbed()
           .setTitle(`Evaluation`)
           .setDescription(`Error`)
@@ -386,15 +386,13 @@ client.on("message", async message => {
           .addField(`Error`,"```" + e.message + "```")
           .setTimestamp()
           return message.channel.send(`<@${message.member.id}>`,embed);
-        } else {
-            throw e;
-        }
+
     }
     const embed = new Discord.MessageEmbed()
           .setTitle(`Evaluation`)
           .setDescription(`Evaluated in *${Date.now() - message.createdTimestamp + " ms"}.*`)
           .addField(`Input`,"```js\n" + result + "```")
-          .addField(`Output`,"```js\n" + evaled + "```")
+          .addField(`Output`,"```js\n" + evaluated + "```")
           .setTimestamp()
           return message.channel.send(`<@${message.member.id}>`,embed);
           
