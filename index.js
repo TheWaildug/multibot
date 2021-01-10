@@ -373,16 +373,16 @@ client.on("message", async message => {
         message.channel.send(embed)
     }else if(command == "eval") {
       if(!message.author.id == "432345618028036097") return message.delete();
-      let result = message.content.split(" ").slice(1).join(" ")
+      let code = message.content.split(" ").slice(1).join(" ")
       let evaluated
       try {
-        evaluated = asynceval(result)
+        evaluated = eval(code)
     } catch (e) {
       
           const embed = new Discord.MessageEmbed()
           .setTitle(`Evaluation`)
           .setDescription(`Error`)
-          .addField(`Input`,"```js\n" + result + "```")
+          .addField(`Input`,"```js\n" + code + "```")
           .addField(`Error`,"```" + e.message + "```")
           .setTimestamp()
           return message.channel.send(`<@${message.member.id}>`,embed);
@@ -391,7 +391,7 @@ client.on("message", async message => {
     const embed = new Discord.MessageEmbed()
           .setTitle(`Evaluation`)
           .setDescription(`Evaluated in *${Date.now() - message.createdTimestamp + " ms"}.*`)
-          .addField(`Input`,"```js\n" + result + "```")
+          .addField(`Input`,"```js\n" + code + "```")
           .addField(`Output`,"```js\n" + evaluated + "```")
           .setTimestamp()
           return message.channel.send(`<@${message.member.id}>`,embed);
