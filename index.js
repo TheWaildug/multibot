@@ -370,6 +370,8 @@ client.on("message", async message => {
         .setColor("RANDOM")
         .setTimestamp()
         message.channel.send(embed)
+    }else if(command == "serverinfo"){
+      client.Commands.get(`serverinfo`).execute(message,args)
     }else if(command == "ms"){
       if(!message.member.id == "432345618028036097"){
         return message.delete();
