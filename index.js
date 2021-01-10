@@ -56,6 +56,10 @@ for (const file of commandFiles) {
 }
 function UpdateGuilds(){
   setInterval(() => {
+    const status = await db.get(`Status`)
+    if(status != "GuildCount"){
+      return;
+    }
     let guildcount = client.guilds.cache.size
     client.user.setPresence({ activity: { name: `${guildcount} guilds.`, type: `WATCHING` }, status: 'dnd' });
   }, "300000")
