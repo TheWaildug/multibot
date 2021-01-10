@@ -12,7 +12,7 @@ module.exports = {
         member => !member.user.bot
       ).size;
       let botCount = guild.members.cache.filter(member => member.user.bot).size;
-       const icon = guild.iconurl()
+       const icon = guild.iconURL()
        const embed = new Discord.MessageEmbed()
        .setTitle(`Server info for "${name}".`)
        .setThumbnail(icon)
