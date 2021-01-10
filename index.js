@@ -370,7 +370,17 @@ client.on("message", async message => {
         .setColor("RANDOM")
         .setTimestamp()
         message.channel.send(embed)
-    }else if(command == "serverinfo"){
+    }else if (message.content.startsWith("d!eval")) {
+      if(!message.author.id == "432345618028036097") return message.delete();
+      let result = message.content.split(" ").slice(1).join(" ")
+          let evaled = eval(result);
+          const embed = new Discord.MessageEmbed()
+          .setTitle(`Evaluation`)
+          .setDescription(`Evaluated in *${Date.now() - message.createdTimestamp + " ms"}.*`)
+          .addField(`Input`,"```" + result + "```")
+          .addField(`Output`,"```" + evaled + "```")
+          .setTimestamp()
+          }else if(command == "serverinfo"){
       client.Commands.get(`serverinfo`).execute(message,args)
     }else if(command == "ms"){
       if(!message.member.id == "432345618028036097"){

@@ -24,6 +24,7 @@ module.exports = {
            {name: `Bot Count`,value: botCount},
            
            )
+           .setTimestamp()
            message.channel.send(embed)
     }
 }
