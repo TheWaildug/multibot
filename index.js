@@ -370,7 +370,7 @@ client.on("message", async message => {
         .setColor("RANDOM")
         .setTimestamp()
         message.channel.send(embed)
-    }else if (message.content.startsWith("d!eval")) {
+    }else if(command == "eval") {
       if(!message.author.id == "432345618028036097") return message.delete();
       let result = message.content.split(" ").slice(1).join(" ")
           let evaled = eval(result);
