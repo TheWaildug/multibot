@@ -54,7 +54,7 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.Commands.set(command.name, command);
 }
-function UpdateGuilds(){
+async function UpdateGuilds(){
   setInterval(() => {
     const status = await db.get(`Status`)
     if(status != "GuildCount"){
