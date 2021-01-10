@@ -345,9 +345,7 @@ collector.on('collect', (reaction, user) => {
       }
     }
 })
-async function evaluate(obj){
-  return eval(obj)
-}
+
 client.on("message", async message => {   
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
