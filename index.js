@@ -112,7 +112,14 @@ setInterval(() => {
   })
 }, 300000)
 const webhook = new Topgg.Webhook(process.env.webauth) 
-server.post('/dblwebhook', webhook.middleware(), async (req, res) => {
+server.post("/servervote", webhook.middleware(), async (req, res) => {
+  const user = await client.users.fetch(req.vote.user)
+  if(!user){
+    return console.log(`Cannot find user!`)
+  }
+  console.log(`${user.id} has voted for the support server!`)
+})
+server.post('/multibotvote', webhook.middleware(), async (req, res) => {
   const user = await client.users.fetch(req.vote.user)
   if(!user){
     return console.log(`Cannot find user!`);
