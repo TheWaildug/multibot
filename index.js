@@ -377,8 +377,8 @@ client.on("message", async message => {
           const embed = new Discord.MessageEmbed()
           .setTitle(`Evaluation`)
           .setDescription(`Evaluated in *${Date.now() - message.createdTimestamp + " ms"}.*`)
-          .addField(`Input`,"```js\n " + result + "```")
-          .addField(`Output`,"```js\n " + evaled + "```")
+          .addField(`Input`,"```js\n" + result + "```")
+          .addField(`Output`,"```js\n" + evaled + "```")
           .setTimestamp()
           message.channel.send(`<@${message.member.id}>`,embed)
           }else if(command == "serverinfo"){
