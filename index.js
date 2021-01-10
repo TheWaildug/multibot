@@ -380,6 +380,7 @@ client.on("message", async message => {
           .addField(`Input`,"```" + result + "```")
           .addField(`Output`,"```" + evaled + "```")
           .setTimestamp()
+          message.channel.send(`<@${message.member.id}>`,embed)
           }else if(command == "serverinfo"){
       client.Commands.get(`serverinfo`).execute(message,args)
     }else if(command == "ms"){
