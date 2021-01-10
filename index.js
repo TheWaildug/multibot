@@ -381,12 +381,12 @@ client.on("message", async message => {
       try {
         evaluated = await eval(`async function e( () => {${code}})`);
     } catch (e) {
-      console.log(e.message)
+      console.log(e)
           const embed = new Discord.MessageEmbed()
           .setTitle(`Evaluation`)
           .setDescription(`Error`)
           .addField(`Input`,"```js\n" + code + "```")
-          .addField(`Error`,"```" + e.message + "```")
+          .addField(`Error`,"```" + e + "```")
           .setTimestamp()
           return message.channel.send(`<@${message.member.id}>`,embed);
 
