@@ -345,6 +345,9 @@ collector.on('collect', (reaction, user) => {
       }
     }
 })
+async function evaluate(obj){
+  return eval(obj)
+}
 client.on("message", async message => {   
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
@@ -376,7 +379,7 @@ client.on("message", async message => {
       let code = message.content.split(" ").slice(1).join(" ")
       let evaluated
       try {
-        evaluated = eval(code)
+        evaluated = await eval(`async (() => {${code}})()`);
     } catch (e) {
       
           const embed = new Discord.MessageEmbed()
