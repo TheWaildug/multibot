@@ -55,7 +55,7 @@ for (const file of commandFiles) {
 	client.Commands.set(command.name, command);
 }
 async function UpdateGuilds(){
-  setInterval(() => {
+  setInterval(async () => {
     const status = await db.get(`Status`)
     if(status != "GuildCount"){
       return;
