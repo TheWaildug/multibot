@@ -121,7 +121,7 @@ server.post("/servervote", webhook.middleware(), async (req, res) => {
   const embed = new Discord.MessageEmbed()
   .setColor("RANDOM")
   .setTitle("Thanks For Voting!")
-  .setDescription(`Thanks you for voting for my support server! You will have the "Voted" role in our server, https://discord.gg/qyHnGP5yMP for 12 hours.`)
+  .setDescription(`Thanks you for voting for my support server! You will have the "Voted" role in the support server, https://discord.gg/qyHnGP5yMP for 12 hours.`)
   user.send(embed).catch(error => {
     console.log(`Error: ${error}`)
   })
@@ -157,7 +157,7 @@ server.post('/multibotvote', webhook.middleware(), async (req, res) => {
     const embed = new Discord.MessageEmbed()
 .setColor("RANDOM")
 .setTitle("Thanks For Voting!")
-.setDescription(`Thanks you for voting for MultiBot. You will have the "Voted" role in our server, https://discord.gg/qyHnGP5yMP for 12 hours.`)
+.setDescription(`Thanks you for voting for MultiBot. You will have the "Voted" role in my support server, https://discord.gg/qyHnGP5yMP for 12 hours.`)
 user.send(embed).catch(error => {
   console.log(`Error: ${error}`)
 })
