@@ -376,7 +376,7 @@ client.on("message", async message => {
       let result = message.content.split(" ").slice(1).join(" ")
       let evaluated
       try {
-        evaluated = asynceval(code)
+        evaluated = asynceval(result)
     } catch (e) {
         if (e instanceof SyntaxError) {
           const embed = new Discord.MessageEmbed()
