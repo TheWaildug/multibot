@@ -118,6 +118,35 @@ server.post("/servervote", webhook.middleware(), async (req, res) => {
     return console.log(`Cannot find user!`)
   }
   console.log(`${user.id} has voted for the support server!`)
+  const embed = new Discord.MessageEmbed()
+  .setColor("RANDOM")
+  .setTitle("Thanks For Voting!")
+  .setDescription(`Thanks you for voting for my support server! You will have the "Voted" role in our server, https://discord.gg/qyHnGP5yMP for 12 hours.`)
+  user.send(embed).catch(error => {
+    console.log(`Error: ${error}`)
+  })
+  const guild = client.guilds.cache.find(g => g.id == "791760625243652127")
+  if(!guild){
+    return console.log(`Cannot find guild!`);
+  }
+  const channel = guild.channels.cache.find(c => c.id == "793598695382843402")
+  if(!channel){
+    return console.log(`Cannot find channel!`)
+  }
+  channel.send(`<@${user.id}> has voted for the server!`)
+  const role = guild.roles.cache.find(r => r.id == "796439384940871701")
+  if(!role){
+    return console.log(`Cannot find role!`)
+  }
+  const guildmember = guild.members.cache.find(m => m.id == user.id)
+  if(!guildmember){
+    return console.log(`Cannot find guild member.`)
+  }
+  guildmember.roles.add(role,"Voted for the server!")
+  setTimeout(() => {
+    guildmember.roles.remove(role,"12 Hour voting period over.")
+  }, 43200000)
+      return;
 })
 server.post('/multibotvote', webhook.middleware(), async (req, res) => {
   const user = await client.users.fetch(req.vote.user)
