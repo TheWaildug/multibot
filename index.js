@@ -381,13 +381,25 @@ client.on("message", async message => {
       let evaluated
        
     try {
-      evaluated = eval(`(async () => {${code}})()`);
-      if (typeof evaluated !== "string")
-        evaluated = require("util").inspect(evaluated);
- 
-      message.channel.send(clean(evaluated), {code:"xl"});
-    } catch (err) {
-      message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
+      evaluated = await eval(`(async () => {return ${code}})()`);
+      console.log(evaluated)
+      const embed = new Discord.MessageEmbed()
+            .setTitle(`Evaluation`)
+            .setDescription(`Evaluated in *${Date.now() - message.createdTimestamp + " ms"}.*`)
+            .addField(`Input`,"```js\n" + code + "```")
+            .addField(`Output`,"```js\n" + evaluated + "```")
+            .setTimestamp()
+            return message.channel.send(`<@${message.member.id}>`,embed);
+    } catch (e) {
+      console.log(e)
+          const embed = new Discord.MessageEmbed()
+          .setTitle(`Evaluation`)
+          .setDescription(`Error`)
+          .addField(`Input`,"```js\n" + code + "```")
+          .addField(`Error`,"```" + e + "```")
+          .setTimestamp()
+          return message.channel.send(`<@${message.member.id}>`,embed);
+
     }
           }else if(command == "serverinfo"){
       client.Commands.get(`serverinfo`).execute(message,args)
