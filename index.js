@@ -5,7 +5,7 @@ const randomPing = require("./randomping.js")
 const facts = require("./facts.js")
 const quote = require("./quotes.js")
 const ms = require("ms")
-const asynceval = require("async-eval")
+
 const fetch = require("node-fetch")
 const Database = require("@replit/database")
 const jsonfile = require("jsonfile")
@@ -379,7 +379,7 @@ client.on("message", async message => {
       console.log(`Evaluate ${message.member.id}`)
       let evaluated
       try {
-        evaluated = await eval(`(async () => {${code}})()`);
+        evaluated = eval('(async function() {' + code + '}())');
     } catch (e) {
       console.log(e)
           const embed = new Discord.MessageEmbed()
