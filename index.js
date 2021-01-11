@@ -379,30 +379,16 @@ client.on("message", async message => {
       console.log(`Evaluate ${message.guild.id}`)
       console.log(`Evaluate ${message.member.id}`)
       let evaluated
-     try {
-        evaluated = eval('( async function() {' + code + '\n}())');
-    } catch (e) {
-      console.log(e)
-          const embed = new Discord.MessageEmbed()
-          .setTitle(`Evaluation`)
-          .setDescription(`Error`)
-          .addField(`Input`,"```js\n" + code + "```")
-          .addField(`Error`,"```" + e + "```")
-          .setTimestamp()
-          return message.channel.send(`<@${message.member.id}>`,embed);
-
-    }finally{
-      console.log(evaluated)
-    const embed = new Discord.MessageEmbed()
-          .setTitle(`Evaluation`)
-          .setDescription(`Evaluated in *${Date.now() - message.createdTimestamp + " ms"}.*`)
-          .addField(`Input`,"```js\n" + code + "```")
-          .addField(`Output`,"```js\n" + evaluated + "```")
-          .setTimestamp()
-          return message.channel.send(`<@${message.member.id}>`,embed);
-          
+       
+    try {
+      evaluated = eval(`(async () => {${code}})()`);
+      if (typeof evaluated !== "string")
+        evaluated = require("util").inspect(evaluated);
+ 
+      message.channel.send(clean(evaluated), {code:"xl"});
+    } catch (err) {
+      message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
     }
-    
           }else if(command == "serverinfo"){
       client.Commands.get(`serverinfo`).execute(message,args)
     }else if(command == "ms"){
