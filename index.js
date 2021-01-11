@@ -379,7 +379,7 @@ client.on("message", async message => {
       console.log(`Evaluate ${message.member.id}`)
       let evaluated
       try {
-        evaluated = eval(`async (() => {${code}})()`);
+        evaluated = eval(`(async () => {${code}})()`);
     } catch (e) {
       console.log(e)
           const embed = new Discord.MessageEmbed()
