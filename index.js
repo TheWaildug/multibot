@@ -58,7 +58,7 @@ for (const file of commandFiles) {
 async function UpdateGuilds(){
   setInterval(async () => {
     const status = await db.get(`Status`)
-    if(status != "GuildCount"){
+    if(!status.toLowerCase().includes("{guildcount}")){
       return;
     }
     let guildcount = client.guilds.cache.size
@@ -68,15 +68,12 @@ async function UpdateGuilds(){
 client.on("ready", async () => {
     console.log("The MultiBot is ready!")
    const status = await db.get("Status")
-   if(status == "GuildCount"){
-    let guildcount = 0
-    client.guilds.cache.forEach(() => {
-      guildcount = guildcount + 1
-    })
+   if(status.toLowerCase().includes("{guildcount}")){
+    let guildcount = client.guilds.cache.size
     client.user.setPresence({ activity: { name: `${guildcount} guilds.`, type: `WATCHING` }, status: 'dnd' });
-    return UpdateGuilds();
+ return UpdateGuilds(); 
    }
-   client.user.setPresence({ activity: { name: status, type: `WATCHING` }, status: 'dnd' })
+    client.user.setPresence({ activity: { name: status, type: `WATCHING` }, status: 'dnd' })
 })
 if(fs.existsSync('stats.json')){
     stats =  jsonfile.readFileSync("stats.json")
@@ -824,10 +821,10 @@ client.on("message", async message => {
        if(!args[0]){
          return message.reply('I need a status buddy.')
        }  
-       if(status == "guilds"){
-         db.set("Status","GuildCount")
-         let guildcount = client.guilds.cache.size
-         client.user.setPresence({ activity: { name: `${guildcount} guilds.`, type: `WATCHING` }, status: 'dnd' })
+       if(status.toLowerCase().includes("{guildcount}")){
+         db.set("Status",status)
+  
+         client.user.setPresence({ activity: { name: `${status.toLowerCase().replace("{guildcount"),client.guilds.cache.size}`, type: `WATCHING` }, status: 'dnd' })
        message.reply("go check it out");
        return UpdateGuilds();
        }
