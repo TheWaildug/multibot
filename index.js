@@ -62,7 +62,7 @@ async function UpdateGuilds(){
       return;
     }
  
-    client.user.setPresence({ activity: { name: `${status.toLowerCase().replace("{guildcount"),client.guilds.cache.size}`, type: `WATCHING` }, status: 'dnd' })
+    client.user.setPresence({ activity: { name: `${status.toLowerCase().replace("{guildcount}"),client.guilds.cache.size}`, type: `WATCHING` }, status: 'dnd' })
   }, "300000")
 }
 client.on("ready", async () => {
@@ -70,7 +70,7 @@ client.on("ready", async () => {
    const status = await db.get("Status")
    if(status.toLowerCase().includes("{guildcount}")){
 
-    client.user.setPresence({ activity: { name: `${status.toLowerCase().replace("{guildcount"),client.guilds.cache.size}`, type: `WATCHING` }, status: 'dnd' })
+    client.user.setPresence({ activity: { name: `${status.toLowerCase().replace("{guildcount}"),client.guilds.cache.size}`, type: `WATCHING` }, status: 'dnd' })
     return UpdateGuilds(); 
    }
     client.user.setPresence({ activity: { name: status, type: `WATCHING` }, status: 'dnd' })
@@ -824,7 +824,7 @@ client.on("message", async message => {
        if(status.toLowerCase().includes("{guildcount}")){
          db.set("Status",status)
   
-         client.user.setPresence({ activity: { name: `${status.toLowerCase().replace("{guildcount"),client.guilds.cache.size}`, type: `WATCHING` }, status: 'dnd' })
+         client.user.setPresence({ activity: { name: `${status.toLowerCase().replace("{guildcount}"),client.guilds.cache.size}`, type: `WATCHING` }, status: 'dnd' })
        message.reply("go check it out");
        return UpdateGuilds();
        }
