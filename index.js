@@ -61,17 +61,17 @@ async function UpdateGuilds(){
     if(!status.toLowerCase().includes("{guildcount}")){
       return;
     }
-    let guildcount = client.guilds.cache.size
-    client.user.setPresence({ activity: { name: `${guildcount} guilds.`, type: `WATCHING` }, status: 'dnd' });
+ 
+    client.user.setPresence({ activity: { name: `${status.toLowerCase().replace("{guildcount"),client.guilds.cache.size}`, type: `WATCHING` }, status: 'dnd' })
   }, "300000")
 }
 client.on("ready", async () => {
     console.log("The MultiBot is ready!")
    const status = await db.get("Status")
    if(status.toLowerCase().includes("{guildcount}")){
-    let guildcount = client.guilds.cache.size
-    client.user.setPresence({ activity: { name: `${guildcount} guilds.`, type: `WATCHING` }, status: 'dnd' });
- return UpdateGuilds(); 
+
+    client.user.setPresence({ activity: { name: `${status.toLowerCase().replace("{guildcount"),client.guilds.cache.size}`, type: `WATCHING` }, status: 'dnd' })
+    return UpdateGuilds(); 
    }
     client.user.setPresence({ activity: { name: status, type: `WATCHING` }, status: 'dnd' })
 })
