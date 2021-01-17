@@ -432,10 +432,9 @@ client.on("message", async message => {
         .setURL(`https://reddit.com${post.permalink}`)
         .setDescription(`${prefix}reddit`)
         .setColor("RANDOM")
-        .attachFiles(post.url)
         .setTimestamp()
        
-          return message.channel.send(embed);
+          return message.channel.send(post.url,embed);
 
       }).catch(error => {
         console.warn("Error: " + error)
@@ -462,8 +461,7 @@ client.on("message", async message => {
         .attachFiles(post.url)
         .setTimestamp()
        
-          return message.channel.send(embed);
-       
+        return message.channel.send(post.url,embed);
       }).catch(error => {
         console.warn("Error: " + error)
         return message.reply("Something went wrong: `" + error + "`")
