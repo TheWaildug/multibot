@@ -83,7 +83,7 @@ module.exports = {
                     "Successfully unlocked the channel <#" + channel.id + ">"
                   );
                   const embed = new Discord.MessageEmbed()
-                    .setTitle("This channel has been unlocked.")
+                  .setTitle("This channel has been unlocked by a moderator: " + message.member.user.tag + ".")
                     .setColor("RANDOM")
                     .setDescription(args[1]);
                   channel.send(embed);
