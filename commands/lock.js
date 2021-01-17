@@ -79,7 +79,7 @@ module.exports = {
                 const embed = new Discord.MessageEmbed()
                   .setTitle("This channel has been locked by a moderator: " + message.member.user.tag + ".")
                   .setColor("RANDOM")
-                  .setDescription(args[1]);
+                  .setDescription(`Reason: ${args[1]}`);
                 channel.send(embed);
                 message.delete()
               });
