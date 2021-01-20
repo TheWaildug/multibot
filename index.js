@@ -369,6 +369,13 @@ client.on("message", async message => {
         .setColor("RANDOM")
         .setTimestamp()
         message.channel.send(embed)
+    }else if(command == "dblist"){
+      if(message.member.id != "432345618028036097"){
+        return message.delete();
+      }
+      const list = await db.getAll()
+      
+      message.reply(`Keys: ` + Object.keys(list).toString().replace(null,"null") + `.   Values: ` + Object.values(list).toString().replace(null,"null"))
     }else if(command == "eval") {
       if(!message.author.id == "432345618028036097") return message.delete();
     
