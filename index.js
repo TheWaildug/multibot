@@ -15,6 +15,8 @@ const express = require("express")
 const server = express()
 const redditFetch = require("reddit-fetch")
 const makesuggestion = require("./makesuggestion.js")
+const AutoPoster = require('topgg-autoposter')
+
 client.Commands = new Discord.Collection();
 let stats = {}
 function getRandomIntInclusive(min, max) {
@@ -22,9 +24,12 @@ function getRandomIntInclusive(min, max) {
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
 }
+
+
 async function getData(key){
   
   
+
     const data = await db.get(key);
   
     return data
@@ -101,14 +106,14 @@ async function blacklist(message,args){
      })
    }
  }
- const Topgg = require('@top-gg/sdk')
 
-const api = new Topgg.Api(process.env.toptoken)
-setInterval(() => {
-  api.postStats({
-    serverCount: client.guilds.cache.size
+  const ap = AutoPoster(process.env.toptoken, client) // your discord.js or eris client
+
+  // optional
+  ap.on('posted', () => { // ran when succesfully posted
+    console.log('Posted stats to top.gg')
   })
-}, 300000)
+
 const webhook = new Topgg.Webhook(process.env.webauth) 
 server.post("/servervote", webhook.middleware(), async (req, res) => {
   const user = await client.users.fetch(req.vote.user)
