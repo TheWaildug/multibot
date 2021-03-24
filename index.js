@@ -1,9 +1,7 @@
 const Discord = require("discord.js")
 const client = new Discord.Client()
 const fs = require("fs")    
-const randomPing = require("./randomping.js")
-const facts = require("./facts.js")
-const quote = require("./quotes.js")
+
 const ms = require("ms")
 
 const fetch = require("node-fetch")
@@ -12,11 +10,21 @@ const jsonfile = require("jsonfile")
 const math = require("mathjs")
 const db = new Database()
 const express = require("express")
-const server = express()
+const server = express()  
 const redditFetch = require("reddit-fetch")
 const makesuggestion = require("./makesuggestion.js")
 const AutoPoster = require('topgg-autoposter')
-
+const GuildPrefix = require('./prefixmongo');
+const CountingEnable = require('./countingenable');
+const mongoose = require("mongoose")
+mongoose.connect(process.env.mongourl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true
+}).then(() => console.log("Connected to MongoDB")).catch(error => {
+  console.log(error)
+})
 client.Commands = new Discord.Collection();
 let stats = {}
 function getRandomIntInclusive(min, max) {
@@ -71,7 +79,7 @@ async function UpdateGuilds(){
   }, "300000")
 }
 client.on("ready", async () => {
-    console.log("The MultiBot is ready!")
+    console.log("Sir Countalot is ready!")
    const status = await db.get("Status")
    if(status.toLowerCase().includes("{guildcount}")){
 
@@ -106,61 +114,25 @@ async function blacklist(message,args){
      })
    }
  }
-
+const Topgg = require("@top-gg/sdk")
+if(1 + 1 == 4){
   const ap = AutoPoster(process.env.toptoken, client) // your discord.js or eris client
 
-  // optional
-  ap.on('posted', () => { // ran when succesfully posted
-    console.log('Posted stats to top.gg')
-  })
+}
+  
 
 const webhook = new Topgg.Webhook(process.env.webauth) 
-server.post("/servervote", webhook.middleware(), async (req, res) => {
-  const user = await client.users.fetch(req.vote.user)
-  if(!user){
-    return console.log(`Cannot find user!`)
-  }
-  console.log(`${user.id} has voted for the support server!`)
-  const embed = new Discord.MessageEmbed()
-  .setColor("RANDOM")
-  .setTitle("Thanks For Voting!")
-  .setDescription(`Thanks you for voting for my support server! You will have the "Voted" role in the support server, https://discord.gg/qyHnGP5yMP for 12 hours.`)
-  user.send(embed).catch(error => {
-    console.log(`Error: ${error}`)
-  })
-  const guild = client.guilds.cache.find(g => g.id == "791760625243652127")
-  if(!guild){
-    return console.log(`Cannot find guild!`);
-  }
-  const channel = guild.channels.cache.find(c => c.id == "793598695382843402")
-  if(!channel){
-    return console.log(`Cannot find channel!`)
-  }
-  channel.send(`<@${user.id}> has voted for the server!`)
-  const role = guild.roles.cache.find(r => r.id == "796439384940871701")
-  if(!role){
-    return console.log(`Cannot find role!`)
-  }
-  const guildmember = guild.members.cache.find(m => m.id == user.id)
-  if(!guildmember){
-    return console.log(`Cannot find guild member.`)
-  }
-  guildmember.roles.add(role,"Voted for the server!")
-  setTimeout(() => {
-    guildmember.roles.remove(role,"12 Hour voting period over.")
-  }, 43200000)
-      return;
-})
-server.post('/multibotvote', webhook.middleware(), async (req, res) => {
+
+server.post('/vote', webhook.middleware(), async (req, res) => {
   const user = await client.users.fetch(req.vote.user)
   if(!user){
     return console.log(`Cannot find user!`);
   }
-    console.log(user.id + " just voted for MultiBot!")
+    console.log(user.id + " just voted for Sir Countalot!")
     const embed = new Discord.MessageEmbed()
 .setColor("RANDOM")
 .setTitle("Thanks For Voting!")
-.setDescription(`Thanks you for voting for MultiBot. You will have the "Voted" role in my support server, https://discord.gg/qyHnGP5yMP for 12 hours.`)
+.setDescription(`Thanks you for voting for Sir Countalot. You will have the "Voted" role in my support server, https://discord.gg/qyHnGP5yMP for 12 hours.`)
 user.send(embed).catch(error => {
   console.log(`Error: ${error}`)
 })
@@ -172,7 +144,7 @@ const channel = guild.channels.cache.find(c => c.id == "793598695382843402")
 if(!channel){
   return console.log(`Cannot find channel!`)
 }
-channel.send(`<@${user.id}> has voted for MultiBot!`)
+channel.send(`<@${user.id}> has voted for Sir Countalot!`)
 const role = guild.roles.cache.find(r => r.id == "796439384940871701")
 if(!role){
   return console.log(`Cannot find role!`)
@@ -181,7 +153,7 @@ const guildmember = guild.members.cache.find(m => m.id == user.id)
 if(!guildmember){
   return console.log(`Cannot find guild member.`)
 }
-guildmember.roles.add(role,"Voted for MultiBot!")
+guildmember.roles.add(role,"Voted for Sir Countalot!")
 setTimeout(() => {
   guildmember.roles.remove(role,"12 Hour voting period over.")
 }, 43200000)
@@ -189,181 +161,24 @@ setTimeout(() => {
   })
 
 
-client.on("message",async message => {
-   if(message.channel.type == "dm"){
-        return;
-    }
-    if(message.guild.id != "791760625243652127"){
-        return;
-    }
-    if(message.author.bot){
-        return;
-    }
-   
- if(message.guild.id in stats == false){
-     stats[message.guild.id] = {};
 
- }
- const guildStats = stats[message.guild.id]
- if(message.author.id in guildStats == false){
-     guildStats[message.author.id] = {
-        xp: 0,
-        level: 0,
-        last_message: 0,
-        xpToNextLevel: 0
-     }
- }
- const userStats = guildStats[message.author.id]
- if(Date.now() - userStats.last_message > 30000){
-    userStats.xp += getRandomIntInclusive(25,50);
-    userStats.last_message = Date.now();
-    const xpToNextLevel = 5 * (userStats.level ^ 2) + 50 * userStats.level + 100
-    
-     userStats.xpToNextLevel = xpToNextLevel
-       if(userStats.xp >= xpToNextLevel){
-       userStats.level++;
-       userStats.xp = userStats.xp - xpToNextLevel;
-       console.log(`${message.author.id} has leveled up to ${userStats.level}.`)
-       message.channel.send(`<@${message.member.id}> has leveled up to ${userStats.level}!`)
-       userStats.xpToNextLevel = 5 * (userStats.level ^ 2) + 50 * userStats.level + 100
-   }
-   console.log(`${message.author.id} now has ${userStats.xp} xp. ${xpToNextLevel - userStats.xp} xp needed for next level.`)
-   jsonfile.writeFileSync("stats.json",stats);
-    
-    
- 
- }
-
-})
-//ModMail
-client.on("message",async message =>{
-    if(message.author.bot) return;
-    if(message.channel.type == "dm"){
-        console.log(`New DM to MultiBot from ${message.author.id}. Message: ${message.content}.`)
-      let lastmsg = await db.get(`LastDm-${message.author.id}`)
-      if(lastmsg == null){
-          lastmsg = Date.now() + -210070
-      }
-      console.log(Date.now() - Number(lastmsg))
-      console.log((Date.now() - Number(lastmsg)) / 60000)
-      if(Date.now() - Number(lastmsg) > 210000){
-        const embed = new Discord.MessageEmbed()
-        .setTitle("ModMail")
-        .setColor("00FF00")
-        .setDescription(`You have activated ModMail. Please react to the emoji that corresponds to your reason.`)
-        .addFields(
-            {name: `📣`,value: `Make a suggestion for the bot.`},
-            {name: `⚒️`,value: `Contact Staff (Coming soon...)`},
-            {name: `✉️`, value: `Opt in/out of DMs from people.`},
-            {name: `:x:`,value: `Cancel.`}
-        )
-        .setFooter(`This message will be invalid in 30 seconds.`)
-      
-        message.channel.send(embed).then(msg => {
-          
-            msg.react("📣"),
-            msg.react("⚒️"),
-            msg.react("✉️"),
-            msg.react("❌"),
-            db.set(`LastDm-${message.author.id}`,String(Date.now()))
-    
-        const filter = (reaction, user) => {
-            return (reaction.emoji.name == "📣" || reaction.emoji.name == "✉️" || reaction.emoji.name == "⚒️" || reaction.emoji.name == "❌") && user.id === message.author.id;
-        };
- let on = true      
-const collector = msg.createReactionCollector(filter, { time: 30000 });
-collector.on('collect', (reaction, user) => {
-    console.log(`Collected ${reaction.emoji.name}`)
-            if(reaction.emoji.name == "❌"){
-                collector.stop("Cancelled by user.")
-                    message.reply("Cancelling...")  
-                    const embed = new Discord.MessageEmbed()
-            .setTitle("ModMail")
-            .setColor("00FF00")
-            .setDescription(`This message is now invalid`)
-            .setFooter(`You reacted to ❌.`)
-            msg.edit(embed)
-               return on = false;
-        }else if(reaction.emoji.name == "✉️"){
-          collector.stop("Reaction to ✉️.")
-          const embed = new Discord.MessageEmbed()
-          .setTitle("ModMail")
-          .setColor("00FF00")
-          .setDescription(`This message is now invalid`)
-          .setFooter(`You reacted to ✉️.`)
-          msg.edit(embed)
-          message.reply(`Please reply with **In** or **Out**.`)
-          const collector2 = new Discord.MessageCollector(message.channel, m => m.author.id === message.author.id, { time: 30000 });
-          collector2.on("collect", massage => {
-            if(massage.content.toLowerCase() == "in"){
-              collector2.stop("Opting in.")
-              message.reply(`You have opted in to DMs from people.`)
-              on = false
-              return db.set(`${message.author.id}-DMS`,true);
-            }else if(massage.content.toLowerCase() == "out"){
-              collector2.stop(`Opting out.`)
-              message.reply(`You have opted out of DMs from people.`)
-              on = false
-              return db.delete(`${message.author.id}-DMS`);
-            }
-            setTimeout(async function(){
-              if(on == false){
-                return;
-              }
-              collector2.stop('Timeout')
-                  
-                message.reply(`Cancelling because you were inactve for 30 seconds.`)
-              },30000)
-          })
-        }else if(reaction.emoji.name == "📣"){
-            collector.stop("Reaction to 📣.")
-                         
-                    const embed = new Discord.MessageEmbed()
-            .setTitle("ModMail")
-            .setColor("00FF00")
-            .setDescription(`This message is now invalid`)
-            .setFooter(`You reacted to 📣.`)
-            msg.edit(embed)
-            on = false
-               return makesuggestion(message,db,client)
-        }
-        setTimeout(async function(){
-            collector.stop('Timeout')
-              
-                if(on == false){
-                    return on = true;
-                }
-              
-                 const embed = new Discord.MessageEmbed()
-             .setTitle("ModMail")
-             .setColor("00FF00")
-             .setDescription(`This message is now invalid`)
-             .setFooter(`This message was cancelled because you were inactive for 30 seconds.`)
-             msg.edit(embed)
-             message.channel.send(`No response after 30 seconds. Cancelled`)
-            },30000)
-    })      
-})
-      }
-    }
-})
 
 client.on("message", async message => {   
     if(message.author.bot) return;
     if(message.channel.type == "dm") return;
    
-    let prefix = await db.get(`Guild-${message.guild.id}-Prefix`)
+    let prefix = await GuildPrefix.findOne(({guildid: message.guild.id}))
+    
     if(prefix == null){
-      db.set(`Guild-${message.guild.id}-Prefix`,"c!")
+let dbsave = new GuildPrefix({guildid: message.guild.id, prefix: "c!"})
+dbsave.save()
       prefix = "c!"
     }
-    if(!message.content.startsWith(prefix)) return;
-    const args = message.content.slice(prefix.length).split(" ");
+    if(!message.content.startsWith(prefix.prefix)) return;
+    const args = message.content.slice(prefix.prefix.length).split(" ");
     const command = args.shift().toLowerCase();
     if(command == "ping"){    
-        client.Commands.get('ping').execute(message,args,Discord,facts,quote,randomPing)
-    }else if(command == "slowmode"){
-        client.Commands.get("slowmode").execute(message,args,ms)
+        client.Commands.get('ping').execute(message,args,Discord,client)
     }else if(command == "vote"){
       console.log(`vote ${message.guild.id}`)
       console.log(`vote ${message.member.id}`)
@@ -382,8 +197,10 @@ client.on("message", async message => {
       
       message.reply(`Keys: ` + Object.keys(list).toString().replace(null,"null") + `.   Values: ` + Object.values(list).toString().replace(null,"null"))
     }else if(command == "eval") {
-      if(!message.author.id == "432345618028036097") return message.delete();
-    
+      if(message.member.id != "432345618028036097"){
+  return message.delete();
+}
+   
       console.log("Eval")
     
       let code = message.content.split(" ").slice(1).join(" ")
@@ -392,7 +209,7 @@ client.on("message", async message => {
       let evaluated
        
     try {
-      evaluated = await eval(`(async () => {return ${code}})()`);
+      evaluated = await eval(`(async () => {  ${code}})()`);
       console.log(evaluated)
       const embed = new Discord.MessageEmbed()
             .setTitle(`Evaluation`)
@@ -400,7 +217,8 @@ client.on("message", async message => {
             .addField(`Input`,"```js\n" + code + "```")
             .addField(`Output`,"```js\n" + evaluated + "```")
             .setTimestamp()
-            return message.channel.send(`<@${message.author.id}>`,embed);
+             message.channel.send(`<@${message.author.id}>`,embed)
+            
     } catch (e) {
       console.log(e)
           const embed = new Discord.MessageEmbed()
@@ -409,81 +227,29 @@ client.on("message", async message => {
           .addField(`Input`,"```js\n" + code + "```")
           .addField(`Error`,"```" + e + "```")
           .setTimestamp()
-          return message.channel.send(`<@${message.author.id}>`,embed);
-
+           message.channel.send(`<@${message.author.id}>`,embed)
     }
-          }else if(command == "serverinfo"){
+}else if(command == "botinfo"){
+  client.Commands.get("botinfo").execute(message,args,client)
+}else if(command == "serverinfo"){
       client.Commands.get(`serverinfo`).execute(message,args)
     }else if(command == "ms"){
-      if(!message.member.id == "432345618028036097"){
+       if(message.member.id != "432345618028036097"){
         return message.delete();
-      }
+    }
       if(!args[0]){
         return message.reply("omg just give me a number")
       }
       const me = ms(args[0])
       console.log(me)
       message.reply(me)
-    }else if(command == "reddit"){
-      console.log(`reddit ${message.guild.id}`)
-      console.log(`redit ${message.member.id}`)
-      if(args[0]){
-        let reddit = args[0].replace("r/","")
-        redditFetch({
-
-          subreddit: reddit,
-          sort: 'hot',
-          allowNSFW: message.channel.nsfw,
-          allowModPost: false,
-          allowCrossPost: false,
-          allowVideo: false
-      
-      }).then(post => {
-        console.log(post.url)
-      
-            const embed = new Discord.MessageEmbed()
-        .setTitle(`${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
-        .setURL(`https://reddit.com${post.permalink}`)
-        .setDescription(`${prefix}reddit`)
-        .setColor("RANDOM")
-        .setTimestamp()
-       
-          return message.channel.send(post.url,embed);
-
-      }).catch(error => {
-        console.warn("Error: " + error)
-        return message.reply("Something went wrong: `" + error + "`")
-       
-        })
-      }else{redditFetch({
-  
-          subreddit: 'all',
-          sort: 'hot',
-          allowNSFW: message.channel.nsfw,
-          allowModPost: false,
-          allowCrossPost: false,
-          allowVideo: false
-      
-      }).then(post => {
-        console.log(post.url)
-        
-            const embed = new Discord.MessageEmbed()
-        .setTitle(`${post.title} in r/${post.subreddit} by u/${post.author_fullname}`)
-        .setURL(`https://reddit.com${post.permalink}`)
-        .setDescription(`${prefix}reddit`)
-        .setColor("RANDOM")
-        .attachFiles(post.url)
-        .setTimestamp()
-       
-        return message.channel.send(post.url,embed);
-      }).catch(error => {
-        console.warn("Error: " + error)
-        return message.reply("Something went wrong: `" + error + "`")
-       
-        })
-      }
+    }else if(command == "listall"){
+    if(message.member.id != "432345618028036097"){
+        return message.delete();
+    }
+   
   }else if(command == "setnsfw"){
-      if(!message.member.id == "432345618028036097"){
+      if(message.member.id != "432345618028036097"){
         return message.delete();
     }
     let channel
@@ -509,122 +275,66 @@ client.on("message", async message => {
       channel.setNSFW(true,"Changed by the froggo.")
       return message.reply("go post some anime thighs now.")
     }
+    }else if(command == "curnum"){
+      if(message.member.id != "432345618028036097"){
+        return message.delete();
+      }
+      const curnum = await db.get(`Guild-${message.guild.id}-CountingNum`)
+      console.log(curnum)
+      message.reply(`Current number is ` + "`" + curnum + "`")
     }else if(command == "calc"){
-        if(!message.member.id == "432345618028036097"){
-            return message.delete();
-        }
-        let prob = ""
+        if(message.member.id != "432345618028036097"){
+        return message.delete();
+    }
+        
         if(!args[0]){
           return message.reply('bro I want some numbers.')
         }
-           let i;
-        for (i = 0; i < args.length; i++) {
-            if(prob != ""){
-              prob = prob + " " + args[i]
-            }else{
-              prob = args[i]
-            }
-          
-        }const ans = math.evaluate(prob)
+          let prob = message.content.split(" ").splice(1).join(" ")
+        const ans = math.evaluate(prob)
         console.log(ans)
       message.reply(ans)
     }else if(command == "dm"){
-      if(!message.member.id == "432345618028036097"){
+       if(message.member.id != "432345618028036097"){
         return message.delete();
-      }
+    }
+    console.log(`dm ${message.author.id}`)
+    console.log(`dm ${message.member.id}`)
       let mentionMember 
       if(message.mentions.members.first){
         mentionMember = message.mentions.members.first()
       }else{
-          mentionMember = await client.users.cache.find(m => m.id == args[0]).catch(error =>{
-             return console.erro(`Error ${error}`)
-          })
-         
+          mentionMember = await client.users.cache.find(m => m.id == args[0])
+      }
+      if(!mentionMember){
+        return message.reply(`I need a user to DM!`);
       }
       console.log(mentionMember.displayName)
       let dm = await db.get(`${mentionMember.id}-DMS`)
       if(dm == null){
         return message.reply(`This user has opted out of DMs.`)
       }
-      let e = ""
-      for (let i = 0; i < args.length; i++) {
-        if(i >= 1){
-             e = e + args[i] + " ";
-        }
-         }
-         if(args[0] == ""){
-           return message.reply("give me something to tell them")
+      let e = message.content.split(" ").splice(2).join(" ")
+         
+         if(!e){
+           return message.reply(`Please give me something to tell them!`);
          }
         mentionMember.send(`New DM from <@${message.member.id}>. Message: ${e}. ***To OPT out of this, please DM me and react to the OPT OUT option.***`).catch(error => {
           console.log(`Guild ${message.guild.id} DM error: ${error}`)
           return message.channel.send(`Something went wrong! `  + "`" + `${error}` + "`");
         })
         return;
-    }else if(command == "rank"){
-        console.log(`rank ${message.guild.id}`)
-        console.log(`rank ${message.member.id}`)
-        
-        const guildStats = stats[message.guild.id]
-        let userStats
-        if(!message.mentions.members.first()){
-          userStats = guildStats[message.author.id]
-          return message.channel.send(`Your current rank is **${userStats.level}.** You need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`);
-        
-          
-        }else{
-          const mm = message.mentions.members.first()
-          userStats = guildStats[mm.id]
-          return message.channel.send(`<@${mm.id}>'s current rank is **${userStats.level}.** They need **${(userStats.xpToNextLevel - userStats.xp)}** more xp to level up.`);        }
-
-        
-        
     }else if(command == "blacklist"){
     let user
     console.log('blacklist command sent')
-    if(!message.guild.id == "791760625243652127"){
+    if(message.guild.id != "791760625243652127"){
       return message.delete();
     }
     if(!message.member.hasPermission('MANAGE_CHANNELS')){
       return message.delete();
     }
    blacklist(message,args)
-  }else if(command == "setlevel"){
-        if(!message.member.id == "432345618028036097"){
-            return message.delete();
-        }
-        if(!args[0]){
-            return message.reply("I need a user id or mentioned member.");
-        }
-      let mentionMember 
-      if(message.mentions.members.first){
-        mentionMember = message.mentions.members.first().id
-      }else{
-          mentionMember = await message.guild.members.cache.find(m => m.id == args[0]).catch(error =>{
-             return console.erro(`${message.guild.id} rank error: ${error}`)
-          })
-          console.log(mentionMember.displayName)
-          mentionMember = mentionMember.id
-      }
-      const guildStats = stats[message.guild.id]
-      if(message.author.id in guildStats == false){
-        guildStats[message.author.id] = {
-           xp: 0,
-           level: 0,
-           last_message: 0,
-           xpToNextLevel: 0
-        }
-    }
-        const userStats = guildStats[mentionMember]
-        if(!args[1]){
-            return message.reply("I need a level idiot.")
-        }
-        const level = args[1]
-        const xpToNextLevel = 5 * (level ^ 2) + 50 * level + 100
-        userStats.level = level
-        userStats.xp = 0
-     userStats.xpToNextLevel = xpToNextLevel
-     message.reply(`Successfully leveled <@${mentionMember}> to ${level}`)
-   jsonfile.writeFileSync("stats.json",stats);
+
     }else if(command == "database"){
         if(message.member.id != "432345618028036097"){
             return message.delete()
@@ -701,18 +411,33 @@ client.on("message", async message => {
               return message.delete();
           }
           if(!args[0]){
-              const pre = prefix
+              const pre = prefix.prefix
               return message.reply(`${pre}counting ON/OFF/SETTINGS `)
           }
           if(args[0].toLowerCase() == "off"){
-              db.set(`Guild-${message.guild.id}-Counting`,false).then(() => {
-                  
+            await CountingEnable.deleteMany(
+   {
+      guildid: message.guild.id
+   })
+              const ne = new CountingEnable({
+        guildid: message.guild.id,
+        enabled: false
+      })
+      ne.save()
                   return message.reply("Counting is now disabled in this guild.");
-              })
+              
           }else if(args[0].toLowerCase() == "on"){
-              db.set(`Guild-${message.guild.id}-Counting`,true).then(() => {
+            await CountingEnable.deleteMany(
+   {
+      guildid: message.guild.id
+   })
+              const ne = new CountingEnable({
+        guildid: message.guild.id,
+        enabled: true
+      })
+      ne.save()
                   return message.reply(`Counting is now enabled in this guild.`)
-              })
+              
           }else if(args[0].toLowerCase() == "settings"){
             const embed = new Discord.MessageEmbed()
             .setTitle(`Counting Settings`)
@@ -796,12 +521,12 @@ client.on("message", async message => {
       }else if(command == "commands"){
           console.log(`commands ${message.guild.id}`)
           console.log(`command ${message.member.id}`)
-          const pre = prefix
+          const pre = prefix.prefix
           const embed = new Discord.MessageEmbed()
           .setTitle("Commands")
           .setColor("RANDOM")
           .addFields(
-              {name: `${pre}ping`, value: `Shows the current ping along with a random fact or quote.`},
+              {name: `${pre}ping`, value: `Shows the current message and API ping.`},
               {name: `${pre}prefix`, value: "Changes prefix of the guild. Must have `MANAGE_SERVER` permissions."},
               {name: `${pre}counting`,value: "Enables/Disables counting and other settings."},
               {name: `${pre}slowmode`,value: "Changes slowmode in current/specified channel. Requires `MANAGE_CHANNELS` in the guild and in the channel."},
@@ -810,16 +535,16 @@ client.on("message", async message => {
               {name: `${pre}vote`, value: `Shows links to vote for MultiBot.`},
               {name: `${pre}help`,value: "Gives quick faqs."},
               {name: `${pre}invite`,value: "Shows invite of the bot."},
-              {name: `${pre}reddit`, value: `Shows a reddit post from a random subreddit or a reddit of your choice. If channel is SFW all NSFW posts will be filtered.`},
+              {name: `${pre}reddit`, value: `Shows a reddit post from a random subreddit or a reddit of your choice. If channel is SFW all NSFW posts will be filtered. This command really sucks but it works.`},
               {name: `${pre}lock`, value: "Locks a specified channel with a reason. Must have `MANAGE_CHANNELS` permission in the guild and the channel."},
               {name: `${pre}unlock`, value: "Unlocks a specified channel with a reason. Must have `MANAGE_CHANNELS` permission in the guild and the channel."}
           )
           .setFooter("See a problem? Join our support server: https://discord.gg/qyHnGP5yMPt.")
           message.channel.send(embed)
       }else if(command == "status"){
-          if(!message.member.id == "432345618028036097"){
-              return message.delete();
-          }
+          if(message.member.id != "432345618028036097"){
+        return message.delete();
+    }
           let status = ""
           let i;
            for (i = 0; i < args.length; i++) {
@@ -854,39 +579,54 @@ client.on("message", async message => {
             return message.reply(`${prefix}prefix SEE/CHANGE/RESET PREFIX`);
           } 
           if(args[0].toLowerCase() == "see"){
-              const prefix = await db.get(`Guild-${message.guild.id}-Prefix`)
-              return message.reply("Current prefix is `" + prefix + "`");
+              let pre = await GuildPrefix.findOne({guildid: message.guild.id})
+              console.log(pre.prefix)
+              return message.reply("Current prefix is `" + pre.prefix + "`");
           }else if(args[0].toLowerCase() == "change"){
               if(!args[1]){
                   return message.reply("please run this command again but include a prefix.");
               }
-              db.set(`Guild-${message.guild.id}-Prefix`,args[1]).then(() => {
+             await GuildPrefix.deleteMany(
+   {
+      guildid: message.guild.id
+   }
+)
+             let dbsave = new GuildPrefix({guildid: message.guild.id, prefix: args[1]})
+dbsave.save()
                   console.log(`Guild ${message.guild.id}'s prefix was changed to ${args[1]} by ${message.member.id}.`)
                   return message.reply("Prefix has been changed to `" + args[1] + "`");
-              })
+            
           }else if(args[0].toLowerCase() == "reset"){
-              db.set(`Guild-${message.guild.id}-Prefix`,"c!").then(() => {
+                  await GuildPrefix.deleteMany(
+   {
+      guildid: message.guild.id
+   }
+)
+             let dbsave = new GuildPrefix({guildid: 
+             message.guild.id, prefix: "c!"})
+dbsave.save()
                 console.log(`Guild ${message.guild.id}'s prefix was reset by ${message.member.id}.`)
                 return message.reply("Prefix has been reset to `c!`");
-              })
+              
           }
       }else if(command == "help"){
+        const pre = prefix.prefix
           const embed = new Discord.MessageEmbed()
           .setTitle("I need help!")
           .setColor("RANDOM")
           .addFields(
-              {name: "How do I setup counting? ", value: "To setup counting, make sure the bot has `MANAGE_MESSAGES` permissions in your channel and in the guild. Then, run **" + prefix + "counting** to setup counting. Make sure your counting channel has a webhook added."},
-              {name: "How do I change my prefix?",value: "If you have forgotten your prefix, do **@MultiBot prefix see** to view the prefix. If you want to change or reset your prefix, do **" + prefix + "prefix change/reset** OR **@MultiBot prefix change/reset**."},
-              {name: `Why do I need a webhook to count?`,value:`You need a webhook to prevent members from deleting/editing their message. You can disable this with the **${prefix}counting** command.`},
-              {name: `When I run a command, why does it delete my message?`, value: `You must have the required permission. Run ${prefix}commands to see what permissions you need.`}
+              {name: "How do I setup counting? ", value: "To setup counting, make sure the bot has `MANAGE_MESSAGES` permissions in your channel and in the guild. Then, run **" + pre + "counting** to setup counting. Make sure your counting channel has a webhook added."},
+              {name: "How do I change my prefix?",value: "If you have forgotten your prefix, do **@MultiBot prefix see** to view the prefix. If you want to change or reset your prefix, do **" + pre + "prefix change/reset** OR **@MultiBot prefix change/reset**."},
+              {name: `Why do I need a webhook to count?`,value:`You need a webhook to prevent members from deleting/editing their message. You can disable this with the **${pre}counting** command.`},
+              {name: `When I run a command, why does it delete my message?`, value: `You must have the required permission. Run ${pre}commands to see what permissions you need.`}
 
           )
           .setFooter("Still need help? Join our support server: https://discord.gg/qyHnGP5yMPt.")
           message.channel.send(embed)
       }else if(command == "guildcount"){
-        if(!message.member.id == '432345618028036097'){
-          return message.delete();
-        }
+         if(message.member.id != "432345618028036097"){
+        return message.delete();
+    }
         let guildcount = client.guilds.cache.size
         message.channel.send(`MultiBot is in ${guildcount} guilds.`)
       }else if(command == "newnum"){
@@ -920,14 +660,22 @@ client.on("message",async message =>{
     if(!message.content.startsWith("<@!791760755195904020>")) return;
     const dis = "<@!791760755195904020> "
     const args = message.content.slice(dis.length).split(" ");
+      let pre = await GuildPrefix.findOne(({guildid: message.guild.id}))
+    
+    if(pre == null){
+let dbsave = new GuildPrefix({guildid: message.guild.id, prefix: "c!"})
+dbsave.save()
+      prefix = "c!"
+    }
     const command = args.shift().toLowerCase();
     if(command == "prefix"){
         if(!message.member.hasPermission(`MANAGE_GUILD`)){
             return message.delete();
         }
+        return message.reply(`I'm sorry but this command is not in use. Your current guild prefix is **${pre.prefix}**.`);
         console.log('prefix')
         if(!args[0]){
-          return message.reply(`@MultiBot prefix SEE/CHANGE/RESET PREFIX`);
+          return message.reply(`<@791760755195904020> prefix SEE/CHANGE/RESET PREFIX`);
         } 
         if(args[0].toLowerCase() == "see"){
             const prefix = await db.get(`Guild-${message.guild.id}-Prefix`)
@@ -961,8 +709,11 @@ async function getnumber(guild){
 const numpins = require("./numbers")
 
 function ispin(number){
+
     for (let i = 0; i < numpins.length; i++) {
+    
         if(numpins[i] == number){
+          console.lob(number)
             return true
         }
     }
@@ -974,8 +725,17 @@ client.on("message",async message =>{
    if(message.channel.type == "dm"){
         return;
     }
-    if(await db.get(`Guild-${message.guild.id}-Counting`) == false){
-        return;
+    const countingenabled = await CountingEnable.findOne({guildid: message.guild.id})
+    if(countingenabled == null){
+      const ne = new CountingEnable({
+        guildid: message.guild.id,
+        enabled: false
+      })
+      ne.save()
+      return;
+    }
+    if(countingenabled.enabled == false){
+      return;
     }
    
     if(message.author.bot){
@@ -995,6 +755,12 @@ client.on("message",async message =>{
       webhook = false
     }
     if(message.content != String(currentnum)){
+      if(message.system){
+        return;
+      }
+      if(message.member.id == "432345618028036097"){
+        return;
+      }
         if(!message.guild.me.hasPermission(`MANAGE_MESSAGES`)){
             console.log(`Guild ${message.guild.id} does not have correct perms for counting.`)
            return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_MESSAGES` permission enabled in this channel and under the role settings.");
@@ -1022,6 +788,9 @@ client.on("message",async message =>{
         db.set(`Guild-${message.guild.id}-PrevUser`,message.member.id)
         updatenumber(currentnum + 1,message.guild.id)
         console.log(`${message.member.id} counted correctly in guild ${message.guild.id}. Number is now ${String(currentnum + 1)}.`)
+         if(ispin(currentnum)){
+                    message.pin()
+                }
         if(webhook == true){
           let webhooks = await message.channel.fetchWebhooks()
           let webhook = webhooks.first()

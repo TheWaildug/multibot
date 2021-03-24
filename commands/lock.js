@@ -7,9 +7,7 @@ module.exports = {
             return message.delete();
         }
         let channel;
-        if(!message.guild.me.hasPermission(`MANAGE_CHANNELS`)){
-          return message.channel.send("I do not have the correct permissions. Please make sure I have the `MANAGE_CHANNELS` permission enabled in the channel you want to lock and under the role settings.");
-       }
+        
         let cont = true;
         if (message.mentions.channels.first()) {
           channel = message.mentions.channels.first();
@@ -25,14 +23,19 @@ module.exports = {
         if (cont == false) {
           return;
         }
+
+        let perms = await message.guild.me.permissionsIn(channel).toArray()
+        console.log(perms)
+    console.log(perms.includes("MANAGE_CHANNEL"))
+    console.log(perms.includes("SEND_MESSAGES"))
+    if(!perms.includes("MANAGE_CHANNEL")){
+      return message.channel.send(`I cannot lock this channel. Please make sure I have the permission \`MANAGE_CHANNELS\` in this channel and in other channels you want to lock.`).catch(error => {
+        console.log(error)
+      })
+    }
         console.log(channel.name);
         let i;
-        let e = "";
-        for (i = 0; i < args.length; i++) {
-          if (i >= "1") {
-            e = e + args[i] + " ";
-          }
-        }
+       let e = message.content.split(" ").splice(2).join(" ")
         args[1] = e;
         let yes = false;
         console.log(args[1]);
@@ -49,11 +52,9 @@ module.exports = {
           return message.reply("They already can't chat here.");
         }
         
-        const perms = message.member.permissionsIn(channel).toArray();
-    
-        perms.forEach(function(item, index, array) {
-          
-          if (item === "MANAGE_CHANNELS") {
+        const perms2 = message.member.permissionsIn(channel)
+     if(perms2.has("MANAGE_CHANNELS")){
+         
             console.log("idk man");
             yes = true;
             const everyone = message.channel.guild.roles.cache.find(
@@ -83,10 +84,9 @@ module.exports = {
                 channel.send(embed);
                 message.delete()
               });
+          }else if(!perms2.has("MANAGE_CHANNELS")){
+            return message.delete();
           }
-        });
-        if (yes === false) {
-          return message.reply("dude you cannot do this!");
-        }
+  
     }
 }

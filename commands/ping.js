@@ -3,44 +3,24 @@
 module.exports = {
     name: 'ping',
     description: 'This is a ping command',
-    execute(message,args,Discord,facts,quote,randomNum){
+    async execute(message,args,Discord,client){
         console.log('ping ',message.guild.id)
         console.log('ping, ',message.member.id)
-        let which =  randomNum
-      console.log(which)
-    if(which === 1){
-      let randomfact =  facts[Math.floor(Math.random() * facts.length)];
+     let perms = await message.guild.me.permissionsIn(message.channel).toArray()
+     console.log(perms)
+    console.log(perms.includes("EMBED_LINKS"))
+    console.log(perms.includes("SEND_MESSAGES"))
+    if(!perms.includes("EMBED_LINKS")){
+      return message.channel.send(`I cannot send embeds in this channel. Please make sure I have permissions.`).catch(error => {
+        console.log(error)
+      });
+    } 
+     let yourping = Date.now() - message.createdTimestamp 
+let botping = Math.round(client.ws.ping)
+const embed = new Discord.MessageEmbed()
+.setColor("RANDOM")
+.setDescription(`Message Ping: ${yourping} \n API Ping: ${botping}`)
+message.channel.send(`${message.member}, Pong!`,embed)
 
-        console.log('Ping Command Sent Type 1')
-        let ping = Date.now() - message.createdTimestamp + " ms";
-        const exampleEmbed = new Discord.MessageEmbed()
-        .setColor('RANDOM')
-        .setTitle('Pong!')
-        .setDescription(ping)
-        .addFields(
-            { name: 'Fun Fact', value: `${randomfact}` },
-        )
-        
-        .setTimestamp();
-       
-    message.channel.send("<@" + message.member.id + ">",exampleEmbed);   
-    }  else if(which === 2){
-      let randomquote =  quote[Math.floor(Math.random() * quote.length)];
-
-        console.log('Ping Command Sent Type 2')
-        let ping = Date.now() - message.createdTimestamp + " ms";
-        const exampleEmbed = new Discord.MessageEmbed()
-        .setColor('RANDOM')
-        .setTitle('Pong!')
-        .setDescription(ping)
-        .addFields(
-            { name: 'Fun Quote', value: `${randomquote}` },
-        )
-      
-        .setTimestamp();
-       
-    message.channel.send("<@" + message.member.id + ">",exampleEmbed);   
-    
-  }
     }
 }
